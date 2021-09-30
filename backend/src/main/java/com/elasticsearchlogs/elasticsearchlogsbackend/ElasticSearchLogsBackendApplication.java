@@ -11,8 +11,4 @@ public class ElasticSearchLogsBackendApplication {
         SpringApplication.run(ElasticSearchLogsBackendApplication.class, args);
     }
 
-    @GetMapping("/city")
-    public void City(){
-        System.out.println("City");
-    }
 }

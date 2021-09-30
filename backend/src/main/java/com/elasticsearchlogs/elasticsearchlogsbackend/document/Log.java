@@ -43,6 +43,9 @@ public class Log {
     @Field(type = FieldType.Ip_Range)
     private String ip_range;
 
+    @Field(type = FieldType.Text)
+    private LinkedHashMap<String,String> machine;
+
     @Field(type = FieldType.Double)
     private String memory;
 
@@ -166,6 +169,14 @@ public class Log {
 
     public void setIp_range(String ip_range) {
         this.ip_range = ip_range;
+    }
+
+    public LinkedHashMap<String, String> getMachine() {
+        return machine;
+    }
+
+    public void setMachine(LinkedHashMap<String, String> machine) {
+        this.machine = machine;
     }
 
     public String getMemory() {

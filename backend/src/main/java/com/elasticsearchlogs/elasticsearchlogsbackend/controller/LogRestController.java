@@ -5,6 +5,8 @@ import com.elasticsearchlogs.elasticsearchlogsbackend.service.LogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/log")
 public class LogRestController {
@@ -21,8 +23,18 @@ public class LogRestController {
         service.save(log);
     }
 
-    @GetMapping("/{agent}")
-    public Log findLogByExtension(@PathVariable final String agent){
-        return service.findLogByExtension(agent);
+    @GetMapping("/clientip/{clientIp}")
+    public List<Log> findAllByClientip(@PathVariable final String clientIp){
+        return service.findAllByClientip(clientIp);
+    }
+
+    @GetMapping("/extension/{extension}")
+    public List<Log> findAllByExtension(@PathVariable final String extension){
+        return service.findAllByExtension(extension);
+    }
+
+    @GetMapping("/url/{url}")
+    public List<Log> findAllByUrl(@PathVariable final String url){
+        return service.findAllByUrl(url);
     }
 }
