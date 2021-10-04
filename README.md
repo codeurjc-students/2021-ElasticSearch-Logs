@@ -5,7 +5,7 @@ ElasticSearch-Logs is a tool that try to improve the Kibana logs service applied
 I will be posting some entries in my [Blog](https://medium.com/@cris.dgrnu), so as you can follow the process of building a big app like this one 
 
 ## Technologies
-The main technologies used to build the app are the following:
+The main technologies used to build the application are the following:
 - Maven to enpackage the Server.
 - Angular on the Client to have the beneficts of SPA applications.
 - Spring Boot on the Server to manage the services.
@@ -14,6 +14,12 @@ The main technologies used to build the app are the following:
 - Kibana to test if the data has been loaded correctly.
 - Git as version control system.
 - Arch Linux as main OS due to the facilities and integrations with Docker and modern web technologies
+
+## Tools
+The principal tools used to develope the application are the following:
+- Intellij IDEA as Java IDE.
+- Visual Studio Code as Angular code editor.
+- Vim for some configuration files.
 
 ## Architecture
 ### Backend
