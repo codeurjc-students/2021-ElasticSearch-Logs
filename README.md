@@ -12,6 +12,8 @@ The main technologies used to build the app are the following:
 - Elasticsearch as the main database to query data.
 - Logstash to load data into the database.
 - Kibana to test if the data has been loaded correctly.
+- Git as version control system.
+- Arch Linux as main OS due to the facilities and integrations with Docker and modern web technologies
 
 ## Architecture
 ### Backend
