@@ -8,6 +8,8 @@ I will be posting some entries in my [Blog](https://medium.com/@cris.dgrnu), so 
 The main technologies used to build the application are the following:
 - Maven to enpackage the Server.
 - Angular on the Client to have the beneficts of SPA applications.
+- NPM as package manager.
+- NodeJs to execute JavaScript outside the browser.
 - Spring Boot on the Server to manage the services.
 - Elasticsearch as the main database to query data.
 - Logstash to load data into the database.
