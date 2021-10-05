@@ -1,8 +1,10 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Log } from './model/log';
 import { LogService } from './service/log.service';
+
 import { ColDef, FieldElement } from 'ag-grid-community';
+import { AgGridAngular } from 'ag-grid-angular';
 
 
 @Component({
@@ -11,6 +13,7 @@ import { ColDef, FieldElement } from 'ag-grid-community';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
+  @ViewChild('agGrid') agGrid!: AgGridAngular;
 
   public columnsName: string[] = [
     'id',
@@ -39,7 +42,7 @@ export class AppComponent implements OnInit {
   ];
 
   public columnDefs: ColDef[] = this.columnsName.map((column): any => {
-    return { "field": column }
+    return { "field": column, sortable: true, filter: true }
   });
 
 
@@ -49,12 +52,22 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.getLogsByExtension();
+    this.columnDefs[0] = { "field": "id", sortable: true, filter: true, checkboxSelection: true }
   }
+
 
   public getLogsByExtension(): void {
     this.logService.getLogsByExtension('deb').subscribe(
       (res: Log[]) => this.rowData = res,
       (error: HttpErrorResponse) => alert(error.message)
     );
+  }
+
+  getSelectedRows(): void {
+    const selectedNodes = this.agGrid.api.getSelectedNodes();
+    const selectedData = selectedNodes.map(node => node.data);
+    const selectedDataStringPresentation = selectedData.map(node => `\n- ${node.id}`).join('');
+
+    alert(`Selected nodes: ${selectedDataStringPresentation}`);
   }
 }
