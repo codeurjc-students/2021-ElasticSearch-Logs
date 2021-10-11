@@ -1,0 +1,23 @@
+<form [formGroup]="queryFilters"> 
+    
+    <label>Extension</label>
+    <input type="text" class="form-control" formControlName="extension">
+
+    <label>Client IP</label>
+    <input type="text" class="form-control" formControlName="clientip">
+
+    <label>Host</label>
+    <input type="text" class="form-control" formControlName="host">
+
+    <label>Request</label>
+    <input type="text" class="form-control" formControlName="request">
+
+    <label>Response</label>
+    <input type="text" class="form-control" formControlName="response">
+
+    <label>URL</label>
+    <input type="text" class="form-control" formControlName="url">
+
+
+    <button class="btn btn-primary" type="submit" (click)="filter()">Enviar</button>
+</form>
