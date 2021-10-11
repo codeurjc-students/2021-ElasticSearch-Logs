@@ -25,7 +25,7 @@ public class LogService {
     }
 
     public Page<Log> findAll(int pageNumber){
-        Pageable pageable = PageRequest.of(pageNumber, 15);
+        Pageable pageable = PageRequest.of(pageNumber, 200);
         return repository.findAll(pageable);
     }
 

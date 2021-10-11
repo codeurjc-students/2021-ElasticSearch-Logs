@@ -26,7 +26,7 @@ public class LogRestController {
     }
 
     @GetMapping("/{pageNumber}")
-    public Page<Log> findAll(@PathVariable final int pageNumber){
+    public Page<Log> findAll(@PathVariable final int pageNumber ){
         return service.findAll(pageNumber);
     }
 
