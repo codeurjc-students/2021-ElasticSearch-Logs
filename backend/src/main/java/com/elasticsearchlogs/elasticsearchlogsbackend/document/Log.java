@@ -1,82 +1,32 @@
 package com.elasticsearchlogs.elasticsearchlogsbackend.document;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.elasticsearch.annotations.*;
-
 import java.util.LinkedHashMap;
 
-@Document(indexName = "kibana_sample_data_logs")
-@Setting(settingPath = "static/es-settings.json")
 public class Log {
 
-    @Id
-    @Field(type = FieldType.Keyword)
+
     private String id;
-
-    @Field(type = FieldType.Text)
     private String agent;
-
-    @Field(type = FieldType.Long)
     private String bytes;
-
-    @Field(type = FieldType.Ip)
     private String clientip;
-
-    @Field(type = FieldType.Keyword)
     private LinkedHashMap<String, String> event;
-
-    @Field(type = FieldType.Text)
     private String extension;
-
-    @GeoPointField
     private Geo geo;
-
-    @Field(type = FieldType.Text)
     private String host;
-
-    @Field(type = FieldType.Text)
     private String index;
-
-    @Field(type = FieldType.Ip)
     private String ip;
-
-    @Field(type = FieldType.Ip_Range)
     private String ip_range;
-
-    @Field(type = FieldType.Text)
     private LinkedHashMap<String,String> machine;
-
-    @Field(type = FieldType.Double)
     private String memory;
-
-    @Field(type = FieldType.Text)
     private String message;
-
-    @Field(type = FieldType.Long)
     private String phpmemory;
-
-    @Field(type = FieldType.Keyword)
     private String referer;
-
-    @Field(type = FieldType.Text)
     private String request;
-
-    @Field(type = FieldType.Text)
     private String response;
-
-    @Field(type = FieldType.Text)
     private String tags;
-
-    @Field(type = FieldType.Date)
     private String timestamp;
-
-    @Field(type = FieldType.Date_Range)
     private String timestamp_range;
-
-    @Field(type = FieldType.Text)
     private String url;
-
-    @Field(type = FieldType.Date)
     private String utc_time;
 
     public Log() {

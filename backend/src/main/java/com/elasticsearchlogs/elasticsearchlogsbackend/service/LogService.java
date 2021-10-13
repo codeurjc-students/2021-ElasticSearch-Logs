@@ -1,37 +1,97 @@
 package com.elasticsearchlogs.elasticsearchlogsbackend.service;
 
 import com.elasticsearchlogs.elasticsearchlogsbackend.document.Log;
-import com.elasticsearchlogs.elasticsearchlogsbackend.repository.LogRepository;
+import com.elasticsearchlogs.elasticsearchlogsbackend.search.SearchRequestDTO;
+import com.elasticsearchlogs.elasticsearchlogsbackend.search.util.SearchUtil;
+import com.elasticsearchlogs.elasticsearchlogsbackend.utils.Indices;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.elasticsearch.action.get.GetRequest;
+import org.elasticsearch.action.get.GetResponse;
+import org.elasticsearch.action.index.IndexRequest;
+import org.elasticsearch.action.index.IndexResponse;
+import org.elasticsearch.action.search.SearchRequest;
+import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.client.RequestOptions;
+import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.common.xcontent.XContentType;
+import org.elasticsearch.rest.RestStatus;
+import org.elasticsearch.search.SearchHit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
 public class LogService {
+    private static final ObjectMapper MAPPER = new ObjectMapper();
+    private static final Logger LOG = LoggerFactory.getLogger(Log.class);
 
-    private final LogRepository repository;
+    private final RestHighLevelClient client;
 
     @Autowired
-    public LogService(LogRepository repository){
-        this.repository = repository;
+    public LogService(RestHighLevelClient client) {
+        this.client = client;
     }
 
-    public void save(final Log log){
-        repository.save(log);
+    public boolean index(final Log log) {
+        try {
+            final String logAsString = MAPPER.writeValueAsString(log);
+
+            final IndexRequest request = new IndexRequest(Indices.LOG_INDEX);
+            request.id(log.getId());
+            request.source(logAsString, XContentType.JSON);
+
+            final IndexResponse response = client.index(request, RequestOptions.DEFAULT);
+
+            return response != null && response.status().equals(RestStatus.OK);
+        } catch (final Exception e) {
+            LOG.error(e.getMessage(), e);
+            return false;
+        }
     }
 
-    public Page<Log> findAll(int pageNumber){
-        Pageable pageable = PageRequest.of(pageNumber, 200);
-        return repository.findAll(pageable);
+    public Log getById(final String logId) {
+        try {
+            final GetResponse documentFields = client.get(
+                    new GetRequest(Indices.LOG_INDEX, logId),
+                    RequestOptions.DEFAULT
+            );
+
+            if (documentFields == null) {
+                return null;
+            }
+
+            return MAPPER.readValue(documentFields.getSourceAsString(), Log.class);
+        } catch (final Exception e) {
+            LOG.error(e.getMessage(), e);
+            return null;
+        }
     }
 
-    public List<Log> findAllByClientip(final String clientIp){ return repository.findAllByClientip(clientIp); }
+    public List<Log> search(final SearchRequestDTO searchRequestDTO) {
+        final SearchRequest request = SearchUtil.buildSearchRequest(
+                "kibana_sample_data_logs",
+                searchRequestDTO
+        );
 
-    public List<Log> findAllByExtension(final String extension){ return repository.findAllByExtension(extension); }
+        if (request == null) {
+            return Collections.emptyList();
+        }
 
-    public List<Log> findAllByUrl(final String url){ return repository.findAllByUrl(url); }
+        try {
+            final SearchResponse response = client.search(request, RequestOptions.DEFAULT);
+            final SearchHit[] searchHits = response.getHits().getHits();
+            final List<Log> logs = new ArrayList<>(searchHits.length);
+            for (SearchHit hit : searchHits) {
+                logs.add(MAPPER.readValue(hit.getSourceAsString(), Log.class));
+            }
+            return logs;
+        } catch (Exception e) {
+            return Collections.emptyList();
+        }
+    }
 }
