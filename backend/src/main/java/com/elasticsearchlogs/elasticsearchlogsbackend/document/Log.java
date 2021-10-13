@@ -1,6 +1,7 @@
 package com.elasticsearchlogs.elasticsearchlogsbackend.document;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 
 public class Log {
 
@@ -23,7 +24,7 @@ public class Log {
     private String referer;
     private String request;
     private String response;
-    private String tags;
+    private List<String> tags;
     private String timestamp;
     private String timestamp_range;
     private String url;
@@ -177,11 +178,11 @@ public class Log {
         this.response = response;
     }
 
-    public String getTags() {
+    public List<String> getTags() {
         return tags;
     }
 
-    public void setTags(String tags) {
+    public void setTags(List<String> tags) {
         this.tags = tags;
     }
 

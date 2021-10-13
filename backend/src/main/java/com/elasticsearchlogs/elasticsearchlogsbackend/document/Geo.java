@@ -1,23 +1,29 @@
 package com.elasticsearchlogs.elasticsearchlogsbackend.document;
 
+import org.springframework.data.elasticsearch.annotations.GeoPointField;
 import org.springframework.data.elasticsearch.core.geo.GeoPoint;
+
+import java.util.LinkedHashMap;
 
 public class Geo {
 
-    private GeoPoint coordinates;
+    private LinkedHashMap<String,Double> coordinates;
     private String dest;
     private String src;
     private String srcdest;
+
+
 
     public Geo() {
 
     }
 
-    public GeoPoint getCordinates() {
+
+    public LinkedHashMap<String, Double> getcoordinates() {
         return coordinates;
     }
 
-    public void setCordinates(GeoPoint coordinates) {
+    public void setcoordinates(LinkedHashMap<String, Double> coordinates) {
         this.coordinates = coordinates;
     }
 
