@@ -90,7 +90,6 @@ public class LogService {
 
 
             for (SearchHit hit : searchHits) {
-                System.out.println(hit.getSourceAsString());
                 logs.add(MAPPER.readValue(hit.getSourceAsString(), Log.class));
             }
             return logs;
