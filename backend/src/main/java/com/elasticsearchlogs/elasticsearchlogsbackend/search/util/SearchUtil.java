@@ -4,6 +4,7 @@ import com.elasticsearchlogs.elasticsearchlogsbackend.search.SearchRequestDTO;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.index.query.*;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
@@ -15,8 +16,15 @@ public final class SearchUtil {
 
     public static SearchRequest buildSearchRequest(final String indexName, final SearchRequestDTO searchRequestDTO) {
         try {
-            final SearchSourceBuilder builder = new SearchSourceBuilder()
+            SearchSourceBuilder builder = new SearchSourceBuilder()
                     .postFilter(getQueryBuilder(searchRequestDTO));
+
+            if ( searchRequestDTO.getSortBy() != null){
+                builder = builder.sort(
+                        searchRequestDTO.getSortBy(),
+                        searchRequestDTO.getOrder() != null ? searchRequestDTO.getOrder() : SortOrder.ASC
+                );
+            }
 
             final SearchRequest request = new SearchRequest(indexName);
             request.source(builder);
