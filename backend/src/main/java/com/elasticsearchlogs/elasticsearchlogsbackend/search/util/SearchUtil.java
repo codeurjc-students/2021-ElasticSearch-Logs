@@ -2,7 +2,10 @@ package com.elasticsearchlogs.elasticsearchlogsbackend.search.util;
 
 import com.elasticsearchlogs.elasticsearchlogsbackend.search.SearchRequestDTO;
 import org.elasticsearch.action.search.SearchRequest;
-import org.elasticsearch.index.query.*;
+import org.elasticsearch.index.query.MultiMatchQueryBuilder;
+import org.elasticsearch.index.query.Operator;
+import org.elasticsearch.index.query.QueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.util.CollectionUtils;
@@ -14,6 +17,13 @@ public final class SearchUtil {
     private SearchUtil() {
     }
 
+    /**
+     * It queries in the database based on the data provided in the DTO
+     *
+     * @param indexName        The name of the index
+     * @param searchRequestDTO The DTO to filter the data
+     * @return A SearchRequest with the data
+     */
     public static SearchRequest buildSearchRequest(final String indexName, final SearchRequestDTO searchRequestDTO) {
         try {
             final int page = searchRequestDTO.getPage();
@@ -25,7 +35,7 @@ public final class SearchUtil {
                     .size(size)
                     .postFilter(getQueryBuilder(searchRequestDTO));
 
-            if ( searchRequestDTO.getSortBy() != null){
+            if (searchRequestDTO.getSortBy() != null) {
                 builder = builder.sort(
                         searchRequestDTO.getSortBy(),
                         searchRequestDTO.getOrder() != null ? searchRequestDTO.getOrder() : SortOrder.ASC
@@ -42,6 +52,12 @@ public final class SearchUtil {
         }
     }
 
+    /**
+     * Get an specific instance of QueryBuilder depending on the parameters
+     *
+     * @param searchRequestDTO The DTO to filter the data
+     * @return An specific QueryBuilder
+     */
     public static QueryBuilder getQueryBuilder(final SearchRequestDTO searchRequestDTO) {
         if (searchRequestDTO == null) {
             return null;

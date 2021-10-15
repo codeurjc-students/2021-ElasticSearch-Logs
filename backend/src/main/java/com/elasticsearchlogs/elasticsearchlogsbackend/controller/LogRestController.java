@@ -19,16 +19,6 @@ public class LogRestController {
         this.service = service;
     }
 
-    @PostMapping("/")
-    public void index(@RequestBody final Log log) {
-        service.index(log);
-    }
-
-    @GetMapping("/{id}")
-    public Log getById(@PathVariable final String id) {
-        return service.getById(id);
-    }
-
     @PostMapping("/search")
     public List<Log> search(@RequestBody final SearchRequestDTO searchRequestDTO) {
         return service.search(searchRequestDTO);

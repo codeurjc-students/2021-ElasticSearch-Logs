@@ -37,41 +37,6 @@ public class LogService {
         this.client = client;
     }
 
-    public boolean index(final Log log) {
-        try {
-            final String logAsString = MAPPER.writeValueAsString(log);
-
-            final IndexRequest request = new IndexRequest(Indices.LOG_INDEX);
-            request.id(log.getId());
-            request.source(logAsString, XContentType.JSON);
-
-            final IndexResponse response = client.index(request, RequestOptions.DEFAULT);
-
-            return response != null && response.status().equals(RestStatus.OK);
-        } catch (final Exception e) {
-            LOG.error(e.getMessage(), e);
-            return false;
-        }
-    }
-
-    public Log getById(final String logId) {
-        try {
-            final GetResponse documentFields = client.get(
-                    new GetRequest(Indices.LOG_INDEX, logId),
-                    RequestOptions.DEFAULT
-            );
-
-            if (documentFields == null) {
-                return null;
-            }
-
-            return MAPPER.readValue(documentFields.getSourceAsString(), Log.class);
-        } catch (final Exception e) {
-            LOG.error(e.getMessage(), e);
-            return null;
-        }
-    }
-
     public List<Log> search(final SearchRequestDTO searchRequestDTO) {
         final SearchRequest request = SearchUtil.buildSearchRequest(
                 Indices.LOG_INDEX,

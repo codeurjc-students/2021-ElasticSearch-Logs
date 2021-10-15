@@ -1,16 +1,11 @@
 package com.elasticsearchlogs.elasticsearchlogsbackend.document;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.LinkedHashMap;
 import java.util.List;
 
 public class Log {
 
-
-    private String id;
     private String agent;
     private String bytes;
     private String clientip;
@@ -21,16 +16,14 @@ public class Log {
     private String index;
     private String ip;
     private String ip_range;
-    private LinkedHashMap<String,String> machine;
+    private LinkedHashMap<String, String> machine;
     private String memory;
     private String message;
     private String phpmemory;
     private String referer;
     private String request;
     private String response;
-
     private List<String> tags;
-
     private Timestamp timestamp;
     private String timestamp_range;
     private String url;
@@ -39,14 +32,6 @@ public class Log {
 
     public Log() {
 
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getAgent() {

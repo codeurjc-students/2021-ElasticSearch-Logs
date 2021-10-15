@@ -1,10 +1,13 @@
 package com.elasticsearchlogs.elasticsearchlogsbackend.controller;
 
 import com.elasticsearchlogs.elasticsearchlogsbackend.document.Log;
+import com.elasticsearchlogs.elasticsearchlogsbackend.search.SearchRequestDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
+
+import java.util.Collections;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -14,9 +17,21 @@ public class LogRestControllerTest {
     @Autowired
     private LogRestController logRestController;
 
-    /*@Test
-    void getPageNumber() {
-        Page<Log> res = logRestController.findAll(0);
-        assertEquals(0,res.getNumber());
-    }*/
+    private SearchRequestDTO createSearchRequestDTO() {
+        SearchRequestDTO searchRequestDTO = new SearchRequestDTO();
+
+        searchRequestDTO.setFields(Collections.singletonList("extension"));
+        searchRequestDTO.setSearchTerm("deb");
+        searchRequestDTO.setPage(0);
+        searchRequestDTO.setSize(50);
+
+        return searchRequestDTO;
+    }
+
+    @Test
+    void searchByExtension() {
+        SearchRequestDTO searchRequestDTO = createSearchRequestDTO();
+        List<Log> res = logRestController.search(searchRequestDTO);
+        assertEquals(50, res.size());
+    }
 }
