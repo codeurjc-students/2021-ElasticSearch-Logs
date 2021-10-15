@@ -1,5 +1,9 @@
 package com.elasticsearchlogs.elasticsearchlogsbackend.document;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -24,11 +28,14 @@ public class Log {
     private String referer;
     private String request;
     private String response;
+
     private List<String> tags;
-    private String timestamp;
+
+    private Timestamp timestamp;
     private String timestamp_range;
     private String url;
-    private String utc_time;
+
+    private Timestamp utc_time;
 
     public Log() {
 
@@ -186,11 +193,11 @@ public class Log {
         this.tags = tags;
     }
 
-    public String getTimestamp() {
+    public Timestamp getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(String timestamp) {
+    public void setTimestamp(Timestamp timestamp) {
         this.timestamp = timestamp;
     }
 
@@ -210,11 +217,12 @@ public class Log {
         this.url = url;
     }
 
-    public String getUtc_time() {
+    public Timestamp getUtc_time() {
         return utc_time;
     }
 
-    public void setUtc_time(String utc_time) {
+    public void setUtc_time(Timestamp utc_time) {
         this.utc_time = utc_time;
     }
+
 }
