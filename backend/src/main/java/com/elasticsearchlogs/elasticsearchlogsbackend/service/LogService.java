@@ -37,7 +37,13 @@ public class LogService {
         this.client = client;
     }
 
+    /**
+     * It queries in the database based on the data provided in the DTO
+     * @param searchRequestDTO The DTO to filter the data
+     * @return
+     */
     public List<Log> search(final SearchRequestDTO searchRequestDTO) {
+        //
         final SearchRequest request = SearchUtil.buildSearchRequest(
                 Indices.LOG_INDEX,
                 searchRequestDTO

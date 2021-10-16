@@ -21,7 +21,7 @@ public class LogRestControllerTest {
         SearchRequestDTO searchRequestDTO = new SearchRequestDTO();
 
         searchRequestDTO.setFields(Collections.singletonList("extension"));
-        searchRequestDTO.setSearchTerm("deb");
+        searchRequestDTO.setSearchTerms(Collections.singletonList("deb"));
         searchRequestDTO.setPage(0);
         searchRequestDTO.setSize(50);
 

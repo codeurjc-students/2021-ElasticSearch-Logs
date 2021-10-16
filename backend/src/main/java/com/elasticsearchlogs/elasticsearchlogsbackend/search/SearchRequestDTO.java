@@ -6,7 +6,7 @@ import java.util.List;
 
 public class SearchRequestDTO extends PageRequestDTO {
     private List<String> fields;
-    private String searchTerm;
+    private List<String> searchTerms;
     private String sortBy;
     private SortOrder order;
 
@@ -18,12 +18,12 @@ public class SearchRequestDTO extends PageRequestDTO {
         this.fields = fields;
     }
 
-    public String getSearchTerm() {
-        return searchTerm;
+    public List<String> getSearchTerms() {
+        return searchTerms;
     }
 
-    public void setSearchTerm(String searchTerm) {
-        this.searchTerm = searchTerm;
+    public void setSearchTerms(List<String> searchTerms) {
+        this.searchTerms = searchTerms;
     }
 
     public String getSortBy() {

@@ -2,15 +2,14 @@ package com.elasticsearchlogs.elasticsearchlogsbackend.search.util;
 
 import com.elasticsearchlogs.elasticsearchlogsbackend.search.SearchRequestDTO;
 import org.elasticsearch.action.search.SearchRequest;
-import org.elasticsearch.index.query.MultiMatchQueryBuilder;
+import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.Operator;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.sort.SortOrder;
-import org.springframework.util.CollectionUtils;
 
-import java.util.List;
+import java.util.Iterator;
 
 public final class SearchUtil {
 
@@ -18,7 +17,7 @@ public final class SearchUtil {
     }
 
     /**
-     * It queries in the database based on the data provided in the DTO
+     * It creates de SearchRequest and set up the configuration
      *
      * @param indexName        The name of the index
      * @param searchRequestDTO The DTO to filter the data
@@ -26,14 +25,10 @@ public final class SearchUtil {
      */
     public static SearchRequest buildSearchRequest(final String indexName, final SearchRequestDTO searchRequestDTO) {
         try {
-            final int page = searchRequestDTO.getPage();
-            final int size = searchRequestDTO.getSize();
-            final int from = page <= 0 ? 0 : page * size;
 
-            SearchSourceBuilder builder = new SearchSourceBuilder()
-                    .from(from)
-                    .size(size)
-                    .postFilter(getQueryBuilder(searchRequestDTO));
+            final BoolQueryBuilder boolQuery = getBoolQueryBuilder(searchRequestDTO);
+
+            SearchSourceBuilder builder = getSearchSourceBuilder(searchRequestDTO, boolQuery);
 
             if (searchRequestDTO.getSortBy() != null) {
                 builder = builder.sort(
@@ -46,6 +41,7 @@ public final class SearchUtil {
             request.source(builder);
 
             return request;
+
         } catch (final Exception e) {
             e.printStackTrace();
             return null;
@@ -53,36 +49,50 @@ public final class SearchUtil {
     }
 
     /**
-     * Get an specific instance of QueryBuilder depending on the parameters
-     *
+     * It builds the SearchSourceBuilder and add pagination options
      * @param searchRequestDTO The DTO to filter the data
-     * @return An specific QueryBuilder
+     * @param boolQuery The query that contains the subqueries
+     * @return A SearchSourceBuilder to perform the search
      */
-    public static QueryBuilder getQueryBuilder(final SearchRequestDTO searchRequestDTO) {
-        if (searchRequestDTO == null) {
+    private static SearchSourceBuilder getSearchSourceBuilder(SearchRequestDTO searchRequestDTO, BoolQueryBuilder boolQuery) {
+        final int page = searchRequestDTO.getPage();
+        final int size = searchRequestDTO.getSize();
+        final int from = page <= 0 ? 0 : page * size;
+
+        SearchSourceBuilder builder = new SearchSourceBuilder()
+                .from(from)
+                .size(size)
+                .postFilter(boolQuery);
+        return builder;
+    }
+
+    private static BoolQueryBuilder getBoolQueryBuilder(SearchRequestDTO searchRequestDTO) {
+        final BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
+
+        Iterator<String> fieldsIterator = searchRequestDTO.getFields().iterator();
+        Iterator<String> searchTermsIterator = searchRequestDTO.getSearchTerms().iterator();
+
+        while (fieldsIterator.hasNext() && searchTermsIterator.hasNext()) {
+            String field = fieldsIterator.next();
+            String searchTerm = searchTermsIterator.next();
+
+            System.out.println("FIELDS =>" + field);
+            System.out.println("TERM =>" + searchTerm);
+
+            QueryBuilder query = getQueryBuilder(field, searchTerm);
+
+            boolQuery.must(query);
+        }
+        return boolQuery;
+    }
+
+
+    private static QueryBuilder getQueryBuilder(final String field, final String searchTerm) {
+        if (field == null || searchTerm == null) {
             return null;
         }
-
-        final List<String> fields = searchRequestDTO.getFields();
-        if (CollectionUtils.isEmpty(fields)) {
-            return null;
-        }
-
-        if (fields.size() > 1) {
-            final MultiMatchQueryBuilder queryBuilder = QueryBuilders.multiMatchQuery(searchRequestDTO.getSearchTerm())
-                    .type(MultiMatchQueryBuilder.Type.CROSS_FIELDS)
-                    .operator(Operator.AND);
-
-            fields.forEach(queryBuilder::field);
-
-            return queryBuilder;
-        }
-
-        return fields.stream()
-                .findFirst()
-                .map(field ->
-                        QueryBuilders.matchQuery(field, searchRequestDTO.getSearchTerm())
-                                .operator(Operator.AND))
-                .orElse(null);
+        return QueryBuilders
+                .matchQuery(field, searchTerm)
+                .operator(Operator.AND);
     }
 }
