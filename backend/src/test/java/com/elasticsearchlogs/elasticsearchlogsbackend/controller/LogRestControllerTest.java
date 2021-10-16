@@ -6,10 +6,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.Collections;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 public class LogRestControllerTest {
@@ -17,11 +17,11 @@ public class LogRestControllerTest {
     @Autowired
     private LogRestController logRestController;
 
-    private SearchRequestDTO createSearchRequestDTO() {
+    private SearchRequestDTO createSearchRequestDTO(List<String> fields, List<String> searchTerms) {
         SearchRequestDTO searchRequestDTO = new SearchRequestDTO();
 
-        searchRequestDTO.setFields(Collections.singletonList("extension"));
-        searchRequestDTO.setSearchTerms(Collections.singletonList("deb"));
+        searchRequestDTO.setFields(fields);
+        searchRequestDTO.setSearchTerms(searchTerms);
         searchRequestDTO.setPage(0);
         searchRequestDTO.setSize(50);
 
@@ -29,9 +29,37 @@ public class LogRestControllerTest {
     }
 
     @Test
-    void searchByExtension() {
-        SearchRequestDTO searchRequestDTO = createSearchRequestDTO();
+    void searchOneField() {
+        SearchRequestDTO searchRequestDTO = createSearchRequestDTO(List.of("extension"), List.of("deb"));
         List<Log> res = logRestController.search(searchRequestDTO);
-        assertEquals(50, res.size());
+        assertFalse(res.isEmpty());
+    }
+
+    @Test
+    void searchMoreThanOneField() {
+        SearchRequestDTO searchRequestDTO = createSearchRequestDTO(List.of("extension", "bytes"), List.of("deb", "0"));
+        List<Log> res = logRestController.search(searchRequestDTO);
+        assertFalse(res.isEmpty());
+    }
+
+    @Test
+    void searchWithMoreFieldsThanSearchTerms() {
+        SearchRequestDTO searchRequestDTO = createSearchRequestDTO(List.of("extension", "bytes","ip"), List.of("deb", "0"));
+        List<Log> res = logRestController.search(searchRequestDTO);
+        assertFalse(res.isEmpty());
+    }
+
+    @Test
+    void searchWithMoreSearchTermsThanFields() {
+        SearchRequestDTO searchRequestDTO = createSearchRequestDTO(List.of("extension", "bytes"), List.of("deb", "0","xxx"));
+        List<Log> res = logRestController.search(searchRequestDTO);
+        assertFalse(res.isEmpty());
+    }
+
+    @Test
+    void searchButNothingFound() {
+        SearchRequestDTO searchRequestDTO = createSearchRequestDTO(List.of("extension", "bytes"), List.of("xrx", "0"));
+        List<Log> res = logRestController.search(searchRequestDTO);
+        assertTrue(res.isEmpty());
     }
 }
