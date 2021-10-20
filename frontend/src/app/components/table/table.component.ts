@@ -15,6 +15,14 @@ import { SearchRequest } from 'src/app/models/searchRequest';
 export class TableComponent implements OnInit {
   @ViewChild('agGrid') agGrid!: AgGridAngular;
 
+  private defaultSearchRequest: SearchRequest = {
+    fields: [],
+    searchTerms: [],
+    page: 0,
+    size: 100,
+  }
+
+  // Ag-Grid configuration
   public columnsName: string[] = [
     // 'id',
     'timestamp',
@@ -42,17 +50,16 @@ export class TableComponent implements OnInit {
     // 'utc_time'
   ];
 
-  private defaultSearchRequest: SearchRequest = {
-    fields: [],
-    searchTerms: [],
-    page: 0,
-    size: 100,
-  }
-
   public columnDefs: ColDef[] = this.columnsName.map((column): any => {
     return { "field": column, sortable: true, filter: true }
   });
 
+  public defaultColDef: Object = {
+    width : 200,
+    filter: 'agTextColumnFilter',
+    floatingFilter: true,
+    resizable: true,
+  }
 
   rowData: Log[] = [];
 
