@@ -27,7 +27,6 @@ export class FormComponent implements OnInit {
 
   filter(): void{
     const filtersToApply = this.queryFilters.value;
-    this.logService.getLogs('deb');
   }
 
 }

@@ -3,7 +3,7 @@ import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { environment } from "src/environments/environment";
 import { Log } from "../models/log";
-import { Page } from "../models/page";
+import { SearchRequest } from "../models/searchRequest";
 
 
 @Injectable({
@@ -17,9 +17,9 @@ export class LogService {
 
     }
 
-    public getLogs(extension: string): Observable<Log[]> {
-        return this.httpClient.get<Log[]>(`${this.url}/log/extension/${extension}`)
-        
+    public search(searchRequest: SearchRequest):Observable<Log[]> {
+        return this.httpClient.post<Log[]>(`${this.url}/log/search`,searchRequest);
+
     }
 
 }

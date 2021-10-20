@@ -5,6 +5,7 @@ import { LogService } from '../../service/log.service';
 
 import { ColDef, FieldElement } from 'ag-grid-community';
 import { AgGridAngular } from 'ag-grid-angular';
+import { SearchRequest } from 'src/app/models/searchRequest';
 
 @Component({
   selector: 'app-table',
@@ -41,6 +42,13 @@ export class TableComponent implements OnInit {
     // 'utc_time'
   ];
 
+  private defaultSearchRequest: SearchRequest = {
+    fields: [],
+    searchTerms: [],
+    page: 0,
+    size: 100,
+  }
+
   public columnDefs: ColDef[] = this.columnsName.map((column): any => {
     return { "field": column, sortable: true, filter: true }
   });
@@ -51,13 +59,13 @@ export class TableComponent implements OnInit {
   constructor(private logService: LogService) { }
 
   ngOnInit() {
-    this.getLogsByExtension();
+    this.getLogs();
     this.columnDefs[0] = { "field": "timestamp", sortable: true, filter: true, checkboxSelection: true }
   }
 
 
-  public getLogsByExtension(): void {
-    this.logService.getLogs('deb').subscribe(
+  public getLogs(): void {
+    this.logService.search(this.defaultSearchRequest).subscribe(
       (res: Log[]) => this.rowData = res,
       (error: HttpErrorResponse) => alert(error.message)
     );
