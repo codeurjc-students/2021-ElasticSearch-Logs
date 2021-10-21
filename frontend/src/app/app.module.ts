@@ -11,10 +11,6 @@ import { TableComponent } from './components/table/table.component';
 import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    TableComponent,
-  ],
   imports: [
     BrowserModule,
     AgGridModule.withComponents([]),
@@ -22,6 +18,10 @@ import { ReactiveFormsModule } from '@angular/forms';
     AppRoutingModule,
     ReactiveFormsModule
 
+  ],
+  declarations: [
+    AppComponent,
+    TableComponent,
   ],
   providers: [LogService],
   bootstrap: [AppComponent, TableComponent]

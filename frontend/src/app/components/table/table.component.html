@@ -1,11 +1,15 @@
-<button (click)="getSelectedRows()">Get selected rows</button>
+<div>
+  <button (click)="updateColumnsMode(true)">Advanced Columns</button>
+  <button (click)="updateColumnsMode(false)">Normal Columns</button>
+</div>
 
 <ag-grid-angular
-    #agGrid
-    style="width: 100%; height: 100vh;"
-    class="ag-theme-alpine"
-    [rowData]="rowData"
-    [columnDefs]="columnDefs"
-    [defaultColDef]="defaultColDef"
-    rowSelection="multiple">
+  #agGrid
+  style="width: 100%; height: 100vh"
+  id="myGrid"
+  class="ag-theme-alpine"
+  [defaultColDef]="defaultColDef"
+  [rowData]="rowData"
+  (gridReady)="onGridReady($event)"
+>
 </ag-grid-angular>

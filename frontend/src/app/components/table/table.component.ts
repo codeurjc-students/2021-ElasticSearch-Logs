@@ -1,9 +1,9 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ViewChild, Input } from '@angular/core';
 import { Log } from '../../models/log';
 import { LogService } from '../../service/log.service';
 
-import { ColDef, FieldElement } from 'ag-grid-community';
+import { ColDef, FieldElement, GridOptions } from 'ag-grid-community';
 import { AgGridAngular } from 'ag-grid-angular';
 import { SearchRequest } from 'src/app/models/searchRequest';
 
@@ -12,9 +12,10 @@ import { SearchRequest } from 'src/app/models/searchRequest';
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.css']
 })
-export class TableComponent implements OnInit {
+export class TableComponent {
   @ViewChild('agGrid') agGrid!: AgGridAngular;
 
+  // Pagination configuration
   private defaultSearchRequest: SearchRequest = {
     fields: [],
     searchTerms: [],
@@ -23,67 +24,91 @@ export class TableComponent implements OnInit {
   }
 
   // Ag-Grid configuration
-  public columnsName: string[] = [
-    // 'id',
+  private gridApi: any;
+  private gridColumnApi: any;
+
+  public defaultColDef: any
+  public rowData: Log[] = [];
+
+  normalColumnsName: string[] = [
     'timestamp',
-    'agent',
-    // 'bytes',
-    'clientip',
-    // 'event',
-    'extension',
-    // 'geo',
-    'host',
-    // 'index',
-    // 'ip',
-    // 'ip_range',
-    // 'machine',
-    // 'memory',
     'message',
-    // 'phpmemory',
-    // 'referer',
+    'agent',
+    'clientip',
+    'event',
+    'host',
     'request',
     'response',
-    // 'tags',
-
-    // 'timestamp_range',
     'url',
-    // 'utc_time'
+  ];
+  
+  advancedColumnsName: string[] = [
+    'timestamp',
+    'agent',
+    'bytes',
+    'clientip',
+    'event',
+    'extension',
+    'geo',
+    'host',
+    'index',
+    'ip',
+    'ip_range',
+    'machine',
+    'memory',
+    'message',
+    'phpmemory',
+    'referer',
+    'request',
+    'response',
+    'tags',
+    'timestamp_range',
+    'url',
+    'utc_time'
   ];
 
-  public columnDefs: ColDef[] = this.columnsName.map((column): any => {
-    return { "field": column, sortable: true, filter: true }
-  });
-
-  public defaultColDef: Object = {
-    width : 200,
-    filter: 'agTextColumnFilter',
-    floatingFilter: true,
-    resizable: true,
+  constructor(private logService: LogService) {
+    this.defaultColDef = {
+      width: 200,
+      filter: 'agTextColumnFilter',
+      floatingFilter: true,
+      resizable: true,
+    }
   }
 
-  rowData: Log[] = [];
 
-  constructor(private logService: LogService) { }
+  onGridReady(params: any) {
+    this.gridApi = params.api;
+    this.gridColumnApi = params.columnApi;
 
-  ngOnInit() {
     this.getLogs();
-    this.columnDefs[0] = { "field": "timestamp", sortable: true, filter: true, checkboxSelection: true }
+    this.updateColumnsMode(false);
   }
 
+  updateColumnsMode(advancedMode: boolean): void {
+    if(!advancedMode){
+      this.gridApi.setColumnDefs(this.buildColumns(this.normalColumnsName));
+    } else {
+      this.gridApi.setColumnDefs(this.buildColumns(this.advancedColumnsName));
+    }
+  }
 
-  public getLogs(): void {
+  buildColumns(columnsToBuild: String[]): ColDef[] {
+    return columnsToBuild.map((column): any => {
+      return { "headerName": column, "field": column, sortable: true, filter: true }
+    })
+
+  }
+
+  getLogs(): void {
     this.logService.search(this.defaultSearchRequest).subscribe(
       (res: Log[]) => this.rowData = res,
       (error: HttpErrorResponse) => alert(error.message)
     );
   }
 
-  getSelectedRows(): void {
-    const selectedNodes = this.agGrid.api.getSelectedNodes();
-    const selectedData = selectedNodes.map(node => node.data);
-    const selectedDataStringPresentation = selectedData.map(node => `\n- ${node.id}`).join('');
-
-    alert(`Selected nodes: ${selectedDataStringPresentation}`);
-  }
-
 }
+
+
+
+
