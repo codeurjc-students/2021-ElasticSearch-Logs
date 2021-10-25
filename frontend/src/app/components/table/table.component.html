@@ -1,7 +1,13 @@
-<div>
-  <button (click)="updateColumnsMode(true)">Advanced Columns</button>
-  <button (click)="updateColumnsMode(false)">Normal Columns</button>
-</div>
+<form [formGroup]="profileForm" (ngSubmit)="updateColumns(true)">
+
+  <div *ngFor="let name of columnsName">
+    <input id="name" type="checkbox" [formControlName]="name">
+    <label for="name">{{name}}</label>
+    
+  </div>
+
+  <button type="submit" [disabled]="!profileForm.valid">Submit</button>
+</form>
 
 <ag-grid-angular
   #agGrid
