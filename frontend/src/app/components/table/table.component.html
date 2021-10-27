@@ -1,9 +1,7 @@
 <form [formGroup]="profileForm" (ngSubmit)="updateColumns(true)">
-
   <div *ngFor="let name of columnsName">
-    <input id="name" type="checkbox" [formControlName]="name">
-    <label for="name">{{name}}</label>
-    
+    <input id="name" type="checkbox" [formControlName]="name" />
+    <label for="name">{{ name }}</label>
   </div>
 
   <button type="submit" [disabled]="!profileForm.valid">Submit</button>
@@ -15,6 +13,15 @@
   id="myGrid"
   class="ag-theme-alpine"
   [defaultColDef]="defaultColDef"
+  [components]="components"
+  [rowBuffer]="rowBuffer"
+  [rowSelection]="rowSelection"
+  [rowModelType]="rowModelType"
+  [paginationPageSize]="paginationPageSize"
+  [cacheOverflowSize]="cacheOverflowSize"
+  [maxConcurrentDatasourceRequests]="maxConcurrentDatasourceRequests"
+  [infiniteInitialRowCount]="infiniteInitialRowCount"
+  [maxBlocksInCache]="maxBlocksInCache"
   [rowData]="rowData"
   (gridReady)="onGridReady($event)"
 >

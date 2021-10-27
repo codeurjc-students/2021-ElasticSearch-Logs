@@ -23,7 +23,7 @@ export class TableComponent {
     fields: [],
     searchTerms: [],
     page: 0,
-    size: 100,
+    size: 5000,
   }
 
   // Ag-Grid configuration
@@ -32,6 +32,17 @@ export class TableComponent {
 
   public defaultColDef: any
   public rowData: Log[] = [];
+  public rowBuffer: number;
+  public rowSelection: string;
+  public rowModelType: string;
+  public dataSource: any;
+  public components: any;
+  public paginationPageSize: number
+  public cacheOverflowSize: number;
+  public maxConcurrentDatasourceRequests: number;
+  public infiniteInitialRowCount: number;
+  public maxBlocksInCache: number;
+
 
   columnsName: string[] = [
     'timestamp',
@@ -75,7 +86,25 @@ export class TableComponent {
       filter: 'agTextColumnFilter',
       floatingFilter: true,
       resizable: true,
-    }
+    };
+
+    this.components = {
+      loadingRenderer: function (params: any) {
+        if (params.value !== undefined) {
+          return params.value;
+        } else {
+          return "<img src=\"https://www.ag-grid.com/example-assets/loading.gif\">";
+        }
+      },
+    };
+    this.rowBuffer = 0;
+    this.rowSelection = 'multiple';
+    this.rowModelType = 'infinite';
+    this.paginationPageSize = 100;
+    this.cacheOverflowSize = 2;
+    this.maxConcurrentDatasourceRequests = 1;
+    this.infiniteInitialRowCount = 1000;
+    this.maxBlocksInCache = 10;
   }
 
   /**
@@ -86,7 +115,27 @@ export class TableComponent {
     this.gridApi = params.api;
     this.gridColumnApi = params.columnApi;
 
-    this.getLogs();
+    var dataSource: any = this.logService.search(this.defaultSearchRequest).subscribe((data) => {
+      var dataSource = {
+        rowCount: null,
+        getRows: function (params: any) {
+          console.log(
+            'asking for ' + params.startRow + ' to ' + params.endRow
+          );
+          setTimeout(function () {
+            var rowsThisPage = data.slice(params.startRow, params.endRow);
+            var lastRow = -1;
+            if (data.length <= params.endRow) {
+              lastRow = data.length;
+            }
+            params.successCallback(rowsThisPage, lastRow);
+          }, 500);
+        },
+      };
+      params.api.setDatasource(dataSource);
+    });
+
+
     this.updateColumns(false);
   }
 
@@ -95,15 +144,26 @@ export class TableComponent {
    * @param fromForm Check if the method is called from the view
    */
   updateColumns(fromForm: boolean): void {
-    if (!fromForm)
-      this.gridApi.setColumnDefs(this.buildColumns(this.columnsName).slice(0, 9));
-    else {
-      const newColumnsName = this.buildColumnsFromForm()
+    if (!fromForm) {
+      let colDefs = this.buildColumns(this.columnsName).slice(0, 9)
+      colDefs[0] = { "headerName": colDefs[0].headerName, "field": colDefs[0].field, sortable: true, filter: true, cellRenderer: 'loadingRenderer', };
+      this.gridApi.setColumnDefs(colDefs);
+    }
 
-      if (newColumnsName.length != 0)
-        this.gridApi.setColumnDefs(this.buildColumns(newColumnsName));
-      else
-        this.gridApi.setColumnDefs(this.buildColumns(this.columnsName).slice(0, 9));
+    else {
+      let newColumnsName = this.buildColumnsFromForm()
+
+      if (newColumnsName.length != 0) {
+        let newColDefs = this.buildColumns(newColumnsName);
+        newColDefs[0] = { "headerName": newColDefs[0].headerName, "field": newColDefs[0].field, sortable: true, filter: true, cellRenderer: 'loadingRenderer', };
+        this.gridApi.setColumnDefs(newColDefs);
+      }
+
+      else {
+        let colDefs = this.buildColumns(this.columnsName).slice(0, 9)
+        colDefs[0] = { "headerName": colDefs[0].headerName, "field": colDefs[0].field, sortable: true, filter: true, cellRenderer: 'loadingRenderer', };
+        this.gridApi.setColumnDefs(colDefs);
+      }
 
     }
   }
@@ -158,10 +218,7 @@ export class TableComponent {
    * Get a apge of logs from the backend
    */
   getLogs(): void {
-    this.logService.search(this.defaultSearchRequest).subscribe(
-      (res: Log[]) => this.rowData = res,
-      (error: HttpErrorResponse) => alert(error.message)
-    );
+
   }
 
 }

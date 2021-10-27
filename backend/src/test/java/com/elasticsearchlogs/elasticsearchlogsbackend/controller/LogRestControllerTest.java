@@ -22,8 +22,8 @@ public class LogRestControllerTest {
 
         searchRequestDTO.setFields(fields);
         searchRequestDTO.setSearchTerms(searchTerms);
-        searchRequestDTO.setPage(0);
-        searchRequestDTO.setSize(50);
+        /*searchRequestDTO.setPage(0);
+        searchRequestDTO.setSize(50);*/
 
         return searchRequestDTO;
     }
