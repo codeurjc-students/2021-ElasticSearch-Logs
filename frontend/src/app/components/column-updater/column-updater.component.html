@@ -1,0 +1,8 @@
+<form [formGroup]="profileForm" (ngSubmit)="columnsToUpdate()">
+    <div *ngFor="let name of columnsName">
+      <input id="name" type="checkbox" [formControlName]="name" />
+      <label for="name">{{ name }}</label>
+    </div>
+  
+    <button type="submit" [disabled]="!profileForm.valid">Submit</button>
+</form>

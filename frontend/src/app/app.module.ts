@@ -7,13 +7,14 @@ import { AppComponent } from './app.component';
 import { LogService } from './service/log.service';
 
 import { AgGridModule } from 'ag-grid-angular';
-import { TableComponent } from './components/table/table.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { ColumnUpdaterComponent } from './components/column-updater/column-updater.component';
+import { TableComponent } from './components/table/table.component';
 
 @NgModule({
   imports: [
     BrowserModule,
-    AgGridModule.withComponents([]),
+    AgGridModule.withComponents(),
     HttpClientModule,
     AppRoutingModule,
     ReactiveFormsModule
@@ -21,9 +22,10 @@ import { ReactiveFormsModule } from '@angular/forms';
   ],
   declarations: [
     AppComponent,
+    ColumnUpdaterComponent,
     TableComponent,
   ],
   providers: [LogService],
-  bootstrap: [AppComponent, TableComponent]
+  bootstrap: [AppComponent]
 })
 export class AppModule { }
