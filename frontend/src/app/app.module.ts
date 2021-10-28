@@ -8,7 +8,7 @@ import { LogService } from './service/log.service';
 
 import { AgGridModule } from 'ag-grid-angular';
 import { ReactiveFormsModule } from '@angular/forms';
-import { ColumnUpdaterComponent } from './components/column-updater/column-updater.component';
+import { ColumnUpdaterComponent } from './components/tools/column-updater/column-updater.component';
 import { TableComponent } from './components/table/table.component';
 
 @NgModule({
