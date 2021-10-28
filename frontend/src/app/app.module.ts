@@ -7,7 +7,6 @@ import { AppComponent } from './app.component';
 import { LogService } from './service/log.service';
 
 import { AgGridModule } from 'ag-grid-angular';
-import { TableComponent } from './components/table/table.component';
 import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
@@ -21,9 +20,8 @@ import { ReactiveFormsModule } from '@angular/forms';
   ],
   declarations: [
     AppComponent,
-    TableComponent,
   ],
   providers: [LogService],
-  bootstrap: [AppComponent, TableComponent]
+  bootstrap: [AppComponent]
 })
 export class AppModule { }
