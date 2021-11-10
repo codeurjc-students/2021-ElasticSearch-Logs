@@ -1,6 +1,7 @@
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { AbstractControl, FormControl, FormGroup } from "@angular/forms";
+import { ColDef } from "ag-grid-community";
 import { environment } from "src/environments/environment";
 
 
@@ -9,7 +10,7 @@ import { environment } from "src/environments/environment";
     providedIn: 'root'
 })
 
-export class OptionsService {
+export class UtilService {
 
     constructor(private httpClient: HttpClient) {
 
@@ -19,7 +20,7 @@ export class OptionsService {
     * Build the form controls for the form group
     * @returns An object with the form controls
     */
-    buildFormControls(columnsName:string[]): { [key: string]: AbstractControl; } {
+    buildFormControls(columnsName: string[]): { [key: string]: AbstractControl; } {
         let formControls = {}
         columnsName.map((name): any => {
             Object.assign(formControls, { [name]: new FormControl(false) })
@@ -32,7 +33,7 @@ export class OptionsService {
     * Build an array of String with the columns name to build dynamically columns later
     * @returns An array with the columns name
     */
-    buildColumnsFromForm(profileForm: FormGroup): string[] {
+    getColumnsNameFromForm(profileForm: FormGroup): string[] {
         const formDataKeys: string[] = Object.keys(profileForm.value);
         const formDataValues: boolean[] = Object.values(profileForm.value);
 
@@ -47,6 +48,18 @@ export class OptionsService {
         }
 
         return newColumnsName;
+    }
+
+    /**
+   * Build the columns of the table by the given names
+   * @param columnsToBuild An array with the name of the columns
+   * @returns An array with the columns created
+   */
+    buildColumns(columnsToBuild: string[]): ColDef[] {
+        return columnsToBuild.map((column): any => {
+            return { "headerName": column, "field": column, sortable: true, filter: true }
+        })
+
     }
 
 }

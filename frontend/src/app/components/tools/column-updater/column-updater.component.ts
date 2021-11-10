@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
-import { OptionsService } from 'src/app/service/option.service';
+import { ColDef } from 'ag-grid-community';
+import { UtilService } from 'src/app/util/util.service';
+import { Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-column-updater',
@@ -8,6 +10,8 @@ import { OptionsService } from 'src/app/service/option.service';
   styleUrls: ['./column-updater.component.css']
 })
 export class ColumnUpdaterComponent implements OnInit {
+
+  @Output() updateColDefs = new EventEmitter<ColDef[]>();
 
   public profileForm: FormGroup;
 
@@ -42,13 +46,13 @@ export class ColumnUpdaterComponent implements OnInit {
     'timestamp_range',
     'url',
     'utc_time'
-]
+  ]
 
   params: any;
   componentParent: any;
 
-  constructor(private optionsService: OptionsService) {
-    let formControls: { [key: string]: AbstractControl; } = this.optionsService.buildFormControls(this.columnsName);
+  constructor(private utilService: UtilService) {
+    let formControls: { [key: string]: AbstractControl; } = this.utilService.buildFormControls(this.columnsName);
     this.profileForm = new FormGroup(formControls);
   }
 
@@ -56,9 +60,20 @@ export class ColumnUpdaterComponent implements OnInit {
 
   }
 
+  /**
+   * Builds the columns definitions to update in the table
+   */
   columnsToUpdate(): void {
-    const fields = this.optionsService.buildColumnsFromForm(this.profileForm);
-    console.log(fields);
+    const fields: string[] = this.utilService.getColumnsNameFromForm(this.profileForm);
+    let colDefs: ColDef[] = [];
+
+    // Set columns definitions by default
+    if (fields.length == 0)
+      colDefs = this.utilService.buildColumns(this.columnsName).slice(0, 9);
+    else
+      colDefs = this.utilService.buildColumns(fields);
+
+    this.updateColDefs.emit(colDefs);
   }
 
 }

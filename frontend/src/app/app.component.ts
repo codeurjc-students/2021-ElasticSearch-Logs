@@ -13,12 +13,18 @@ import { AgGridAngular } from 'ag-grid-angular';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  
-  constructor() { }
+
+  updatedColDefs: ColDef[];
+
+  constructor() {
+    this.updatedColDefs = []
+   }
 
   ngOnInit() {
 
   }
 
-
+  updateColDefs(colDefs: ColDef[]) {
+    this.updatedColDefs = colDefs;
+  }
 }

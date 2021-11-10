@@ -1,5 +1,5 @@
 
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
 import { Log } from '../../models/log';
 import { LogService } from '../../service/log.service';
 
@@ -7,6 +7,7 @@ import { ColDef, FieldElement } from 'ag-grid-community';
 import { AgGridAngular } from 'ag-grid-angular';
 import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
 import { SearchRequest } from 'src/app/models/searchRequest';
+import { UtilService } from 'src/app/util/util.service';
 
 
 @Component({
@@ -14,9 +15,11 @@ import { SearchRequest } from 'src/app/models/searchRequest';
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.css']
 })
-export class TableComponent {
+export class TableComponent implements OnChanges {
 
   @ViewChild('agGrid') agGrid!: AgGridAngular;
+
+  @Input() updatedColDefs: ColDef[] = [];
 
   // Pagination configuration
   private defaultSearchRequest: SearchRequest = {
@@ -80,7 +83,12 @@ export class TableComponent {
     'utc_time'
   ]
 
-  constructor(private logService: LogService) {
+  /**
+   * Constructor
+   * @param logService 
+   * @param utilService 
+   */
+  constructor(private logService: LogService, private utilService: UtilService) {
 
     this.context = {
       componentParent: this
@@ -110,6 +118,12 @@ export class TableComponent {
     this.maxConcurrentDatasourceRequests = 1;
     this.infiniteInitialRowCount = 1000;
     this.maxBlocksInCache = 10;
+  }
+
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if(this.gridApi != null)
+      this.updateColDefs(this.updatedColDefs);
   }
 
   /**
@@ -144,21 +158,22 @@ export class TableComponent {
     this.initColumns();
   }
 
-  private initColumns(): void {
-    let colDefs = this.buildColumns(this.columnsName).slice(0, 9)
-    colDefs[0] = { "headerName": colDefs[0].headerName, "field": colDefs[0].field, sortable: true, filter: true, cellRenderer: 'loadingRenderer', };
+  /**
+   * Update the columns definition
+   * @param colDefs Array with the definitions columns
+   */
+  private updateColDefs(colDefs: ColDef[]): void {
     this.gridApi.setColumnDefs(colDefs);
   }
 
   /**
-   * Build the columns of the table
-   * @param columnsToBuild An array with the name of the columns
-   * @returns An array with the columns created
+   * Init default colums on grid reay
    */
-  private buildColumns(columnsToBuild: String[]): ColDef[] {
-    return columnsToBuild.map((column): any => {
-      return { "headerName": column, "field": column, sortable: true, filter: true }
-    })
-
+  private initColumns(): void {
+    let colDefs = this.utilService.buildColumns(this.columnsName).slice(0, 9)
+    colDefs[0] = { "headerName": colDefs[0].headerName, "field": colDefs[0].field, sortable: true, filter: true, cellRenderer: 'loadingRenderer', };
+    this.gridApi.setColumnDefs(colDefs);
   }
+
+
 }

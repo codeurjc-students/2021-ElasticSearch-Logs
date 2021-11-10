@@ -1,4 +1,4 @@
 <div class="main-container">
-    <app-table class="table"></app-table>
-    <app-column-updater class="options"></app-column-updater>
+    <app-table [updatedColDefs]="updatedColDefs" class="table"></app-table>
+    <app-column-updater (updateColDefs)="updateColDefs($event)" class="options"></app-column-updater>
 </div>
