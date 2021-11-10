@@ -1,0 +1,11 @@
+.main-container{
+    display: flex;
+}
+
+.table{
+    width: 80%;
+}
+
+.options{
+    width: 20%;
+}

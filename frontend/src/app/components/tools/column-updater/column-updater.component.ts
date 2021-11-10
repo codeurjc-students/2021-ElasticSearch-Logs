@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
+import { OptionsService } from 'src/app/service/option.service';
 
 @Component({
   selector: 'app-column-updater',
@@ -9,9 +10,6 @@ import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
 export class ColumnUpdaterComponent implements OnInit {
 
   public profileForm: FormGroup;
-
-  params: any;
-  componentParent: any;
 
   columnsName: string[] = [
     'timestamp',
@@ -44,52 +42,22 @@ export class ColumnUpdaterComponent implements OnInit {
     'timestamp_range',
     'url',
     'utc_time'
-  ]
+]
 
-  constructor() {
-    let formControls: { [key: string]: AbstractControl; } = this.buildFormControls();
+  params: any;
+  componentParent: any;
+
+  constructor(private optionsService: OptionsService) {
+    let formControls: { [key: string]: AbstractControl; } = this.optionsService.buildFormControls(this.columnsName);
     this.profileForm = new FormGroup(formControls);
   }
 
   ngOnInit(): void {
-  }
 
-  /**
-  * Build the form controls for the form group
-  * @returns An object with the form controls
-  */
-  buildFormControls(): { [key: string]: AbstractControl; } {
-    let formControls = {}
-    this.columnsName.map((name): any => {
-      Object.assign(formControls, { [name]: new FormControl(false) })
-    })
-
-    return formControls;
-  }
-
-  /**
-   * Build an array of String with the columns name to build dynamically columns later
-   * @returns An array with the columns name
-   */
-  buildColumnsFromForm(): string[] {
-    const formDataKeys: string[] = Object.keys(this.profileForm.value);
-    const formDataValues: boolean[] = Object.values(this.profileForm.value);
-
-    let newColumnsName: string[] = []
-
-    for (let i = 0; i < formDataKeys.length; i++) {
-      const key = formDataKeys[i];
-      const value = formDataValues[i];
-
-      if (value)
-        newColumnsName.push(key);
-    }
-
-    return newColumnsName;
   }
 
   columnsToUpdate(): void {
-    const fields = this.buildColumnsFromForm();
+    const fields = this.optionsService.buildColumnsFromForm(this.profileForm);
     console.log(fields);
   }
 

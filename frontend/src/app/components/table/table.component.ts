@@ -1,4 +1,4 @@
-import { HttpErrorResponse } from '@angular/common/http';
+
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Log } from '../../models/log';
 import { LogService } from '../../service/log.service';
@@ -17,8 +17,6 @@ import { SearchRequest } from 'src/app/models/searchRequest';
 export class TableComponent {
 
   @ViewChild('agGrid') agGrid!: AgGridAngular;
-
-  public profileForm: FormGroup;
 
   // Pagination configuration
   private defaultSearchRequest: SearchRequest = {
@@ -45,10 +43,9 @@ export class TableComponent {
   public infiniteInitialRowCount: number;
   public maxBlocksInCache: number;
 
-  public frameworkComponents:any;
+  public frameworkComponents: any;
 
   public context: any;
-
 
   columnsName: string[] = [
     'timestamp',
@@ -84,8 +81,6 @@ export class TableComponent {
   ]
 
   constructor(private logService: LogService) {
-    let formControls: { [key: string]: AbstractControl; } = this.buildFormControls();
-    this.profileForm = new FormGroup(formControls);
 
     this.context = {
       componentParent: this
@@ -146,70 +141,13 @@ export class TableComponent {
     });
 
 
-    this.updateColumns(false);
+    this.initColumns();
   }
 
-  /**
-   * Update the view of the columns in the table
-   * @param fromForm Check if the method is called from the view
-   */
-  updateColumns(fromForm: boolean): void {
-    if (!fromForm) {
-      let colDefs = this.buildColumns(this.columnsName).slice(0, 9)
-      colDefs[0] = { "headerName": colDefs[0].headerName, "field": colDefs[0].field, sortable: true, filter: true, cellRenderer: 'loadingRenderer', };
-      this.gridApi.setColumnDefs(colDefs);
-    }
-
-    else {
-      let newColumnsName = this.buildColumnsFromForm()
-
-      if (newColumnsName.length != 0) {
-        let newColDefs = this.buildColumns(newColumnsName);
-        newColDefs[0] = { "headerName": newColDefs[0].headerName, "field": newColDefs[0].field, sortable: true, filter: true, cellRenderer: 'loadingRenderer', };
-        this.gridApi.setColumnDefs(newColDefs);
-      }
-
-      else {
-        let colDefs = this.buildColumns(this.columnsName).slice(0, 9)
-        colDefs[0] = { "headerName": colDefs[0].headerName, "field": colDefs[0].field, sortable: true, filter: true, cellRenderer: 'loadingRenderer', };
-        this.gridApi.setColumnDefs(colDefs);
-      }
-
-    }
-  }
-
-  /**
-   * Build an array of String with the columns name to build dynamically columns later
-   * @returns An array with the columns name
-   */
-  buildColumnsFromForm(): string[] {
-    const formDataKeys: string[] = Object.keys(this.profileForm.value);
-    const formDataValues: boolean[] = Object.values(this.profileForm.value);
-
-    let newColumnsName: string[] = []
-
-    for (let i = 0; i < formDataKeys.length; i++) {
-      const key = formDataKeys[i];
-      const value = formDataValues[i];
-
-      if (value)
-        newColumnsName.push(key);
-    }
-
-    return newColumnsName;
-  }
-
-  /**
-   * Build the form controls for the form group
-   * @returns An object with the form controls
-   */
-  buildFormControls(): { [key: string]: AbstractControl; } {
-    let formControls = {}
-    this.columnsName.map((name): any => {
-      Object.assign(formControls, { [name]: new FormControl(false) })
-    })
-
-    return formControls;
+  private initColumns(): void {
+    let colDefs = this.buildColumns(this.columnsName).slice(0, 9)
+    colDefs[0] = { "headerName": colDefs[0].headerName, "field": colDefs[0].field, sortable: true, filter: true, cellRenderer: 'loadingRenderer', };
+    this.gridApi.setColumnDefs(colDefs);
   }
 
   /**
@@ -217,19 +155,10 @@ export class TableComponent {
    * @param columnsToBuild An array with the name of the columns
    * @returns An array with the columns created
    */
-  buildColumns(columnsToBuild: String[]): ColDef[] {
+  private buildColumns(columnsToBuild: String[]): ColDef[] {
     return columnsToBuild.map((column): any => {
       return { "headerName": column, "field": column, sortable: true, filter: true }
     })
 
   }
-
-  /**
-   * Get a apge of logs from the backend
-   */
-  getLogs(): void {
-
-  }
-
-
 }
