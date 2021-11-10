@@ -14,17 +14,23 @@ import { AgGridAngular } from 'ag-grid-angular';
 })
 export class AppComponent implements OnInit {
 
-  updatedColDefs: ColDef[];
+  columnsToUpdateData: ColDef[];
+  queryFilterData: any[][];
 
   constructor() {
-    this.updatedColDefs = []
-   }
+    this.columnsToUpdateData = [];
+    this.queryFilterData = [];
+  }
 
   ngOnInit() {
 
   }
 
-  updateColDefs(colDefs: ColDef[]) {
-    this.updatedColDefs = colDefs;
+  columnsToUpdateHandler(colDefs: ColDef[]) {
+    this.columnsToUpdateData = colDefs;
+  }
+
+  queryFilterHandler(data: any[][]) {
+    this.queryFilterData = data;
   }
 }

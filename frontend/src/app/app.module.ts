@@ -9,6 +9,7 @@ import { AgGridModule } from 'ag-grid-angular';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ColumnUpdaterComponent } from './components/tools/column-updater/column-updater.component';
 import { TableComponent } from './components/table/table.component';
+import { QueryFilterComponent } from './components/tools/query-filter/query-filter.component';
 
 @NgModule({
   imports: [
@@ -21,7 +22,8 @@ import { TableComponent } from './components/table/table.component';
   declarations: [
     AppComponent,
     ColumnUpdaterComponent,
-    TableComponent
+    TableComponent,
+    QueryFilterComponent
   ],
   providers: [LogService],
   bootstrap: [AppComponent]

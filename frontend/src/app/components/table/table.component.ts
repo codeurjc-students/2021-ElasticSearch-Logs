@@ -19,7 +19,8 @@ export class TableComponent implements OnChanges {
 
   @ViewChild('agGrid') agGrid!: AgGridAngular;
 
-  @Input() updatedColDefs: ColDef[] = [];
+  @Input() columnsToUpdateData: ColDef[] = [];
+  @Input() queryFilterData: any[][] = [];
 
   // Pagination configuration
   private defaultSearchRequest: SearchRequest = {
@@ -122,15 +123,34 @@ export class TableComponent implements OnChanges {
 
 
   ngOnChanges(changes: SimpleChanges): void {
-    if(this.gridApi != null)
-      this.updateColDefs(this.updatedColDefs);
+    if (this.gridApi != null) {
+      for (const propName in changes) {
+        if (changes.hasOwnProperty(propName)) 
+          this.applyChanges(propName);
+        
+      }
+    }
   }
 
+  private applyChanges(propName: string): void {
+    switch (propName) {
+      case 'columnsToUpdateData': {
+        this.updateColDefs(this.columnsToUpdateData);
+        break;
+      }
+      case 'queryFilterData': {
+        console.log(this.queryFilterData[0]);
+        console.log(this.queryFilterData[1]);
+      }
+    }
+
+  }
   /**
    * Initialization for grid
    * @param params 
    */
   onGridReady(params: any) {
+
     this.gridApi = params.api;
     this.gridColumnApi = params.columnApi;
 

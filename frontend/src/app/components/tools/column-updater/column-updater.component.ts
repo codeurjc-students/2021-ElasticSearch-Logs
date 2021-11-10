@@ -3,6 +3,7 @@ import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
 import { ColDef } from 'ag-grid-community';
 import { UtilService } from 'src/app/util/util.service';
 import { Output, EventEmitter } from '@angular/core';
+import { LogService } from 'src/app/service/log.service';
 
 @Component({
   selector: 'app-column-updater',
@@ -11,48 +12,18 @@ import { Output, EventEmitter } from '@angular/core';
 })
 export class ColumnUpdaterComponent implements OnInit {
 
-  @Output() updateColDefs = new EventEmitter<ColDef[]>();
+  @Output() columnsToUpdateEvent = new EventEmitter<ColDef[]>();
 
+  public colDefNames: string[];
   public profileForm: FormGroup;
 
-  columnsName: string[] = [
-    'timestamp',
-    'message',
-    'agent',
-    'clientip',
-    'event',
-    'host',
-    'request',
-    'response',
-    'url',
-    'agent',
-    'bytes',
-    'clientip',
-    'event',
-    'extension',
-    'geo',
-    'host',
-    'index',
-    'ip',
-    'ip_range',
-    'machine',
-    'memory',
-    'message',
-    'phpmemory',
-    'referer',
-    'request',
-    'response',
-    'tags',
-    'timestamp_range',
-    'url',
-    'utc_time'
-  ]
+  
 
-  params: any;
-  componentParent: any;
+  constructor(private logService: LogService, private utilService: UtilService) {
 
-  constructor(private utilService: UtilService) {
-    let formControls: { [key: string]: AbstractControl; } = this.utilService.buildFormControls(this.columnsName);
+    this.colDefNames = this.logService.getColDefNames();
+
+    let formControls: { [key: string]: AbstractControl; } = this.utilService.buildFormControls(this.colDefNames,false);
     this.profileForm = new FormGroup(formControls);
   }
 
@@ -63,17 +34,17 @@ export class ColumnUpdaterComponent implements OnInit {
   /**
    * Builds the columns definitions to update in the table
    */
-  columnsToUpdate(): void {
-    const fields: string[] = this.utilService.getColumnsNameFromForm(this.profileForm);
+  columnsToUpdateEmit(): void {
+    const fields: string[] = this.utilService.getDataFromForm(this.profileForm)[0];
     let colDefs: ColDef[] = [];
 
     // Set columns definitions by default
     if (fields.length == 0)
-      colDefs = this.utilService.buildColumns(this.columnsName).slice(0, 9);
+      colDefs = this.utilService.buildColumns(this.colDefNames).slice(0, 9);
     else
       colDefs = this.utilService.buildColumns(fields);
 
-    this.updateColDefs.emit(colDefs);
+    this.columnsToUpdateEvent.emit(colDefs);
   }
 
 }

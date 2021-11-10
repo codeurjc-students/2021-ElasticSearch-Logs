@@ -1,4 +1,7 @@
 <div class="main-container">
-    <app-table [updatedColDefs]="updatedColDefs" class="table"></app-table>
-    <app-column-updater (updateColDefs)="updateColDefs($event)" class="options"></app-column-updater>
+    <app-table [columnsToUpdateData]="columnsToUpdateData" 
+               [queryFilterData]="queryFilterData" 
+               class="table"></app-table>
+    <app-query-filter (queryFilterEvent)="queryFilterHandler($event)"></app-query-filter>
+    <app-column-updater (columnsToUpdateEvent)="columnsToUpdateHandler($event)" class="options"></app-column-updater>
 </div>
