@@ -3,9 +3,8 @@ import { Component, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/
 import { Log } from '../../models/log';
 import { LogService } from '../../service/log.service';
 
-import { ColDef, FieldElement } from 'ag-grid-community';
+import { ColDef, Column } from 'ag-grid-community';
 import { AgGridAngular } from 'ag-grid-angular';
-import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
 import { SearchRequest } from 'src/app/models/searchRequest';
 import { UtilService } from 'src/app/util/util.service';
 
@@ -22,14 +21,6 @@ export class TableComponent implements OnChanges {
   @Input() columnsToUpdateData: ColDef[] = [];
   @Input() queryFilterData: any[][] = [];
 
-  // Pagination configuration
-  private defaultSearchRequest: SearchRequest = {
-    fields: [],
-    searchTerms: [],
-    page: 0,
-    size: 5000,
-  }
-
   // Ag-Grid configuration
   private gridApi: any;
   private gridColumnApi: any;
@@ -38,6 +29,7 @@ export class TableComponent implements OnChanges {
   public rowData: Log[] = [];
   public rowBuffer: number;
   public rowSelection: string;
+  public rowHeight: number;
   public rowModelType: string;
   public dataSource: any;
   public components: any;
@@ -51,38 +43,30 @@ export class TableComponent implements OnChanges {
 
   public context: any;
 
-  columnsName: string[] = [
-    'timestamp',
-    'message',
-    'agent',
-    'clientip',
-    'event',
-    'host',
-    'request',
-    'response',
-    'url',
-    'agent',
-    'bytes',
-    'clientip',
-    'event',
-    'extension',
-    'geo',
-    'host',
-    'index',
-    'ip',
-    'ip_range',
-    'machine',
-    'memory',
-    'message',
-    'phpmemory',
-    'referer',
-    'request',
-    'response',
-    'tags',
-    'timestamp_range',
-    'url',
-    'utc_time'
-  ]
+  columns: any = {
+    'timestamp' : 250,
+    'message' : 1000,
+    'agent': 700,
+    'clientip':150,
+    'event':200,
+    'host':250,
+    'request':350,
+    'response':120,
+    'url':600,
+    'bytes':100,
+    'extension':120,
+    'geo':150,
+    'index':200,
+    'ip':150,
+    'ip_range':200,
+    'machine': 500,
+    'memory':150,
+    'phpmemory':150,
+    'referer':600,
+    'tags':150,
+    'timestamp_range':250,
+    'utc_time':250
+  }
 
   /**
    * Constructor
@@ -95,13 +79,6 @@ export class TableComponent implements OnChanges {
       componentParent: this
     }
 
-    this.defaultColDef = {
-      width: 200,
-      filter: 'agTextColumnFilter',
-      floatingFilter: true,
-      resizable: true,
-    };
-
     this.components = {
       loadingRenderer: function (params: any) {
         if (params.value !== undefined) {
@@ -113,21 +90,23 @@ export class TableComponent implements OnChanges {
     };
     this.rowBuffer = 0;
     this.rowSelection = 'multiple';
+    this.rowHeight = 100;
     this.rowModelType = 'infinite';
     this.paginationPageSize = 100;
     this.cacheOverflowSize = 2;
     this.maxConcurrentDatasourceRequests = 1;
     this.infiniteInitialRowCount = 1000;
     this.maxBlocksInCache = 10;
+
   }
 
 
   ngOnChanges(changes: SimpleChanges): void {
     if (this.gridApi != null) {
       for (const propName in changes) {
-        if (changes.hasOwnProperty(propName)) 
+        if (changes.hasOwnProperty(propName))
           this.applyChanges(propName);
-        
+
       }
     }
   }
@@ -139,12 +118,13 @@ export class TableComponent implements OnChanges {
         break;
       }
       case 'queryFilterData': {
-        console.log(this.queryFilterData[0]);
-        console.log(this.queryFilterData[1]);
+        this.search(this.queryFilterData);
+        break;
       }
     }
 
   }
+
   /**
    * Initialization for grid
    * @param params 
@@ -154,27 +134,13 @@ export class TableComponent implements OnChanges {
     this.gridApi = params.api;
     this.gridColumnApi = params.columnApi;
 
-    var dataSource: any = this.logService.search(this.defaultSearchRequest).subscribe((data) => {
-      var dataSource = {
-        rowCount: null,
-        getRows: function (params: any) {
-          console.log(
-            'asking for ' + params.startRow + ' to ' + params.endRow
-          );
-          setTimeout(function () {
-            var rowsThisPage = data.slice(params.startRow, params.endRow);
-            var lastRow = -1;
-            if (data.length <= params.endRow) {
-              lastRow = data.length;
-            }
-            params.successCallback(rowsThisPage, lastRow);
-          }, 500);
-        },
-      };
-      params.api.setDatasource(dataSource);
-    });
-
-
+    this.logService.search([[],[]]).subscribe(
+      (data) => {
+        let dataSource = this.utilService.buildDataSource(data);
+        params.api.setDatasource(dataSource);
+      },
+      (err) => console.log(err)
+    );
     this.initColumns();
   }
 
@@ -187,13 +153,25 @@ export class TableComponent implements OnChanges {
   }
 
   /**
+   * Search in the database based on the filters
+   * @param filters An array woth 2 arrays, the SearchTerms and the Fields
+   */
+  private search(filters: any[][]):void {
+    this.logService.search(filters).subscribe(
+      (data) => {
+        let dataSource = this.utilService.buildDataSource(data);
+        this.gridApi.setDatasource(dataSource);
+      },
+      (err) => console.log(err)
+    );
+  }
+
+  /**
    * Init default colums on grid reay
    */
   private initColumns(): void {
-    let colDefs = this.utilService.buildColumns(this.columnsName).slice(0, 9)
-    colDefs[0] = { "headerName": colDefs[0].headerName, "field": colDefs[0].field, sortable: true, filter: true, cellRenderer: 'loadingRenderer', };
+    let colDefs = this.utilService.buildColumns(this.columns).slice(0, 9)
     this.gridApi.setColumnDefs(colDefs);
   }
-
 
 }

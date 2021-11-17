@@ -1,19 +1,18 @@
-<ag-grid-angular
-  #agGrid
-  style="width: 100%; height: 100vh"
-  id="myGrid"
-  class="ag-theme-alpine"
-  [defaultColDef]="defaultColDef"
-  [components]="components"
-  [rowBuffer]="rowBuffer"
-  [rowSelection]="rowSelection"
-  [rowModelType]="rowModelType"
-  [paginationPageSize]="paginationPageSize"
-  [cacheOverflowSize]="cacheOverflowSize"
-  [maxConcurrentDatasourceRequests]="maxConcurrentDatasourceRequests"
-  [infiniteInitialRowCount]="infiniteInitialRowCount"
-  [maxBlocksInCache]="maxBlocksInCache"
-  [rowData]="rowData"
-  (gridReady)="onGridReady($event)"
->
-</ag-grid-angular>
+<div id="agGrid" class="ag-theme-material">
+  <ag-grid-angular #agGrid style="width: 100%; height: 100vh" id="myGrid" class="ag-theme-alpine"
+    [defaultColDef]="defaultColDef"
+    [components]="components" 
+    [rowBuffer]="rowBuffer" 
+    [rowSelection]="rowSelection"
+    [rowHeight]="rowHeight"
+    [rowModelType]="rowModelType" 
+    [paginationPageSize]="paginationPageSize" 
+    [cacheOverflowSize]="cacheOverflowSize"
+    [maxConcurrentDatasourceRequests]="maxConcurrentDatasourceRequests"
+    [infiniteInitialRowCount]="infiniteInitialRowCount" 
+    [maxBlocksInCache]="maxBlocksInCache" 
+    [rowData]="rowData"
+    (gridReady)="onGridReady($event)"
+    >
+  </ag-grid-angular>
+</div>

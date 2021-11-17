@@ -15,15 +15,18 @@ export class ColumnUpdaterComponent implements OnInit {
   @Output() columnsToUpdateEvent = new EventEmitter<ColDef[]>();
 
   public colDefNames: string[];
+  public columns: any[];
   public profileForm: FormGroup;
 
-  
+
 
   constructor(private logService: LogService, private utilService: UtilService) {
 
     this.colDefNames = this.logService.getColDefNames();
+    this.columns = this.logService.getColumns();
 
-    let formControls: { [key: string]: AbstractControl; } = this.utilService.buildFormControls(this.colDefNames,false);
+    console.log(this.colDefNames)
+    let formControls: { [key: string]: AbstractControl; } = this.utilService.buildFormControls(this.colDefNames, false);
     this.profileForm = new FormGroup(formControls);
   }
 
@@ -37,13 +40,23 @@ export class ColumnUpdaterComponent implements OnInit {
   columnsToUpdateEmit(): void {
     const fields: string[] = this.utilService.getDataFromForm(this.profileForm)[0];
     let colDefs: ColDef[] = [];
+    let columns:any = Object.assign({}, this.columns);
 
     // Set columns definitions by default
     if (fields.length == 0)
-      colDefs = this.utilService.buildColumns(this.colDefNames).slice(0, 9);
-    else
-      colDefs = this.utilService.buildColumns(fields);
+      colDefs = this.utilService.buildColumns(this.columns).slice(0, 9);
+    else {
+      const colNames: string[] = Object.keys(this.columns);
 
+      for (let i = 0; i < colNames.length; i++) {
+        if (!fields.includes(colNames[i])){
+          console.log(colNames[i])
+          delete columns[colNames[i]]
+        }
+      }
+      colDefs = this.utilService.buildColumns(columns);
+    }
+    
     this.columnsToUpdateEvent.emit(colDefs);
   }
 
