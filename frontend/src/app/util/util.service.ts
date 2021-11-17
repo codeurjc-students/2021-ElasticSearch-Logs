@@ -82,6 +82,8 @@ export class UtilService {
                 "headerName": name,
                 "field": name,
                 "width": width,
+                "wrapText": true,
+                "rowHeight": 600,
                 "sortable": true,
                 "filter": true
             }
@@ -96,7 +98,6 @@ export class UtilService {
             "width": colDef[0].width,
             "cellRenderer": 'loadingRenderer',
         }
-
         return colDef;
     }
 

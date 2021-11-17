@@ -29,7 +29,6 @@ export class TableComponent implements OnChanges {
   public rowData: Log[] = [];
   public rowBuffer: number;
   public rowSelection: string;
-  public rowHeight: number;
   public rowModelType: string;
   public dataSource: any;
   public components: any;
@@ -45,7 +44,7 @@ export class TableComponent implements OnChanges {
 
   columns: any = {
     'timestamp' : 250,
-    'message' : 1000,
+    'message' : 500,
     'agent': 700,
     'clientip':150,
     'event':200,
@@ -90,7 +89,7 @@ export class TableComponent implements OnChanges {
     };
     this.rowBuffer = 0;
     this.rowSelection = 'multiple';
-    this.rowHeight = 100;
+
     this.rowModelType = 'infinite';
     this.paginationPageSize = 100;
     this.cacheOverflowSize = 2;
