@@ -2,6 +2,7 @@ package com.elasticsearchlogs.elasticsearchlogsbackend.search.util;
 
 import com.elasticsearchlogs.elasticsearchlogsbackend.search.SearchRequestDTO;
 import org.elasticsearch.action.search.SearchRequest;
+import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.Operator;
 import org.elasticsearch.index.query.QueryBuilder;
@@ -39,6 +40,7 @@ public final class SearchUtil {
 
             final SearchRequest request = new SearchRequest(indexName);
             request.source(builder);
+            request.scroll(TimeValue.timeValueMinutes(1L));
 
             return request;
 
@@ -50,20 +52,17 @@ public final class SearchUtil {
 
     /**
      * It builds the SearchSourceBuilder and add pagination options
+     *
      * @param searchRequestDTO The DTO to filter the data
-     * @param boolQuery The query that contains the subqueries
+     * @param boolQuery        The query that contains the sub-queries
      * @return A SearchSourceBuilder to perform the search
      */
     private static SearchSourceBuilder getSearchSourceBuilder(SearchRequestDTO searchRequestDTO, BoolQueryBuilder boolQuery) {
-        final int page = searchRequestDTO.getPage();
         final int size = searchRequestDTO.getSize();
-        final int from = page <= 0 ? 0 : page * size;
 
-        SearchSourceBuilder builder = new SearchSourceBuilder()
-                .from(from)
+        return new SearchSourceBuilder()
                 .size(size)
                 .postFilter(boolQuery);
-        return builder;
     }
 
     private static BoolQueryBuilder getBoolQueryBuilder(SearchRequestDTO searchRequestDTO) {
