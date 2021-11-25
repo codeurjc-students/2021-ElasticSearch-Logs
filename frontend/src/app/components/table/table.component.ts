@@ -19,10 +19,11 @@ export class TableComponent implements OnChanges {
   @Input() columnsToDisplayData: string[] = [];
   @Input() queryFilterData: any[][] = [[],[]];
 
-  private HEIGHT_RELATION:number = 100;
+  // Pixel to increment on scrolling
+  private pixelIncrement:number = 4000;
 
-  // Pixels
-  private actualPixel: number = 5000;
+  // Actual pixel
+  private actualPixel: number = 4000;
 
   // Page
   private page:number = 0;
@@ -164,7 +165,7 @@ export class TableComponent implements OnChanges {
       filter: true
     };
 
-    this.rowBuffer = 10;
+    this.rowBuffer = 100;
     this.rowSelection = 'multiple';
     this.context = { componentParent: this }
   }
@@ -180,7 +181,6 @@ export class TableComponent implements OnChanges {
     this.logService.search([[], []],this.page).subscribe(
       (data) => {
         this.rowData = data
-        this.actualPixel = (data.length * 140)/2;
       },
       (err) => console.log(err)
     );
@@ -206,7 +206,7 @@ export class TableComponent implements OnChanges {
       }
       case 'queryFilterData': {
         this.page = 0;
-        this.actualPixel = 5000;
+        this.actualPixel = 4000;
         this.search(this.queryFilterData);
         break;
       }
@@ -219,7 +219,10 @@ export class TableComponent implements OnChanges {
     const bottomPixel = this.gridApi.getVerticalPixelRange().bottom;
 
     if(bottomPixel > this.actualPixel){
-      this.actualPixel += this.actualPixel/2;
+      this.actualPixel += this.pixelIncrement;
+      
+      console.log(this.queryFilterData)
+
       let filters = this.queryFilterData.length == 0 ? [[],[]] : this.queryFilterData;
       this.page++;
       console.log(this.page)
@@ -259,7 +262,7 @@ export class TableComponent implements OnChanges {
   private search(filters: any[][]): void {
     this.logService.search(filters,this.page).subscribe(
       (data) => {
-        console.log(data)
+        this.pixelIncrement = data.length*40;
         this.gridApi.setRowData(data)        
       },
       (err) => console.log(err)
