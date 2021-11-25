@@ -1,63 +1,54 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
-import { ColDef } from 'ag-grid-community';
+import { FormControl, FormGroup } from '@angular/forms';
 import { UtilService } from 'src/app/util/util.service';
 import { Output, EventEmitter } from '@angular/core';
-import { LogService } from 'src/app/service/log.service';
+
 
 @Component({
   selector: 'app-column-updater',
   templateUrl: './column-updater.component.html',
   styleUrls: ['./column-updater.component.css']
 })
-export class ColumnUpdaterComponent implements OnInit {
+export class ColumnUpdaterComponent {
 
-  @Output() columnsToUpdateEvent = new EventEmitter<ColDef[]>();
+  @Output() columnsToDisplayEvent = new EventEmitter<string[]>();
 
-  public colDefNames: string[];
-  public columns: any[];
-  public profileForm: FormGroup;
+  public columnsToDisplay: FormGroup;
 
+  constructor(private utilService: UtilService) {
 
-
-  constructor(private logService: LogService, private utilService: UtilService) {
-
-    this.colDefNames = this.logService.getColDefNames();
-    this.columns = this.logService.getColumns();
-
-    console.log(this.colDefNames)
-    let formControls: { [key: string]: AbstractControl; } = this.utilService.buildFormControls(this.colDefNames, false);
-    this.profileForm = new FormGroup(formControls);
-  }
-
-  ngOnInit(): void {
-
+    this.columnsToDisplay = new FormGroup({
+      timestamp: new FormControl(false),
+      message: new FormControl(false),
+      agent: new FormControl(false),
+      clientip: new FormControl(false),
+      event: new FormControl(false),
+      host: new FormControl(false),
+      request: new FormControl(false),
+      response: new FormControl(false),
+      url: new FormControl(false),
+      bytes: new FormControl(false),
+      extension: new FormControl(false),
+      geo: new FormControl(false),
+      index: new FormControl(false),
+      ip: new FormControl(false),
+      ip_range: new FormControl(false),
+      machine: new FormControl(false),
+      memory: new FormControl(false),
+      phpmemory: new FormControl(false),
+      referer: new FormControl(false),
+      tags: new FormControl(false),
+      timestamp_range: new FormControl(false),
+      utc_time: new FormControl(false)
+    });
   }
 
   /**
    * Builds the columns definitions to update in the table
    */
-  columnsToUpdateEmit(): void {
-    const fields: string[] = this.utilService.getDataFromForm(this.profileForm)[0];
-    let colDefs: ColDef[] = [];
-    let columns:any = Object.assign({}, this.columns);
-
-    // Set columns definitions by default
-    if (fields.length == 0)
-      colDefs = this.utilService.buildColumns(this.columns).slice(0, 9);
-    else {
-      const colNames: string[] = Object.keys(this.columns);
-
-      for (let i = 0; i < colNames.length; i++) {
-        if (!fields.includes(colNames[i])){
-          console.log(colNames[i])
-          delete columns[colNames[i]]
-        }
-      }
-      colDefs = this.utilService.buildColumns(columns);
-    }
-    
-    this.columnsToUpdateEvent.emit(colDefs);
+   columnsToDisplayEmit(): void {
+    const fields: string[] = this.utilService.getDataFromForm(this.columnsToDisplay)[0];
+    this.columnsToDisplayEvent.emit(fields);
   }
 
 }

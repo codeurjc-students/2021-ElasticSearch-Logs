@@ -41,4 +41,16 @@ public class SearchRequestDTO extends PageRequestDTO {
     public void setOrder(SortOrder order) {
         this.order = order;
     }
+
+    @Override
+    public String toString() {
+        return "SearchRequestDTO{" +
+                "fields=" + fields +
+                ", searchTerms=" + searchTerms +
+                ", sortBy='" + sortBy + '\'' +
+                ", order=" + order +
+                ", page=" + getPage() +
+                ", size=" + getSize() +
+                '}';
+    }
 }

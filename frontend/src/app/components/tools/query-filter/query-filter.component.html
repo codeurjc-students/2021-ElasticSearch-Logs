@@ -1,15 +1,112 @@
 <h3>Query Filter</h3>
 
-<form [formGroup]="profileForm" (ngSubmit)="queryFilterEmit()">
+<form [formGroup]="queryFilter" (ngSubmit)="queryFilterEmit()" id="queryFilter">
 
-  <!--Form fields-->
-  <div *ngFor="let name of colDefNames">
-    <label for="name">{{ name }}</label>
-    <input id="name" type="text" [formControlName]="name" />
-    
+  <div class="formControl">
+    <label for="timestamp">timestamp</label>
+    <input id="timestamp" type="text" formControlName="timestamp" />
+  </div>
+
+  <div class="formControl">
+    <label for="message">message</label>
+    <input id="message" type="text" formControlName="message" />
+  </div>
+
+  <div class="formControl">
+    <label for="agent">agent</label>
+    <input id="agent" type="text" formControlName="agent" />
+  </div>
+
+  <div class="formControl">
+    <label for="clientip">clientip</label>
+    <input id="clientip" type="text" formControlName="clientip" />
+  </div>
+
+  <div class="formControl">
+    <label for="event">event</label>
+    <input id="event" type="text" formControlName="event" />
+  </div>
+
+  <div class="formControl">
+    <label for="host">host</label>
+    <input id="host" type="text" formControlName="host" />
+  </div>
+
+  <div class="formControl">
+    <label for="request">request</label>
+    <input id="request" type="text" formControlName="request" />
+  </div>
+
+  <div class="formControl">
+    <label for="response">response</label>
+    <input id="response" type="text" formControlName="response" />
+  </div>
+
+  <div class="formControl">
+    <label for="url">url</label>
+    <input id="url" type="text" formControlName="url" />
+  </div>
+
+  <div class="formControl">
+    <label for="extension">extension</label>
+    <input id="extension" type="text" formControlName="extension" />
+  </div>
+
+  <div class="formControl">
+    <label for="geo">geo</label>
+    <input id="geo" type="text" formControlName="geo" />
+  </div>
+
+  <div class="formControl">
+    <label for="index">index</label>
+    <input id="index" type="text" formControlName="index" />
+  </div>
+
+  <div class="formControl">
+    <label for="ip">ip</label>
+    <input id="ip" type="text" formControlName="ip" />
+  </div>
+
+  <div class="formControl">
+    <label for="ip_range">ip_range</label>
+    <input id="ip_range" type="text" formControlName="ip_range" />
+  </div>
+
+  <div class="formControl">
+    <label for="machine">machine</label>
+    <input id="machine" type="text" formControlName="machine" />
+  </div>
+
+  <div class="formControl">
+    <label for="memory">memory</label>
+    <input id="memory" type="text" formControlName="memory" />
+  </div>
+
+  <div class="formControl">
+    <label for="phpmemory">phpmemory</label>
+    <input id="phpmemory" type="text" formControlName="phpmemory" />
+  </div>
+
+  <div class="formControl">
+    <label for="referer">referer</label>
+    <input id="referer" type="text" formControlName="referer" />
+  </div>
+
+  <div class="formControl">
+    <label for="tags">tags</label>
+    <input id="tags" type="text" formControlName="tags" />
+  </div>
+
+  <div class="formControl">
+    <label for="timestamp_range">timestamp_range</label>
+    <input id="timestamp_range" type="text" formControlName="timestamp_range" />
+  </div>
+
+  <div class="formControl">
+    <label for="utc_time">utc_time</label>
+    <input id="utc_time" type="text" formControlName="utc_time" />
   </div>
 
   <!--On submit update the table-->
-  <button type="submit" [disabled]="!profileForm.valid">Submit</button>
-
+  <button type="submit" [disabled]="!queryFilter.valid">Submit</button>
 </form>

@@ -1,0 +1,9 @@
+#queryFilter{
+    display: flex;
+    flex-direction: column;
+}
+
+.formControl{
+    display: flex;
+    justify-content: space-between;
+}

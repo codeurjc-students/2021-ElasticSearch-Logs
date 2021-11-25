@@ -1,16 +1,112 @@
 <h3>Column Updater</h3>
 
-<form [formGroup]="profileForm" (ngSubmit)="columnsToUpdateEmit()">
+<form [formGroup]="columnsToDisplay" (ngSubmit)="columnsToDisplayEmit()" id="columnsToDisplay">
 
+  <div>
+    <input id="timestamp" type="checkbox" formControlName="timestamp" />
+    <label for="timestamp">timestamp</label>
+  </div>
 
+  <div>
+    <input id="message" type="checkbox" formControlName="message" />
+    <label for="message">message</label>
+  </div>
 
-  <!--Form fields-->
-  <div *ngFor="let name of colDefNames">
-    <input id="name" type="checkbox" [formControlName]="name" />
-    <label for="name">{{ name }}</label>
+  <div>
+    <input id="agent" type="checkbox" formControlName="agent" />
+    <label for="agent">agent</label>
+  </div>
+
+  <div>
+    <input id="clientip" type="checkbox" formControlName="clientip" />
+    <label for="clientip">clientip</label>
+  </div>
+
+  <div>
+    <input id="event" type="checkbox" formControlName="event" />
+    <label for="event">event</label>
+  </div>
+
+  <div>
+    <input id="host" type="checkbox" formControlName="host" />
+    <label for="host">host</label>
+  </div>
+
+  <div>
+    <input id="request" type="checkbox" formControlName="request" />
+    <label for="request">request</label>
+  </div>
+
+  <div>
+    <input id="response" type="checkbox" formControlName="response" />
+    <label for="response">response</label>
+  </div>
+
+  <div>
+    <input id="url" type="checkbox" formControlName="url" />
+    <label for="url">url</label>
+  </div>
+
+  <div>
+    <input id="extension" type="checkbox" formControlName="extension" />
+    <label for="extension">extension</label>
+  </div>
+
+  <div>
+    <input id="geo" type="checkbox" formControlName="geo" />
+    <label for="geo">geo</label>
+  </div>
+
+  <div>
+    <input id="index" type="checkbox" formControlName="index" />
+    <label for="index">index</label>
+  </div>
+
+  <div>
+    <input id="ip" type="checkbox" formControlName="ip" />
+    <label for="ip">ip</label>
+  </div>
+
+  <div>
+    <input id="ip_range" type="checkbox" formControlName="ip_range" />
+    <label for="ip_range">ip_range</label>
+  </div>
+
+  <div>
+    <input id="machine" type="checkbox" formControlName="machine" />
+    <label for="machine">machine</label>
+  </div>
+
+  <div>
+    <input id="memory" type="checkbox" formControlName="memory" />
+    <label for="memory">memory</label>
+  </div>
+
+  <div>
+    <input id="phpmemory" type="checkbox" formControlName="phpmemory" />
+    <label for="phpmemory">phpmemory</label>
+  </div>
+
+  <div>
+    <input id="referer" type="checkbox" formControlName="referer" />
+    <label for="referer">referer</label>
+  </div>
+
+  <div>
+    <input id="tags" type="checkbox" formControlName="tags" />
+    <label for="tags">tags</label>
+  </div>
+
+  <div>
+    <input id="timestamp_range" type="checkbox" formControlName="timestamp_range" />
+    <label for="timestamp_range">timestamp_range</label>
+  </div>
+
+  <div>
+    <input id="utc_time" type="checkbox" formControlName="utc_time" />
+    <label for="utc_time">utc_time</label>
   </div>
 
   <!--On submit update the table-->
-  <button type="submit" [disabled]="!profileForm.valid">Submit</button>
-
+  <button type="submit" [disabled]="!columnsToDisplay.valid">Submit</button>
 </form>

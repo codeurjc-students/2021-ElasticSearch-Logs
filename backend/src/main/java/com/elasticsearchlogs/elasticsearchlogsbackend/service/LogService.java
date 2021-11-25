@@ -4,6 +4,7 @@ import com.elasticsearchlogs.elasticsearchlogsbackend.document.Log;
 import com.elasticsearchlogs.elasticsearchlogsbackend.search.SearchRequestDTO;
 import com.elasticsearchlogs.elasticsearchlogsbackend.search.util.SearchUtil;
 import com.elasticsearchlogs.elasticsearchlogsbackend.utils.Indices;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.elasticsearch.action.get.GetRequest;
 import org.elasticsearch.action.get.GetResponse;
@@ -24,6 +25,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -58,19 +60,28 @@ public class LogService {
 
         try {
             SearchResponse response = client.search(request, RequestOptions.DEFAULT);
+            int page = searchRequestDTO.getPage();
+            int currentPage = 1;
 
             //First fetch
             String scrollId = response.getScrollId();
             SearchHit[] searchHits = response.getHits().getHits();
-            int currentPage = 0;
+
+            if(page == 0){
+                return getLogs(searchHits);
+            }
 
             //Fetch until the page have been gotten
-            while (searchHits != null && searchHits.length > 0 && searchRequestDTO.getPage() != currentPage) {
+            while (searchHits != null && searchHits.length > 0) {
                 SearchScrollRequest scrollRequest = new SearchScrollRequest(scrollId);
                 scrollRequest.scroll(TimeValue.timeValueMinutes(1L));
                 response = client.scroll(scrollRequest, RequestOptions.DEFAULT);
+
                 scrollId = response.getScrollId();
                 searchHits = response.getHits().getHits();
+                if (searchHits.length > 0 && currentPage == page) {
+                    return getLogs(searchHits);
+                }
                 currentPage++;
             }
 
@@ -79,23 +90,31 @@ public class LogService {
                 LOG.warn("Scroll context is still up");
             }
 
-            int hitsNumber = searchHits != null ? searchHits.length : 0;
-            if (hitsNumber == 0) {
-                LOG.error("Empty set of hits");
-                return Collections.emptyList();
-            }
-            final List<Log> logs = new ArrayList<>(hitsNumber);
 
-            for (SearchHit hit : searchHits) {
-                logs.add(MAPPER.readValue(hit.getSourceAsString(), Log.class));
-            }
+            System.out.println("Por aqui");
+            return getLogs(searchHits);
 
-            return logs;
         } catch (Exception e) {
             LOG.error(e.getMessage(), e);
             return Collections.emptyList();
         }
     }
+
+    private List<Log> getLogs(SearchHit[] searchHits) throws JsonProcessingException {
+        int hitsNumber = searchHits != null ? searchHits.length : 0;
+        if (hitsNumber == 0) {
+            LOG.error("Empty set of hits");
+            return Collections.emptyList();
+        }
+
+        final List<Log> logs = new ArrayList<>(hitsNumber);
+
+        for (SearchHit hit : searchHits) {
+            logs.add(MAPPER.readValue(hit.getSourceAsString(), Log.class));
+        }
+        return logs;
+    }
+
 
     /**
      * Clear the context

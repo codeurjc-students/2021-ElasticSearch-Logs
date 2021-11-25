@@ -1,11 +1,9 @@
-
-import { Component, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, HostListener, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
 import { Log } from '../../models/log';
 import { LogService } from '../../service/log.service';
 
 import { ColDef, Column } from 'ag-grid-community';
 import { AgGridAngular } from 'ag-grid-angular';
-import { SearchRequest } from 'src/app/models/searchRequest';
 import { UtilService } from 'src/app/util/util.service';
 
 
@@ -18,85 +16,174 @@ export class TableComponent implements OnChanges {
 
   @ViewChild('agGrid') agGrid!: AgGridAngular;
 
-  @Input() columnsToUpdateData: ColDef[] = [];
-  @Input() queryFilterData: any[][] = [];
+  @Input() columnsToDisplayData: string[] = [];
+  @Input() queryFilterData: any[][] = [[],[]];
 
-  // Ag-Grid configuration
+  private HEIGHT_RELATION:number = 100;
+
+  // Pixels
+  private actualPixel: number = 5000;
+
+  // Page
+  private page:number = 0;
+
+  // Ag-Grid API
   private gridApi: any;
-  private gridColumnApi: any;
 
-  public defaultColDef: any
+  private columnApi: any;
+
+  public columnDefs: any[];
+
+  public defaultColDef: object;
+
+  // Data set
   public rowData: Log[] = [];
+
+  // Rows pre-loaded off view
   public rowBuffer: number;
+
+  // Allow row selection
   public rowSelection: string;
-  public rowModelType: string;
-  public dataSource: any;
-  public components: any;
-  public paginationPageSize: number
-  public cacheOverflowSize: number;
-  public maxConcurrentDatasourceRequests: number;
-  public infiniteInitialRowCount: number;
-  public maxBlocksInCache: number;
 
-  public frameworkComponents: any;
-
+  // Grid context
   public context: any;
-
-  columns: any = {
-    'timestamp' : 250,
-    'message' : 500,
-    'agent': 700,
-    'clientip':150,
-    'event':200,
-    'host':250,
-    'request':350,
-    'response':120,
-    'url':600,
-    'bytes':100,
-    'extension':120,
-    'geo':150,
-    'index':200,
-    'ip':150,
-    'ip_range':200,
-    'machine': 500,
-    'memory':150,
-    'phpmemory':150,
-    'referer':600,
-    'tags':150,
-    'timestamp_range':250,
-    'utc_time':250
-  }
 
   /**
    * Constructor
    * @param logService 
    * @param utilService 
    */
-  constructor(private logService: LogService, private utilService: UtilService) {
-
-    this.context = {
-      componentParent: this
-    }
-
-    this.components = {
-      loadingRenderer: function (params: any) {
-        if (params.value !== undefined) {
-          return params.value;
-        } else {
-          return "<img src=\"https://www.ag-grid.com/example-assets/loading.gif\">";
-        }
+  public constructor(private logService: LogService, private utilService: UtilService) {
+    this.columnDefs = [
+      {
+        field: "timestamp",
+        width: 250
       },
+      {
+        field: "message",
+        width: 500
+      },
+      {
+        field: "agent",
+        width: 700,
+        initialHide: true
+      },
+      {
+        field: "clientip",
+        width: 150
+      },
+      {
+        field: "event",
+        width:200,
+        initialHide:true
+      },
+      {
+        field: "host",
+        width: 250
+      },
+      {
+        field: "request",
+        width: 350
+      },
+      {
+        field: "response",
+        width: 120
+      },
+      {
+        field: "url",
+        width:600
+      },
+      {
+        field: "bytes",
+        width:100
+      },
+      {
+        field: "extension",
+        width:120
+      },
+      {
+        field: "geo",
+        width:150,
+        initialHide:true
+      },
+      {
+        field: "index",
+        width:200,
+        initialHide:true
+      },
+      {
+        field: "ip",
+        width:150,
+        initialHide:true
+      },
+      {
+        field: "ip_range",
+        width:200,
+        initialHide:true
+      },
+      {
+        field: "machine",
+        width:500,
+        initialHide:true
+      },
+      {
+        field: "memory",
+        width:150,
+        initialHide:true
+      },
+      {
+        field: "phpmemory",
+        width:150,
+        initialHide:true
+      },
+      {
+        field: "referer",
+        width:600,
+        initialHide:true
+      },
+      {
+        field: "tags",
+        width:150,
+        initialHide:true
+      },
+      {
+        field: "timestamp_range",
+        width:250,
+        initialHide:true
+      },
+      {
+        field: "utc_time",
+        width:250,
+        initialHide:true
+      }
+    ];
+
+    this.defaultColDef = {
+      wrapText: true,
+      autoHeight: true,
+      filter: true
     };
-    this.rowBuffer = 0;
+
+    this.rowBuffer = 10;
     this.rowSelection = 'multiple';
+    this.context = { componentParent: this }
+  }
 
-    this.rowModelType = 'infinite';
-    this.paginationPageSize = 100;
-    this.cacheOverflowSize = 2;
-    this.maxConcurrentDatasourceRequests = 1;
-    this.infiniteInitialRowCount = 1000;
-    this.maxBlocksInCache = 10;
+  /**
+   * Initialization for grid
+   * @param params 
+   */
+   public onGridReady(params: any) {
+    this.gridApi = params.api;
+    this.columnApi = params.columnApi;
 
+    this.logService.search([[], []],this.page).subscribe(
+      (data) => {
+        this.rowData = data
+        this.actualPixel = (data.length * 140)/2;
+      },
+      (err) => console.log(err)
+    );
   }
 
 
@@ -111,12 +198,15 @@ export class TableComponent implements OnChanges {
   }
 
   private applyChanges(propName: string): void {
+
     switch (propName) {
-      case 'columnsToUpdateData': {
-        this.updateColDefs(this.columnsToUpdateData);
+      case 'columnsToDisplayData': {
+        this.updateColDefs(this.columnsToDisplayData);
         break;
       }
       case 'queryFilterData': {
+        this.page = 0;
+        this.actualPixel = 5000;
         this.search(this.queryFilterData);
         break;
       }
@@ -124,53 +214,55 @@ export class TableComponent implements OnChanges {
 
   }
 
-  /**
-   * Initialization for grid
-   * @param params 
-   */
-  onGridReady(params: any) {
+  
+  bodyScroll(params: any) {
+    const bottomPixel = this.gridApi.getVerticalPixelRange().bottom;
 
-    this.gridApi = params.api;
-    this.gridColumnApi = params.columnApi;
-
-    this.logService.search([[],[]]).subscribe(
-      (data) => {
-        let dataSource = this.utilService.buildDataSource(data);
-        params.api.setDatasource(dataSource);
-      },
-      (err) => console.log(err)
-    );
-    this.initColumns();
+    if(bottomPixel > this.actualPixel){
+      this.actualPixel += this.actualPixel/2;
+      let filters = this.queryFilterData.length == 0 ? [[],[]] : this.queryFilterData;
+      this.page++;
+      console.log(this.page)
+      this.logService.search(filters,this.page).subscribe(
+        (data) => {
+          console.log(data)
+          this.gridApi.applyTransaction({
+            add: data
+          })        
+        },
+        (err) => console.log(err)
+      );
+    }
   }
 
   /**
    * Update the columns definition
    * @param colDefs Array with the definitions columns
    */
-  private updateColDefs(colDefs: ColDef[]): void {
-    this.gridApi.setColumnDefs(colDefs);
+  private updateColDefs(colIds: string[]): void {
+    const allColumns = this.columnApi.getAllColumns();
+    const columnsToHide = allColumns.filter((c:string) => !colIds.includes(c));
+
+    if(colIds.length > 0){
+      this.columnApi.setColumnsVisible(columnsToHide,false);
+      this.columnApi.setColumnsVisible(colIds,true);
+    } else {
+      alert("Selecciona que columnas quieres mostrar.")
+    }
+     
   }
 
   /**
    * Search in the database based on the filters
    * @param filters An array woth 2 arrays, the SearchTerms and the Fields
    */
-  private search(filters: any[][]):void {
-    this.logService.search(filters).subscribe(
+  private search(filters: any[][]): void {
+    this.logService.search(filters,this.page).subscribe(
       (data) => {
-        let dataSource = this.utilService.buildDataSource(data);
-        this.gridApi.setDatasource(dataSource);
+        console.log(data)
+        this.gridApi.setRowData(data)        
       },
       (err) => console.log(err)
     );
   }
-
-  /**
-   * Init default colums on grid reay
-   */
-  private initColumns(): void {
-    let colDefs = this.utilService.buildColumns(this.columns).slice(0, 9)
-    this.gridApi.setColumnDefs(colDefs);
-  }
-
 }
