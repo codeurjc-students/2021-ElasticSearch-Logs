@@ -1,7 +1,10 @@
 <h3>Column Updater</h3>
 
-<form [formGroup]="columnsToDisplay" (ngSubmit)="columnsToDisplayEmit()" id="columnsToDisplay">
-
+<form
+  [formGroup]="columnsToDisplay"
+  (ngSubmit)="columnsToDisplayEmit()"
+  id="columnsToDisplay"
+>
   <div>
     <input id="timestamp" type="checkbox" formControlName="timestamp" />
     <label for="timestamp">timestamp</label>
@@ -98,7 +101,11 @@
   </div>
 
   <div>
-    <input id="timestamp_range" type="checkbox" formControlName="timestamp_range" />
+    <input
+      id="timestamp_range"
+      type="checkbox"
+      formControlName="timestamp_range"
+    />
     <label for="timestamp_range">timestamp_range</label>
   </div>
 
