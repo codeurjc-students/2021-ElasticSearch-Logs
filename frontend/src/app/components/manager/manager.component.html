@@ -1,50 +1,42 @@
-<mat-card id="main-card">
-  <mat-card id="content-card">
-    <h1 class="icon-title">
-      <mat-icon aria-hidden="false" aria-label="Settings icon"
-        >settings</mat-icon
-      >
-      Opciones
-    </h1>
+<mat-card>
+  <mat-card-title>Options</mat-card-title>
+
+  <mat-card-content>
     <mat-accordion>
-      <!--Panel 1-->
-      <mat-expansion-panel
-        hideToggle
-        [expanded]="true"
-        (opened)="panelOpenState = true"
-        (closed)="panelOpenState = false"
-      >
+      <mat-expansion-panel hideToggle>
         <mat-expansion-panel-header>
           <mat-panel-title>
-            <mat-icon aria-hidden="false" aria-label="Filter list icon">
-              filter_list
-            </mat-icon>
-            Filter
+            <mat-icon>filter_list</mat-icon> Filter
           </mat-panel-title>
         </mat-expansion-panel-header>
-        <mat-divider></mat-divider>
-        <h2 class="inside-title">Filter by values</h2>
-        <app-query-filter></app-query-filter>
+        <div class="expansion-body">
+          <p>Filters to apply</p>
+          <app-query-filter></app-query-filter>
+        </div>
       </mat-expansion-panel>
 
-      <!--Panel 2-->
-      <mat-expansion-panel
-        hideToggle
-        (opened)="panelOpenState = true"
-        (closed)="panelOpenState = false"
-      >
+      <mat-expansion-panel hideToggle>
         <mat-expansion-panel-header>
           <mat-panel-title>
-            <mat-icon aria-hidden="false" aria-label="Search list icon">
-              search
-            </mat-icon>
-            Columns
+            <mat-icon>view_column</mat-icon> Columns
           </mat-panel-title>
         </mat-expansion-panel-header>
-        <mat-divider></mat-divider>
-        <h2 class="inside-title">Select columns to display</h2>
-        <app-column-updater></app-column-updater>
+        <div class="expansion-body">
+          <p>Columns to display</p>
+          <app-column-updater></app-column-updater>
+        </div>
+      </mat-expansion-panel>
+      <mat-expansion-panel hideToggle>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <mat-icon> swap_calls</mat-icon>Query
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="expansion-body">
+          <p>Filters to apply</p>
+          <app-query-filter></app-query-filter>
+        </div>
       </mat-expansion-panel>
     </mat-accordion>
-  </mat-card>
+  </mat-card-content>
 </mat-card>
