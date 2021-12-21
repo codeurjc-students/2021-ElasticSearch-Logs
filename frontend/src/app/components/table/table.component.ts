@@ -2,6 +2,7 @@ import {
   Component,
   Input,
   OnChanges,
+  OnInit,
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
@@ -10,13 +11,14 @@ import { LogService } from '../../service/log.service';
 
 import { AgGridAngular } from 'ag-grid-angular';
 import { ScrollService } from 'src/app/util/scroll.service';
+import { ComunicationService } from 'src/app/service/comunication.service';
 
 @Component({
   selector: 'app-table',
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.css'],
 })
-export class TableComponent implements OnChanges {
+export class TableComponent implements OnChanges, OnInit {
   @ViewChild('agGrid') agGrid!: AgGridAngular;
 
   @Input() columnsToDisplayData: string[] = [];
@@ -53,7 +55,8 @@ export class TableComponent implements OnChanges {
    */
   public constructor(
     private logService: LogService,
-    private ScrollService: ScrollService
+    private ScrollService: ScrollService,
+    private comunicationService: ComunicationService
   ) {
     this.columnDefs = [
       {
@@ -168,6 +171,17 @@ export class TableComponent implements OnChanges {
     this.rowBuffer = 100;
     this.rowSelection = 'multiple';
     this.context = { componentParent: this };
+  }
+  ngOnInit(): void {
+    this.comunicationService.colDefsObservable.subscribe((data) => {
+      this.updateColDefs(data);
+    });
+
+    this.comunicationService.queryFilterObservable.subscribe((data) => {
+      this.ScrollService.resetPage();
+      this.ScrollService.recalculate();
+      this.queryFilter(data);
+    });
   }
 
   /**

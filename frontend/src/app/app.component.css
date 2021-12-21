@@ -1,11 +1,14 @@
-.main-container{
-    display: flex;
+.main-container {
+  display: flex;
+  overflow: hidden;
 }
 
-.table{
-    width: 80%;
+.table {
+  width: 80%;
+  height: 100vh;
 }
 
-.options{
-    width: 20%;
+.manager {
+  width: 20%;
+  height: 100vh;
 }

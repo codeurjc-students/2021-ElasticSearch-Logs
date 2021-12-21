@@ -89,9 +89,7 @@ public class LogService {
             if (!closed) {
                 LOG.warn("Scroll context is still up");
             }
-
-
-            System.out.println("Por aqui");
+            
             return getLogs(searchHits);
 
         } catch (Exception e) {

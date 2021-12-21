@@ -1,0 +1,106 @@
+<form
+  [formGroup]="columnsToDisplay"
+  (ngSubmit)="columnsToDisplayEmit()"
+  id="columnsToDisplay"
+>
+  <mat-checkbox id="timestamp" type="checkbox" formControlName="timestamp">
+    Timespamp
+  </mat-checkbox>
+
+  <mat-checkbox id="message" type="checkbox" formControlName="message">
+    Message
+  </mat-checkbox>
+
+  <mat-checkbox id="agent" type="checkbox" formControlName="agent">
+    Agent
+  </mat-checkbox>
+
+  <mat-checkbox id="clientip" type="checkbox" formControlName="clientip">
+    Client IP
+  </mat-checkbox>
+
+  <mat-checkbox id="event" type="checkbox" formControlName="event">
+    Event
+  </mat-checkbox>
+
+  <mat-checkbox id="host" type="checkbox" formControlName="host">
+    Host
+  </mat-checkbox>
+
+  <mat-checkbox id="request" type="checkbox" formControlName="request">
+    Request
+  </mat-checkbox>
+
+  <mat-checkbox id="response" type="checkbox" formControlName="response">
+    Response
+  </mat-checkbox>
+
+  <mat-checkbox id="url" type="checkbox" formControlName="url">
+    Url
+  </mat-checkbox>
+
+  <mat-checkbox id="url" type="checkbox" formControlName="url">
+    Url
+  </mat-checkbox>
+
+  <mat-checkbox id="extension" type="checkbox" formControlName="extension">
+    Extension
+  </mat-checkbox>
+
+  <mat-checkbox id="geo" type="checkbox" formControlName="geo">
+    Geo
+  </mat-checkbox>
+
+  <mat-checkbox id="index" type="checkbox" formControlName="index">
+    Index
+  </mat-checkbox>
+
+  <mat-checkbox id="ip" type="checkbox" formControlName="ip"> Ip </mat-checkbox>
+
+  <mat-checkbox id="ip_range" type="checkbox" formControlName="ip_range">
+    Ip range
+  </mat-checkbox>
+
+  <mat-checkbox id="machine" type="checkbox" formControlName="machine">
+    Machine
+  </mat-checkbox>
+
+  <mat-checkbox id="memory" type="checkbox" formControlName="memory">
+    Memory
+  </mat-checkbox>
+
+  <mat-checkbox id="phpmemory" type="checkbox" formControlName="phpmemory">
+    PHP Memory
+  </mat-checkbox>
+
+  <mat-checkbox id="referer" type="checkbox" formControlName="referer">
+    Referer
+  </mat-checkbox>
+
+  <mat-checkbox id="tags" type="checkbox" formControlName="tags">
+    Tags
+  </mat-checkbox>
+
+  <mat-checkbox
+    id="timestamp_range"
+    type="checkbox"
+    formControlName="timestamp_range"
+  >
+    Timestamp Range
+  </mat-checkbox>
+
+  <mat-checkbox id="utc_time" type="checkbox" formControlName="utc_time">
+    UTC Time
+  </mat-checkbox>
+
+  <!--On submit update the table-->
+  <button
+    class="submit-button"
+    [disabled]="!columnsToDisplay.valid"
+    type="submit"
+    mat-raised-button
+    color="primary"
+  >
+    Submit
+  </button>
+</form>
