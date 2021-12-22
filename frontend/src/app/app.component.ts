@@ -1,26 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewChecked, Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
 })
-export class AppComponent implements OnInit {
-  columnsToDisplayData: string[];
-  queryFilterData: any[][];
+export class AppComponent implements OnInit, AfterViewChecked {
+  loading: boolean;
 
   constructor() {
-    this.columnsToDisplayData = [];
-    this.queryFilterData = [];
+    this.loading = true;
+  }
+  ngAfterViewChecked(): void {
+    this.loading = false;
   }
 
   ngOnInit() {}
-
-  columnsToDisplayHandler(colIds: string[]) {
-    this.columnsToDisplayData = colIds;
-  }
-
-  queryFilterHandler(data: any[][]) {
-    this.queryFilterData = data;
-  }
 }

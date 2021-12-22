@@ -24,8 +24,13 @@ export class TableComponent implements OnChanges, OnInit {
   @Input() columnsToDisplayData: string[] = [];
   @Input() queryFilterData: any[][] = [[], []];
 
+  loading: boolean = true;
+
   // Grid API
   private gridApi: any;
+
+  // Loading overlay
+  public overlayLoadingTemplate: any;
 
   // Column API
   private columnApi: any;
@@ -37,7 +42,7 @@ export class TableComponent implements OnChanges, OnInit {
   public defaultColDef: object;
 
   // Data set
-  public rowData: Log[] = [];
+  public rowData: Log[] | undefined;
 
   // Rows pre-loaded off view
   public rowBuffer: number;
@@ -58,6 +63,9 @@ export class TableComponent implements OnChanges, OnInit {
     private ScrollService: ScrollService,
     private comunicationService: ComunicationService
   ) {
+    this.overlayLoadingTemplate =
+      '<img src="/assets/img/loading.gif" width="100px" height="100px"></img>';
+
     this.columnDefs = [
       {
         field: 'timestamp',
@@ -195,6 +203,7 @@ export class TableComponent implements OnChanges, OnInit {
     this.logService.search([[], []], this.ScrollService.page).subscribe(
       (data) => {
         this.rowData = data;
+        this.loading = false;
       },
       (err) => console.log(err)
     );
