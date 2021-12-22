@@ -1,0 +1,13 @@
+::ng-deep .ag-header-row-column {
+  background-color: var(--primary);
+  color: white;
+}
+
+::ng-deep .ag-header-cell-text {
+  color: white;
+}
+
+::ng-deep.ag-header-cell.ag-focus-managed:hover,
+::ng-deep.ag-header-cell.ag-focus-managed:focus {
+  background-color: var(--primary-dark) !important;
+}
