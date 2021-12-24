@@ -180,6 +180,7 @@ export class TableComponent implements OnChanges, OnInit {
     this.rowSelection = 'multiple';
     this.context = { componentParent: this };
   }
+
   ngOnInit(): void {
     this.comunicationService.colDefsObservable.subscribe((data) => {
       this.updateColDefs(data);

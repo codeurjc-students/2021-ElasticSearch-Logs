@@ -1,0 +1,18 @@
+<div id="editor">
+  <ngx-monaco-editor
+    [options]="editorOptions"
+    [(ngModel)]="code"
+    (ngModelChange)="checkSyntax()"
+  ></ngx-monaco-editor>
+
+  <button
+    (click)="sendJSON()"
+    class="submit-button"
+    [disabled]="!valid"
+    type="submit"
+    mat-raised-button
+    color="primary"
+  >
+    Submit
+  </button>
+</div>

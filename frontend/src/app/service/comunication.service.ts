@@ -7,6 +7,7 @@ import { Subject } from 'rxjs';
 export class ComunicationService {
   colDefs: string[] = [];
   queryFilters: any[][] = [];
+  queryJSON: string = '';
 
   private colDefsSubject = new Subject<string[]>();
   colDefsObservable = this.colDefsSubject.asObservable();

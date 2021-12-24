@@ -1,0 +1,18 @@
+ngx-monaco-editor {
+  padding: 10px;
+  height: 330px;
+  border: 0.5px solid #ededed;
+  border-radius: 2px;
+}
+
+.submit-button {
+  margin-top: 20px;
+}
+
+#editor {
+  padding: 30px;
+  padding-top: 0;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}

@@ -21,7 +21,10 @@ import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
+import { QueryJsonComponent } from './components/manager/tools/query-json/query-json.component';
 
+import { MonacoEditorModule } from 'ngx-monaco-editor';
+import { FormsModule } from '@angular/forms';
 @NgModule({
   imports: [
     BrowserModule,
@@ -36,6 +39,8 @@ import { MatDividerModule } from '@angular/material/divider';
     MatCheckboxModule,
     MatIconModule,
     MatDividerModule,
+    FormsModule,
+    MonacoEditorModule.forRoot(),
   ],
   declarations: [
     AppComponent,
@@ -43,6 +48,7 @@ import { MatDividerModule } from '@angular/material/divider';
     TableComponent,
     QueryFilterComponent,
     ManagerComponent,
+    QueryJsonComponent,
   ],
   providers: [LogService],
   bootstrap: [AppComponent],

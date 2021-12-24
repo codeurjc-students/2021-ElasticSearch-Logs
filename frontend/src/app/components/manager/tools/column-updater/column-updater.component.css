@@ -1,8 +1,3 @@
-#columnsToDisplay {
-  display: flex;
-  flex-direction: column;
-}
-
 .submit-button {
   margin-top: 20px;
 }
@@ -11,4 +6,6 @@ form {
   padding: 30px;
   padding-top: 0;
   margin-top: 20px;
+  display: flex;
+  flex-direction: column;
 }

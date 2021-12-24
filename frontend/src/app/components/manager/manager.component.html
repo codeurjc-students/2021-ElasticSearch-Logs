@@ -3,6 +3,7 @@
 
   <mat-card-content>
     <mat-accordion>
+      <!--Filters-->
       <mat-expansion-panel hideToggle>
         <mat-expansion-panel-header>
           <mat-panel-title>
@@ -15,6 +16,7 @@
         </div>
       </mat-expansion-panel>
 
+      <!--Columns-->
       <mat-expansion-panel hideToggle>
         <mat-expansion-panel-header>
           <mat-panel-title>
@@ -26,15 +28,17 @@
           <app-column-updater></app-column-updater>
         </div>
       </mat-expansion-panel>
+
+      <!--Query-->
       <mat-expansion-panel hideToggle>
         <mat-expansion-panel-header>
           <mat-panel-title>
-            <mat-icon> swap_calls</mat-icon>Query
+            <mat-icon>swap_calls</mat-icon>Query
           </mat-panel-title>
         </mat-expansion-panel-header>
         <div class="expansion-body">
-          <p>Filters to apply</p>
-          <app-query-filter></app-query-filter>
+          <p>JSON with key and values</p>
+          <app-query-json></app-query-json>
         </div>
       </mat-expansion-panel>
     </mat-accordion>

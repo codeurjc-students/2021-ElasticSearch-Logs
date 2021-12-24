@@ -9,7 +9,7 @@ import { UtilService } from 'src/app/util/util.service';
   templateUrl: './query-filter.component.html',
   styleUrls: ['./query-filter.component.css'],
 })
-export class QueryFilterComponent implements OnInit {
+export class QueryFilterComponent {
   public queryFilter: FormGroup;
 
   constructor(
@@ -41,8 +41,6 @@ export class QueryFilterComponent implements OnInit {
       utc_time: new FormControl(''),
     });
   }
-
-  ngOnInit(): void {}
 
   queryFilterEmit(): void {
     const data = this.utilService.getDataFromForm(this.queryFilter);
