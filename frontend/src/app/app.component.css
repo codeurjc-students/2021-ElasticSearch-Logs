@@ -1,3 +1,6 @@
+* {
+  scroll-behavior: smooth;
+}
 .main-container {
   display: flex;
   overflow: hidden;

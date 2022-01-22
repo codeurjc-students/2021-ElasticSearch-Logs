@@ -6,17 +6,10 @@ import com.elasticsearchlogs.elasticsearchlogsbackend.search.util.SearchUtil;
 import com.elasticsearchlogs.elasticsearchlogsbackend.utils.Indices;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.elasticsearch.action.get.GetRequest;
-import org.elasticsearch.action.get.GetResponse;
-import org.elasticsearch.action.index.IndexRequest;
-import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.*;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.unit.TimeValue;
-import org.elasticsearch.common.xcontent.XContentType;
-import org.elasticsearch.rest.RestStatus;
-import org.elasticsearch.search.Scroll;
 import org.elasticsearch.search.SearchHit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +18,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -49,7 +41,7 @@ public class LogService {
      */
     public List<Log> search(final SearchRequestDTO searchRequestDTO) {
         final SearchRequest request = SearchUtil.buildSearchRequest(
-                Indices.LOG_INDEX,
+                Indices.LOG_INDEX_SAMPLE,
                 searchRequestDTO
         );
 

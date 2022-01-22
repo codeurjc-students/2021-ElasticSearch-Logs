@@ -18,7 +18,7 @@ import javax.annotation.PostConstruct;
 public class IndexService {
     private static final Logger LOG = LoggerFactory.getLogger(Util.class);
 
-    private final String INDEX = Indices.LOG_INDEX;
+    private final String INDEX = Indices.LOG_INDEX_SAMPLE;
     private final RestHighLevelClient client;
 
     @Autowired
@@ -32,13 +32,13 @@ public class IndexService {
         try {
             boolean indexExist = client
                     .indices()
-                    .exists(new GetIndexRequest(Indices.LOG_INDEX), RequestOptions.DEFAULT);
+                    .exists(new GetIndexRequest(Indices.LOG_INDEX_SAMPLE), RequestOptions.DEFAULT);
             if (!indexExist) {
-                final String mapping = Util.loadAsString("static/mappings/" + Indices.LOG_INDEX + ".json");
+                final String mapping = Util.loadAsString("static/mappings/" + Indices.LOG_INDEX_SAMPLE + ".json");
                 if (settings == null || mapping == null) {
-                    LOG.error("Filed to create index with name '{}'", Indices.LOG_INDEX);
+                    LOG.error("Filed to create index with name '{}'", Indices.LOG_INDEX_SAMPLE);
                 } else {
-                    final CreateIndexRequest createIndexRequest = new CreateIndexRequest(Indices.LOG_INDEX);
+                    final CreateIndexRequest createIndexRequest = new CreateIndexRequest(Indices.LOG_INDEX_SAMPLE);
                     createIndexRequest.settings(settings, XContentType.JSON);
                     createIndexRequest.mapping(mapping, XContentType.JSON);
 

@@ -6,11 +6,9 @@ import {
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
-import { Log } from '../../models/log';
 import { LogService } from '../../service/log.service';
 
 import { AgGridAngular } from 'ag-grid-angular';
-import { ScrollService } from 'src/app/util/scroll.service';
 import { ComunicationService } from 'src/app/service/comunication.service';
 
 @Component({
@@ -24,7 +22,9 @@ export class TableComponent implements OnChanges, OnInit {
   @Input() columnsToDisplayData: string[] = [];
   @Input() queryFilterData: any[][] = [[], []];
 
-  loading: boolean = true;
+  public page: number = 0;
+
+  public loading: boolean = true;
 
   // Grid API
   private gridApi: any;
@@ -41,9 +41,6 @@ export class TableComponent implements OnChanges, OnInit {
   // Default columns config
   public defaultColDef: object;
 
-  // Data set
-  public rowData: Log[] | undefined;
-
   // Rows pre-loaded off view
   public rowBuffer: number;
 
@@ -53,6 +50,26 @@ export class TableComponent implements OnChanges, OnInit {
   // Grid context
   public context: any;
 
+  public components: any;
+
+  // Grid data model
+  public rowModelType: string;
+
+  // Size of the block loaded by the datasource
+  public cacheBlockSize: number;
+
+  // Number of extra blank rows to display to the user at the end of the dataset
+  public cacheOverflowSize: number;
+
+  // Number of max concurrent request to fetch data from the server
+  public maxConcurrentDatasourceRequests: number;
+
+  // Number of blocks that will be stored in cache
+  public maxBlocksInCache: any;
+
+  // Height of each row
+  public rowHeight: number;
+
   /**
    * Constructor
    * @param logService
@@ -60,11 +77,10 @@ export class TableComponent implements OnChanges, OnInit {
    */
   public constructor(
     private logService: LogService,
-    private ScrollService: ScrollService,
     private comunicationService: ComunicationService
   ) {
-    this.overlayLoadingTemplate =
-      '<img src="/assets/img/loading.gif" width="100px" height="100px"></img>';
+    // Basic config
+    this.rowModelType = 'infinite';
 
     this.columnDefs = [
       {
@@ -172,23 +188,33 @@ export class TableComponent implements OnChanges, OnInit {
 
     this.defaultColDef = {
       wrapText: true,
-      autoHeight: true,
       filter: true,
     };
 
-    this.rowBuffer = 100;
+    // Spinner
+    this.overlayLoadingTemplate =
+      '<img src="/assets/img/loading.gif" width="100px" height="100px"></img>';
+
+    // Row options
+    this.rowHeight = 200;
+    this.rowBuffer = 10;
     this.rowSelection = 'multiple';
+
+    // Infinite loading options
+    this.cacheOverflowSize = 5;
+    this.maxConcurrentDatasourceRequests = 5;
+    this.maxBlocksInCache = 1;
+    this.cacheBlockSize = 10;
+
     this.context = { componentParent: this };
   }
 
   ngOnInit(): void {
     this.comunicationService.colDefsObservable.subscribe((data) => {
-      this.updateColDefs(data);
+      // this.updateColDefs(data);
     });
 
     this.comunicationService.queryFilterObservable.subscribe((data) => {
-      this.ScrollService.resetPage();
-      this.ScrollService.recalculate();
       this.queryFilter(data);
     });
   }
@@ -201,9 +227,30 @@ export class TableComponent implements OnChanges, OnInit {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
 
-    this.logService.search([[], []], this.ScrollService.page).subscribe(
+    let dataSource = {
+      rowCount: null,
+      getRows: (params: any) => {
+        this.page = params.startRow / 10;
+
+        this.logService.search([[], []], this.page).subscribe(
+          (data) => {
+            console.log(`asking for ${params.startRow} to ${params.endRow}`);
+            console.log(this.page);
+            let lastRow = data.length == 10 ? null : data.length;
+
+            params.successCallback(data, lastRow);
+            this.loading = false;
+          },
+          (err) => console.log(err)
+        );
+      },
+    };
+
+    params.api.setDatasource(dataSource);
+
+    this.logService.search([[], []], this.page).subscribe(
       (data) => {
-        this.rowData = data;
+        // this.rowData = data;
         this.loading = false;
       },
       (err) => console.log(err)
@@ -221,41 +268,13 @@ export class TableComponent implements OnChanges, OnInit {
   private applyChanges(propName: string): void {
     switch (propName) {
       case 'columnsToDisplayData': {
-        this.updateColDefs(this.columnsToDisplayData);
+        // this.updateColDefs(this.columnsToDisplayData);
         break;
       }
       case 'queryFilterData': {
-        this.ScrollService.resetPage();
-        this.ScrollService.recalculate();
-
         this.queryFilter(this.queryFilterData);
         break;
       }
-    }
-  }
-
-  bodyScroll(params: any) {
-    const actualPixel = this.gridApi.getVerticalPixelRange().bottom;
-
-    let breakpointPixel = this.ScrollService.breakpointPixel;
-    if (actualPixel > breakpointPixel) {
-      // Condition to stop the event
-      breakpointPixel += breakpointPixel * 10;
-
-      this.ScrollService.increment();
-      this.ScrollService.nextPage();
-
-      let filters =
-        this.queryFilterData.length == 0 ? [[], []] : this.queryFilterData;
-
-      this.logService.search(filters, this.ScrollService.page).subscribe(
-        (data) => {
-          this.gridApi.applyTransaction({
-            add: data,
-          });
-        },
-        (err) => console.log(err)
-      );
     }
   }
 
@@ -263,24 +282,24 @@ export class TableComponent implements OnChanges, OnInit {
    * Update the columns definition
    * @param colDefs Array with the definitions columns
    */
-  private updateColDefs(colIds: string[]): void {
-    const allColumns = this.columnApi.getAllColumns();
-    const columnsToHide = allColumns.filter((c: string) => !colIds.includes(c));
+  // private updateColDefs(colIds: string[]): void {
+  //   const allColumns = this.columnApi.getAllColumns();
+  //   const columnsToHide = allColumns.filter((c: string) => !colIds.includes(c));
 
-    if (colIds.length > 0) {
-      this.columnApi.setColumnsVisible(columnsToHide, false);
-      this.columnApi.setColumnsVisible(colIds, true);
-    } else {
-      alert('Selecciona que columnas quieres mostrar.');
-    }
-  }
+  //   if (colIds.length > 0) {
+  //     this.columnApi.setColumnsVisible(columnsToHide, false);
+  //     this.columnApi.setColumnsVisible(colIds, true);
+  //   } else {
+  //     alert('Selecciona que columnas quieres mostrar.');
+  //   }
+  // }
 
   /**
    * Search in the database based on the filters
    * @param filters An array woth 2 arrays, the SearchTerms and the Fields
    */
   private queryFilter(filters: any[][]): void {
-    this.logService.search(filters, this.ScrollService.page).subscribe(
+    this.logService.search(filters, this.page).subscribe(
       (data) => {
         this.gridApi.setRowData(data);
       },

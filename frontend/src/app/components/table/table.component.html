@@ -2,13 +2,18 @@
   <ag-grid-angular
     #agGrid
     style="width: 100%; height: 100vh"
-    [overlayLoadingTemplate]="overlayLoadingTemplate"
     [columnDefs]="columnDefs"
     [defaultColDef]="defaultColDef"
-    [rowData]="rowData"
+    [components]="components"
     [rowBuffer]="rowBuffer"
+    [overlayLoadingTemplate]="overlayLoadingTemplate"
     [rowSelection]="rowSelection"
-    (bodyScroll)="bodyScroll($event)"
+    [rowModelType]="rowModelType"
+    [rowHeight]="rowHeight"
+    [cacheBlockSize]="cacheBlockSize"
+    [cacheOverflowSize]="cacheOverflowSize"
+    [maxConcurrentDatasourceRequests]="maxConcurrentDatasourceRequests"
+    [maxBlocksInCache]="maxBlocksInCache"
     (gridReady)="onGridReady($event)"
   >
   </ag-grid-angular>

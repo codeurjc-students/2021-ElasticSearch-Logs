@@ -25,7 +25,7 @@ export class LogService {
       fields: filters[0],
       searchTerms: filters[1],
       page: page,
-      size: 100,
+      size: 10,
     };
 
     return this.httpClient.post<Log[]>(`${this.url}/log/search`, searchRequest);

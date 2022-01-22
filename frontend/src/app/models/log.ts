@@ -1,50 +1,47 @@
-
-
 export interface Log {
+  id: string;
 
-    id: string;
+  agent: string;
 
-    agent: string;
+  bytes: string;
 
-    bytes: string;
+  clientIp: string;
 
-    clientIp: string;
+  event: Map<string, string>;
 
-    event: Map<string, string>;
+  extension: string;
 
-    extension: string;
+  geo: Map<string, string>;
 
-    geo: Map<string, string>;
+  host: string;
 
-    host: string;
+  index: string;
 
-    index: string;
+  ip: string;
 
-    ip: string
+  ip_range: string;
 
-    ip_range: string;
+  machine: Map<string, string>;
 
-    machine: Map<string, string>;
-    
-    memory: string;
+  memory: string;
 
-    message: string;
+  message: string;
 
-    phpmemory: string;
+  phpmemory: string;
 
-    referer: string;
+  referer: string;
 
-    request: string;
+  request: string;
 
-    response: string
+  response: string;
 
-    tags: string;
+  tags: string;
 
-    timestamp: string;
+  timestamp: string;
 
-    timestamp_range: string;
+  timestamp_range: string;
 
-    url: string;
+  url: string;
 
-    utc_time: string;
+  utc_time: string;
 }
