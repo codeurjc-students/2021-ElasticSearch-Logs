@@ -1,12 +1,7 @@
-import {
-  Component,
-  Input,
-  OnChanges,
-  OnInit,
-  SimpleChanges,
-  ViewChild,
-} from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { LogService } from '../../service/log.service';
+
+import { COLUMN_DEFS } from './table.config';
 
 import { AgGridAngular } from 'ag-grid-angular';
 import { ComunicationService } from 'src/app/service/comunication.service';
@@ -16,12 +11,13 @@ import { ComunicationService } from 'src/app/service/comunication.service';
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.css'],
 })
-export class TableComponent implements OnChanges, OnInit {
+export class TableComponent implements OnInit {
   @ViewChild('agGrid') agGrid!: AgGridAngular;
 
   @Input() columnsToDisplayData: string[] = [];
   @Input() queryFilterData: any[][] = [[], []];
 
+  // Page number
   public page: number = 0;
 
   public loading: boolean = true;
@@ -29,14 +25,11 @@ export class TableComponent implements OnChanges, OnInit {
   // Grid API
   private gridApi: any;
 
-  // Loading overlay
-  public overlayLoadingTemplate: any;
-
   // Column API
   private columnApi: any;
 
   // Columns definitions
-  public columnDefs: any[];
+  public columnDefs: object[];
 
   // Default columns config
   public defaultColDef: object;
@@ -48,8 +41,9 @@ export class TableComponent implements OnChanges, OnInit {
   public rowSelection: string;
 
   // Grid context
-  public context: any;
+  public context: object;
 
+  // Custom componenets
   public components: any;
 
   // Grid data model
@@ -65,7 +59,9 @@ export class TableComponent implements OnChanges, OnInit {
   public maxConcurrentDatasourceRequests: number;
 
   // Number of blocks that will be stored in cache
-  public maxBlocksInCache: any;
+  public maxBlocksInCache: number;
+
+  public infiniteInitialRowCount: number;
 
   // Height of each row
   public rowHeight: number;
@@ -82,118 +78,24 @@ export class TableComponent implements OnChanges, OnInit {
     // Basic config
     this.rowModelType = 'infinite';
 
-    this.columnDefs = [
-      {
-        field: 'timestamp',
-        width: 250,
-      },
-      {
-        field: 'message',
-        width: 500,
-      },
-      {
-        field: 'agent',
-        width: 700,
-        initialHide: true,
-      },
-      {
-        field: 'clientip',
-        width: 150,
-      },
-      {
-        field: 'event',
-        width: 200,
-        initialHide: true,
-      },
-      {
-        field: 'host',
-        width: 250,
-      },
-      {
-        field: 'request',
-        width: 350,
-      },
-      {
-        field: 'response',
-        width: 120,
-      },
-      {
-        field: 'url',
-        width: 600,
-      },
-      {
-        field: 'bytes',
-        width: 100,
-      },
-      {
-        field: 'extension',
-        width: 120,
-      },
-      {
-        field: 'geo',
-        width: 150,
-        initialHide: true,
-      },
-      {
-        field: 'index',
-        width: 200,
-        initialHide: true,
-      },
-      {
-        field: 'ip',
-        width: 150,
-        initialHide: true,
-      },
-      {
-        field: 'ip_range',
-        width: 200,
-        initialHide: true,
-      },
-      {
-        field: 'machine',
-        width: 500,
-        initialHide: true,
-      },
-      {
-        field: 'memory',
-        width: 150,
-        initialHide: true,
-      },
-      {
-        field: 'phpmemory',
-        width: 150,
-        initialHide: true,
-      },
-      {
-        field: 'referer',
-        width: 600,
-        initialHide: true,
-      },
-      {
-        field: 'tags',
-        width: 150,
-        initialHide: true,
-      },
-      {
-        field: 'timestamp_range',
-        width: 250,
-        initialHide: true,
-      },
-      {
-        field: 'utc_time',
-        width: 250,
-        initialHide: true,
-      },
-    ];
+    // Colums definition
+    this.columnDefs = COLUMN_DEFS;
 
     this.defaultColDef = {
       wrapText: true,
       filter: true,
+      cellRenderer: 'loadingRenderer',
     };
 
-    // Spinner
-    this.overlayLoadingTemplate =
-      '<img src="/assets/img/loading.gif" width="100px" height="100px"></img>';
+    this.components = {
+      loadingRenderer: function (params: any) {
+        if (params.value !== undefined) {
+          return params.value;
+        } else {
+          return '<img src="/assets/img/loading.gif"></img>';
+        }
+      },
+    };
 
     // Row options
     this.rowHeight = 200;
@@ -205,18 +107,9 @@ export class TableComponent implements OnChanges, OnInit {
     this.maxConcurrentDatasourceRequests = 5;
     this.maxBlocksInCache = 1;
     this.cacheBlockSize = 10;
+    this.infiniteInitialRowCount = 5;
 
     this.context = { componentParent: this };
-  }
-
-  ngOnInit(): void {
-    this.comunicationService.colDefsObservable.subscribe((data) => {
-      // this.updateColDefs(data);
-    });
-
-    this.comunicationService.queryFilterObservable.subscribe((data) => {
-      this.queryFilter(data);
-    });
   }
 
   /**
@@ -227,7 +120,7 @@ export class TableComponent implements OnChanges, OnInit {
     this.gridApi = params.api;
     this.columnApi = params.columnApi;
 
-    let dataSource = {
+    const dataSource = {
       rowCount: null,
       getRows: (params: any) => {
         this.page = params.startRow / 10;
@@ -239,71 +132,63 @@ export class TableComponent implements OnChanges, OnInit {
             let lastRow = data.length == 10 ? null : data.length;
 
             params.successCallback(data, lastRow);
-            this.loading = false;
           },
           (err) => console.log(err)
         );
       },
     };
-
     params.api.setDatasource(dataSource);
-
-    this.logService.search([[], []], this.page).subscribe(
-      (data) => {
-        // this.rowData = data;
-        this.loading = false;
-      },
-      (err) => console.log(err)
-    );
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (this.gridApi != null) {
-      for (const propName in changes) {
-        if (changes.hasOwnProperty(propName)) this.applyChanges(propName);
-      }
-    }
-  }
+  ngOnInit(): void {
+    this.comunicationService.colDefsObservable.subscribe((data) => {
+      this.updateColDefs(data);
+    });
 
-  private applyChanges(propName: string): void {
-    switch (propName) {
-      case 'columnsToDisplayData': {
-        // this.updateColDefs(this.columnsToDisplayData);
-        break;
-      }
-      case 'queryFilterData': {
-        this.queryFilter(this.queryFilterData);
-        break;
-      }
-    }
+    this.comunicationService.queryFilterObservable.subscribe((data) => {
+      this.queryFilter(data);
+    });
   }
 
   /**
    * Update the columns definition
    * @param colDefs Array with the definitions columns
    */
-  // private updateColDefs(colIds: string[]): void {
-  //   const allColumns = this.columnApi.getAllColumns();
-  //   const columnsToHide = allColumns.filter((c: string) => !colIds.includes(c));
+  private updateColDefs(colIds: string[]): void {
+    const allColumns = this.columnApi.getAllColumns();
+    const columnsToHide = allColumns.filter((c: string) => !colIds.includes(c));
 
-  //   if (colIds.length > 0) {
-  //     this.columnApi.setColumnsVisible(columnsToHide, false);
-  //     this.columnApi.setColumnsVisible(colIds, true);
-  //   } else {
-  //     alert('Selecciona que columnas quieres mostrar.');
-  //   }
-  // }
+    if (colIds.length > 0) {
+      this.columnApi.setColumnsVisible(columnsToHide, false);
+      this.columnApi.setColumnsVisible(colIds, true);
+    } else {
+      alert('Selecciona que columnas quieres mostrar.');
+    }
+  }
 
   /**
    * Search in the database based on the filters
    * @param filters An array woth 2 arrays, the SearchTerms and the Fields
    */
   private queryFilter(filters: any[][]): void {
-    this.logService.search(filters, this.page).subscribe(
-      (data) => {
-        this.gridApi.setRowData(data);
+    const dataSource = {
+      rowCount: null,
+      getRows: (params: any) => {
+        this.page = params.startRow / 10;
+
+        this.logService.search(filters, this.page).subscribe(
+          (data) => {
+            console.log(`asking for ${params.startRow} to ${params.endRow}`);
+            console.log(`Page => ${this.page}`);
+            let lastRow = data.length == 10 ? null : data.length;
+
+            params.successCallback(data, lastRow);
+          },
+          (err) => console.log(err)
+        );
       },
-      (err) => console.log(err)
-    );
+    };
+
+    this.gridApi.setDatasource(dataSource);
   }
 }
