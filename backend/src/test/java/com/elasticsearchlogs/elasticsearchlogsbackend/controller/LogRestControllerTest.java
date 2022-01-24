@@ -31,35 +31,35 @@ public class LogRestControllerTest {
     @Test
     void searchOneField() {
         SearchRequestDTO searchRequestDTO = createSearchRequestDTO(List.of("extension"), List.of("deb"));
-        List<Log> res = logRestController.search(searchRequestDTO);
+        List<Log> res = logRestController.boolSearch(searchRequestDTO);
         assertFalse(res.isEmpty());
     }
 
     @Test
     void searchMoreThanOneField() {
         SearchRequestDTO searchRequestDTO = createSearchRequestDTO(List.of("extension", "bytes"), List.of("deb", "0"));
-        List<Log> res = logRestController.search(searchRequestDTO);
+        List<Log> res = logRestController.boolSearch(searchRequestDTO);
         assertFalse(res.isEmpty());
     }
 
     @Test
     void searchWithMoreFieldsThanSearchTerms() {
         SearchRequestDTO searchRequestDTO = createSearchRequestDTO(List.of("extension", "bytes","ip"), List.of("deb", "0"));
-        List<Log> res = logRestController.search(searchRequestDTO);
+        List<Log> res = logRestController.boolSearch(searchRequestDTO);
         assertFalse(res.isEmpty());
     }
 
     @Test
     void searchWithMoreSearchTermsThanFields() {
         SearchRequestDTO searchRequestDTO = createSearchRequestDTO(List.of("extension", "bytes"), List.of("deb", "0","xxx"));
-        List<Log> res = logRestController.search(searchRequestDTO);
+        List<Log> res = logRestController.boolSearch(searchRequestDTO);
         assertFalse(res.isEmpty());
     }
 
     @Test
     void searchButNothingFound() {
         SearchRequestDTO searchRequestDTO = createSearchRequestDTO(List.of("extension", "bytes"), List.of("xrx", "0"));
-        List<Log> res = logRestController.search(searchRequestDTO);
+        List<Log> res = logRestController.boolSearch(searchRequestDTO);
         assertTrue(res.isEmpty());
     }
 }

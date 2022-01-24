@@ -39,11 +39,19 @@ public class LogService {
      * @param searchRequestDTO The DTO to filter the data
      * @return List with the logs
      */
-    public List<Log> search(final SearchRequestDTO searchRequestDTO) {
-        final SearchRequest request = SearchUtil.buildSearchRequest(
-                Indices.LOG_INDEX_SAMPLE,
-                searchRequestDTO
-        );
+    public List<Log> search(final SearchRequestDTO searchRequestDTO,String type) {
+        SearchRequest request = null;
+
+        if ( type.equals("match")){
+            request = SearchUtil.buildBoolSearchRequestBasedOnMatch(
+                    Indices.LOG_INDEX_SAMPLE,
+                    searchRequestDTO);
+        }
+        if (type.equals("term")) {
+            request = SearchUtil.buildBoolSearchRequestBasedOnTerm(
+                    Indices.LOG_INDEX_SAMPLE,
+                    searchRequestDTO);
+        }
 
         if (request == null) {
             LOG.error("Failed to build search request");

@@ -17,7 +17,7 @@
       "type": "long"
     },
     "clientip": {
-      "type": "ip"
+      "type": "text"
     },
     "event": {
       "properties": {
@@ -70,7 +70,7 @@
       }
     },
     "ip": {
-      "type": "ip"
+      "type": "text"
     },
     "ip_range": {
       "type": "ip_range"
@@ -107,7 +107,7 @@
       "type": "long"
     },
     "referer": {
-      "type": "keyword"
+      "type": "text"
     },
     "request": {
       "type": "text",

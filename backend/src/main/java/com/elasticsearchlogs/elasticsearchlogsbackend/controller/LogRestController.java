@@ -19,8 +19,13 @@ public class LogRestController {
         this.service = service;
     }
 
-    @PostMapping("/search")
-    public List<Log> search(@RequestBody final SearchRequestDTO searchRequestDTO) {
-        return service.search(searchRequestDTO);
+    @PostMapping("/match-search")
+    public List<Log> boolSearch(@RequestBody final SearchRequestDTO searchRequestDTO) {
+        return service.search(searchRequestDTO,"match");
+    }
+
+    @PostMapping("/term-search")
+    public List<Log> termSearch(@RequestBody final SearchRequestDTO searchRequestDTO) {
+        return service.search(searchRequestDTO,"term");
     }
 }

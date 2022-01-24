@@ -146,6 +146,7 @@ export class TableComponent implements OnInit {
     });
 
     this.comunicationService.queryFilterObservable.subscribe((data) => {
+      console.log(data);
       this.queryFilter(data);
     });
   }
