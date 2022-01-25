@@ -1,20 +1,13 @@
 package com.elasticsearchlogs.elasticsearchlogsbackend.search.util;
 
-import com.elasticsearchlogs.elasticsearchlogsbackend.document.Log;
 import com.elasticsearchlogs.elasticsearchlogsbackend.search.SearchRequestDTO;
-import org.apache.lucene.search.TermQuery;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.index.query.*;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.sort.SortOrder;
 
-import java.lang.reflect.Array;
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public final class SearchUtil {
 
@@ -22,19 +15,19 @@ public final class SearchUtil {
     }
 
     /**
-     * It creates a SearchRequest based on match queries
+     * It creates de SearchRequest and set up the configuration
      *
      * @param indexName        The name of the index
      * @param searchRequestDTO The DTO to filter the data
      * @return A SearchRequest with the data
      * @author cristian
      */
-    public static SearchRequest buildBoolSearchRequestBasedOnMatch(final String indexName, final SearchRequestDTO searchRequestDTO) {
+    public static SearchRequest buildMatchSearchRequest(final String indexName, final SearchRequestDTO searchRequestDTO) {
         try {
 
-            final BoolQueryBuilder boolQuery = getBoolQueryBuilderBasedOnMatch(searchRequestDTO);
+            final BoolQueryBuilder boolQuery = getBoolQueryBuilder(searchRequestDTO.getFields(), searchRequestDTO.getSearchTerms());
 
-            return setupSearchRequestConfig(indexName, searchRequestDTO, boolQuery);
+            return applyOptions(indexName, searchRequestDTO, getSearchSourceBuilder(searchRequestDTO, boolQuery));
 
         } catch (final Exception e) {
             e.printStackTrace();
@@ -43,19 +36,19 @@ public final class SearchUtil {
     }
 
     /**
-     * It creates a SearchRequest based on term queries
+     * It creates de SearchRequest and set up the configuration
      *
      * @param indexName        The name of the index
      * @param searchRequestDTO The DTO to filter the data
      * @return A SearchRequest with the data
      * @author cristian
      */
-    public static SearchRequest buildBoolSearchRequestBasedOnTerm(final String indexName, final SearchRequestDTO searchRequestDTO) {
+    public static SearchRequest buildWildcardSearchRequest(final String indexName, final SearchRequestDTO searchRequestDTO) {
         try {
 
-            final BoolQueryBuilder boolQuery = getTermQueryBuilderBasedOnTerms(searchRequestDTO);
+            final QueryBuilder wildCardQuery = getWildCardQueryBuilder(searchRequestDTO.getFields(), searchRequestDTO.getSearchTerms().get(0));
 
-            return setupSearchRequestConfig(indexName, searchRequestDTO, boolQuery);
+            return applyOptions(indexName, searchRequestDTO, getSearchSourceBuilder(searchRequestDTO, wildCardQuery));
 
         } catch (final Exception e) {
             e.printStackTrace();
@@ -64,16 +57,16 @@ public final class SearchUtil {
     }
 
     /**
-     * It set up basic config to the SearchRequest like sorting options and scroll properties
+     * Set sorting and other options
      *
-     * @param indexName        The name of the index
-     * @param searchRequestDTO The DTO to filter the data
-     * @param boolQuery        The bool query to get the SearchSourceBuilder
-     * @return A SearchRequest fully configured
+     * @param indexName           The name of the index where to search
+     * @param searchRequestDTO    The DTO to extract the options
+     * @param searchSourceBuilder The SearchSourceBuilder to apply the options
+     * @return The SearchRequest ready to being used
      * @author cristian
      */
-    private static SearchRequest setupSearchRequestConfig(String indexName, SearchRequestDTO searchRequestDTO, BoolQueryBuilder boolQuery) {
-        SearchSourceBuilder builder = getSearchSourceBuilder(searchRequestDTO, boolQuery);
+    private static SearchRequest applyOptions(String indexName, SearchRequestDTO searchRequestDTO, SearchSourceBuilder searchSourceBuilder) {
+        SearchSourceBuilder builder = searchSourceBuilder;
 
         if (searchRequestDTO.getSortBy() != null) {
             builder = builder.sort(
@@ -93,30 +86,31 @@ public final class SearchUtil {
      * It builds the SearchSourceBuilder and add pagination options
      *
      * @param searchRequestDTO The DTO to filter the data
-     * @param boolQuery        The query that contains the sub-queries
+     * @param queryBuilder     The query that contains the sub-queries
      * @return A SearchSourceBuilder to perform the search
      * @author cristian
      */
-    private static SearchSourceBuilder getSearchSourceBuilder(SearchRequestDTO searchRequestDTO, BoolQueryBuilder boolQuery) {
+    private static SearchSourceBuilder getSearchSourceBuilder(SearchRequestDTO searchRequestDTO, QueryBuilder queryBuilder) {
         final int size = searchRequestDTO.getSize();
 
         return new SearchSourceBuilder()
                 .size(size)
-                .postFilter(boolQuery);
+                .postFilter(queryBuilder);
     }
 
     /**
-     * It creates a bool query based on match queries
+     * It creates a bool query builder
      *
-     * @param searchRequestDTO The DTO to filter the data
-     * @return A BoolQueryBuilder with based on term queries
+     * @param fields      Fields to look at the searchTerms
+     * @param searchTerms Search terms to look at the fields
+     * @return A BoolQueryBuilder based on several match queries
      * @author cristian
      */
-    private static BoolQueryBuilder getBoolQueryBuilderBasedOnMatch(SearchRequestDTO searchRequestDTO) {
+    private static BoolQueryBuilder getBoolQueryBuilder(final List<String> fields, final List<String> searchTerms) {
         final BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
 
-        Iterator<String> fieldsIterator = searchRequestDTO.getFields().iterator();
-        Iterator<String> searchTermsIterator = searchRequestDTO.getSearchTerms().iterator();
+        Iterator<String> fieldsIterator = fields.iterator();
+        Iterator<String> searchTermsIterator = searchTerms.iterator();
 
         while (fieldsIterator.hasNext() && searchTermsIterator.hasNext()) {
             String field = fieldsIterator.next();
@@ -125,7 +119,7 @@ public final class SearchUtil {
             System.out.println("FIELDS =>" + field);
             System.out.println("TERM =>" + searchTerm);
 
-            QueryBuilder query = getQueryBuilder(field, searchTerm, "match");
+            QueryBuilder query = getMatchQueryBuilder(field, searchTerm);
 
             boolQuery.must(query);
         }
@@ -133,57 +127,34 @@ public final class SearchUtil {
     }
 
     /**
-     * It creates a bool query based on term queries
+     * It creates a match query builder
      *
-     * @param searchRequestDTO The DTO to filter the data
-     * @return A BoolQueryBuilder with based on term queries
+     * @param field      Field to look at on the searchTerm
+     * @param searchTerm The String to look at
+     * @return A queryBuilder based on a match query
      * @author cristian
      */
-    private static BoolQueryBuilder getTermQueryBuilderBasedOnTerms(SearchRequestDTO searchRequestDTO) {
-        final BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
-
-        final String searchTerm = searchRequestDTO.getSearchTerms().get(0);
-
-        // All fields need to be added
-        List<String> fields = Arrays.asList("message", "host", "request", "response");
-
-        System.out.println("SearchTerm => " + searchTerm);
-        for (String field : fields) {
-            System.out.println("Field => " + field);
-            QueryBuilder query = getQueryBuilder(field, searchTerm, "term");
-
-            System.out.println(query.toString());
-
-            boolQuery.should(query);
-        }
-
-        System.out.println(boolQuery.toString());
-        return boolQuery;
-
-    }
-
-
-    /**
-     * It creates a basic QueryBuilder
-     *
-     * @param field      The field to query for
-     * @param searchTerm The term to query for
-     * @param type  The type of the query
-     * @return A QueryBuilder to perform queries
-     * @author cristian
-     */
-    private static QueryBuilder getQueryBuilder(final String field, final String searchTerm, final String type) {
-
+    private static QueryBuilder getMatchQueryBuilder(final String field, final String searchTerm) {
         if (field == null || searchTerm == null) return null;
 
-        return switch (type) {
-            case "match" -> QueryBuilders
-                    .matchQuery(field, searchTerm)
-                    .operator(Operator.AND);
-            case "term" -> QueryBuilders
-                    .termQuery(field, searchTerm);
-            default -> null;
-        };
+        return QueryBuilders
+                .matchQuery(field, searchTerm)
+                .operator(Operator.AND);
+    }
 
+    /**
+     * It creates a wildcard query builder
+     *
+     * @param fields     Fields to look at the searchTerm, normally all fields are passed
+     * @param searchTerm The String to look at
+     * @return A queryBuilder based on a wildcard query
+     * @author cristian
+     */
+    private static QueryBuilder getWildCardQueryBuilder(final List<String> fields, final String searchTerm) {
+        if (fields.isEmpty() || searchTerm == null) return null;
+
+        return QueryBuilders.wildcardQuery("host", "*" + searchTerm + "*");
     }
 }
+
+

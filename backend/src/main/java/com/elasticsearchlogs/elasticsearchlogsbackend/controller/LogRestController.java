@@ -24,8 +24,8 @@ public class LogRestController {
         return service.search(searchRequestDTO,"match");
     }
 
-    @PostMapping("/term-search")
+    @PostMapping("/wildcard-search")
     public List<Log> termSearch(@RequestBody final SearchRequestDTO searchRequestDTO) {
-        return service.search(searchRequestDTO,"term");
+        return service.search(searchRequestDTO,"wildcard");
     }
 }

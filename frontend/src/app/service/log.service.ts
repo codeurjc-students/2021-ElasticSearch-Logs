@@ -23,14 +23,14 @@ export class LogService {
   public search(filters: any, page: number): Observable<any[]> {
     const searchRequest: SearchRequest = {
       // fields: filters[0],
-      fields: ['message'],
+      fields: ['message', 'host'],
       searchTerms: filters[1],
       page: page,
       size: 10,
     };
 
     return this.httpClient.post<Log[]>(
-      `${this.url}/log/term-search`,
+      `${this.url}/log/wildcard-search`,
       searchRequest
     );
   }

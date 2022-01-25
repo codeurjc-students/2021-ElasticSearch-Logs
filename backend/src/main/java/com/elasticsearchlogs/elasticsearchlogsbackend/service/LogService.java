@@ -37,21 +37,12 @@ public class LogService {
      * It queries in the database based on the data provided in the DTO
      *
      * @param searchRequestDTO The DTO to filter the data
+     * @param type             The search operation type
      * @return List with the logs
+     * @author cristian
      */
-    public List<Log> search(final SearchRequestDTO searchRequestDTO,String type) {
-        SearchRequest request = null;
-
-        if ( type.equals("match")){
-            request = SearchUtil.buildBoolSearchRequestBasedOnMatch(
-                    Indices.LOG_INDEX_SAMPLE,
-                    searchRequestDTO);
-        }
-        if (type.equals("term")) {
-            request = SearchUtil.buildBoolSearchRequestBasedOnTerm(
-                    Indices.LOG_INDEX_SAMPLE,
-                    searchRequestDTO);
-        }
+    public List<Log> search(final SearchRequestDTO searchRequestDTO, String type) {
+        SearchRequest request = this.getSearchRequest(searchRequestDTO, type);
 
         if (request == null) {
             LOG.error("Failed to build search request");
@@ -66,10 +57,8 @@ public class LogService {
             //First fetch
             String scrollId = response.getScrollId();
             SearchHit[] searchHits = response.getHits().getHits();
+            if (page == 0) return getLogs(searchHits);
 
-            if(page == 0){
-                return getLogs(searchHits);
-            }
 
             //Fetch until the page have been gotten
             while (searchHits != null && searchHits.length > 0) {
@@ -89,7 +78,7 @@ public class LogService {
             if (!closed) {
                 LOG.warn("Scroll context is still up");
             }
-            
+
             return getLogs(searchHits);
 
         } catch (Exception e) {
@@ -98,6 +87,34 @@ public class LogService {
         }
     }
 
+    /**
+     * Get the SearchRequest based on the type
+     *
+     * @param searchRequestDTO The DTO with the data to build the SearchRequest
+     * @param type             The type of SearchRequest that is intended to perform
+     * @return The SearchRequest or null if the type is not defined
+     * @author cristian
+     */
+    private SearchRequest getSearchRequest(SearchRequestDTO searchRequestDTO, String type) {
+        return switch (type) {
+            case "match" -> SearchUtil.buildMatchSearchRequest(
+                    Indices.LOG_INDEX_SAMPLE,
+                    searchRequestDTO);
+            case "wildcard" -> SearchUtil.buildWildcardSearchRequest(
+                    Indices.LOG_INDEX_SAMPLE,
+                    searchRequestDTO);
+            case default -> null;
+        };
+    }
+
+    /**
+     * Map the hits to Log model
+     *
+     * @param searchHits Array with the hits founded
+     * @return A list with the Logs
+     * @throws JsonProcessingException If some values cannot be parsed
+     * @author cristian
+     */
     private List<Log> getLogs(SearchHit[] searchHits) throws JsonProcessingException {
         int hitsNumber = searchHits != null ? searchHits.length : 0;
         if (hitsNumber == 0) {
@@ -120,6 +137,7 @@ public class LogService {
      * @param scrollId ID of the scroll context
      * @return Boolean with the status of the operation
      * @throws IOException In case of empty parameters
+     * @author cristian
      */
     private boolean clearScrollContext(String scrollId) throws IOException {
         ClearScrollRequest clearScrollRequest = new ClearScrollRequest();
