@@ -25,6 +25,7 @@ import { QueryJsonComponent } from './components/manager/tools/query-json/query-
 
 import { MonacoEditorModule } from 'ngx-monaco-editor';
 import { FormsModule } from '@angular/forms';
+import { HighligtherComponent } from './components/manager/tools/highligther/highligther.component';
 @NgModule({
   imports: [
     BrowserModule,
@@ -49,6 +50,7 @@ import { FormsModule } from '@angular/forms';
     QueryFilterComponent,
     ManagerComponent,
     QueryJsonComponent,
+    HighligtherComponent,
   ],
   providers: [LogService],
   bootstrap: [AppComponent],

@@ -97,12 +97,12 @@ public class LogService {
      */
     private SearchRequest getSearchRequest(SearchRequestDTO searchRequestDTO, String type) {
         return switch (type) {
-            case "match" -> SearchUtil.buildMatchSearchRequest(
+            case "match" -> SearchUtil.buildSearchRequest(
                     Indices.LOG_INDEX_SAMPLE,
-                    searchRequestDTO);
-            case "wildcard" -> SearchUtil.buildWildcardSearchRequest(
+                    searchRequestDTO,type,true);
+            case "wildcard" -> SearchUtil.buildSearchRequest(
                     Indices.LOG_INDEX_SAMPLE,
-                    searchRequestDTO);
+                    searchRequestDTO,type,false);
             case default -> null;
         };
     }

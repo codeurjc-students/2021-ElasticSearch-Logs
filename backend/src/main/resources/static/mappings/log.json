@@ -1,8 +1,7 @@
 {
   "properties": {
     "@timestamp": {
-      "type": "alias",
-      "path": "timestamp"
+      "type": "date"
     },
     "agent": {
       "type": "text",

@@ -1,6 +1,7 @@
 package com.elasticsearchlogs.elasticsearchlogsbackend.search.util;
 
 import com.elasticsearchlogs.elasticsearchlogsbackend.search.SearchRequestDTO;
+import com.elasticsearchlogs.elasticsearchlogsbackend.utils.Indices;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.index.query.*;
@@ -22,10 +23,14 @@ public final class SearchUtil {
      * @return A SearchRequest with the data
      * @author cristian
      */
-    public static SearchRequest buildMatchSearchRequest(final String indexName, final SearchRequestDTO searchRequestDTO) {
+    public static SearchRequest buildSearchRequest(
+            final String indexName,
+            final SearchRequestDTO searchRequestDTO,
+            String type,
+            boolean strictQuery) {
         try {
 
-            final BoolQueryBuilder boolQuery = getBoolQueryBuilder(searchRequestDTO.getFields(), searchRequestDTO.getSearchTerms());
+            final BoolQueryBuilder boolQuery = getBoolQueryBuilder(searchRequestDTO.getFields(), searchRequestDTO.getSearchTerms(), type, strictQuery);
 
             return applyOptions(indexName, searchRequestDTO, getSearchSourceBuilder(searchRequestDTO, boolQuery));
 
@@ -35,26 +40,6 @@ public final class SearchUtil {
         }
     }
 
-    /**
-     * It creates de SearchRequest and set up the configuration
-     *
-     * @param indexName        The name of the index
-     * @param searchRequestDTO The DTO to filter the data
-     * @return A SearchRequest with the data
-     * @author cristian
-     */
-    public static SearchRequest buildWildcardSearchRequest(final String indexName, final SearchRequestDTO searchRequestDTO) {
-        try {
-
-            final QueryBuilder wildCardQuery = getWildCardQueryBuilder(searchRequestDTO.getFields(), searchRequestDTO.getSearchTerms().get(0));
-
-            return applyOptions(indexName, searchRequestDTO, getSearchSourceBuilder(searchRequestDTO, wildCardQuery));
-
-        } catch (final Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
 
     /**
      * Set sorting and other options
@@ -65,7 +50,9 @@ public final class SearchUtil {
      * @return The SearchRequest ready to being used
      * @author cristian
      */
-    private static SearchRequest applyOptions(String indexName, SearchRequestDTO searchRequestDTO, SearchSourceBuilder searchSourceBuilder) {
+    private static SearchRequest applyOptions(String indexName,
+                                              SearchRequestDTO searchRequestDTO,
+                                              SearchSourceBuilder searchSourceBuilder) {
         SearchSourceBuilder builder = searchSourceBuilder;
 
         if (searchRequestDTO.getSortBy() != null) {
@@ -90,7 +77,8 @@ public final class SearchUtil {
      * @return A SearchSourceBuilder to perform the search
      * @author cristian
      */
-    private static SearchSourceBuilder getSearchSourceBuilder(SearchRequestDTO searchRequestDTO, QueryBuilder queryBuilder) {
+    private static SearchSourceBuilder getSearchSourceBuilder(SearchRequestDTO searchRequestDTO,
+                                                              QueryBuilder queryBuilder) {
         final int size = searchRequestDTO.getSize();
 
         return new SearchSourceBuilder()
@@ -106,7 +94,10 @@ public final class SearchUtil {
      * @return A BoolQueryBuilder based on several match queries
      * @author cristian
      */
-    private static BoolQueryBuilder getBoolQueryBuilder(final List<String> fields, final List<String> searchTerms) {
+    private static BoolQueryBuilder getBoolQueryBuilder(final List<String> fields,
+                                                        final List<String> searchTerms,
+                                                        String type,
+                                                        boolean strictQuery) {
         final BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
 
         Iterator<String> fieldsIterator = fields.iterator();
@@ -119,9 +110,11 @@ public final class SearchUtil {
             System.out.println("FIELDS =>" + field);
             System.out.println("TERM =>" + searchTerm);
 
-            QueryBuilder query = getMatchQueryBuilder(field, searchTerm);
+            QueryBuilder query = getMatchQueryBuilder(field, searchTerm, type);
 
-            boolQuery.must(query);
+            if (strictQuery) boolQuery.must(query);
+            else boolQuery.should(query);
+
         }
         return boolQuery;
     }
@@ -131,30 +124,25 @@ public final class SearchUtil {
      *
      * @param field      Field to look at on the searchTerm
      * @param searchTerm The String to look at
+     * @param type       The type of the query
      * @return A queryBuilder based on a match query
      * @author cristian
      */
-    private static QueryBuilder getMatchQueryBuilder(final String field, final String searchTerm) {
+    private static QueryBuilder getMatchQueryBuilder(final String field,
+                                                     final String searchTerm,
+                                                     String type) {
         if (field == null || searchTerm == null) return null;
 
-        return QueryBuilders
-                .matchQuery(field, searchTerm)
-                .operator(Operator.AND);
+        return switch (type) {
+            case "match" -> QueryBuilders
+                    .matchQuery(field, searchTerm)
+                    .operator(Operator.AND);
+            case "wildcard" -> QueryBuilders
+                    .wildcardQuery("host", "*" + searchTerm + "*");
+            case default -> null;
+        };
     }
 
-    /**
-     * It creates a wildcard query builder
-     *
-     * @param fields     Fields to look at the searchTerm, normally all fields are passed
-     * @param searchTerm The String to look at
-     * @return A queryBuilder based on a wildcard query
-     * @author cristian
-     */
-    private static QueryBuilder getWildCardQueryBuilder(final List<String> fields, final String searchTerm) {
-        if (fields.isEmpty() || searchTerm == null) return null;
-
-        return QueryBuilders.wildcardQuery("host", "*" + searchTerm + "*");
-    }
 }
 
 

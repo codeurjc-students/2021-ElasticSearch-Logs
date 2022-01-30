@@ -8,12 +8,16 @@ export class ComunicationService {
   colDefs: string[] = [];
   queryFilters: any[][] = [];
   queryJSON: string = '';
+  stringToHighlight: string = '';
 
   private colDefsSubject = new Subject<string[]>();
   colDefsObservable = this.colDefsSubject.asObservable();
 
   private queryFilterSubject = new Subject<any[][]>();
   queryFilterObservable = this.queryFilterSubject.asObservable();
+
+  private stringToHighlightSubject = new Subject<string>();
+  stringToHighlightObservable = this.stringToHighlightSubject.asObservable();
 
   sendColDefs(colDefs: string[]) {
     this.colDefs = colDefs;
@@ -23,5 +27,10 @@ export class ComunicationService {
   sendQueryFilters(queryFilters: any[][]) {
     this.queryFilters = queryFilters;
     this.queryFilterSubject.next(queryFilters);
+  }
+
+  sendstringToHighlight(stringToHighlight: string) {
+    this.stringToHighlight = stringToHighlight;
+    this.stringToHighlightSubject.next(stringToHighlight);
   }
 }

@@ -20,17 +20,16 @@ export class LogService {
    * filter
    * @returns
    */
-  public search(filters: any, page: number): Observable<any[]> {
+  public search(filters: any, page: number, type: string): Observable<any[]> {
     const searchRequest: SearchRequest = {
-      // fields: filters[0],
-      fields: ['message', 'host'],
+      fields: filters[0],
       searchTerms: filters[1],
       page: page,
       size: 10,
     };
 
     return this.httpClient.post<Log[]>(
-      `${this.url}/log/wildcard-search`,
+      `${this.url}/log/${type}-search`,
       searchRequest
     );
   }

@@ -5,6 +5,7 @@ import { COLUMN_DEFS } from './table.config';
 
 import { AgGridAngular } from 'ag-grid-angular';
 import { ComunicationService } from 'src/app/service/comunication.service';
+import { UtilService } from 'src/app/util/util.service';
 
 @Component({
   selector: 'app-table',
@@ -13,9 +14,6 @@ import { ComunicationService } from 'src/app/service/comunication.service';
 })
 export class TableComponent implements OnInit {
   @ViewChild('agGrid') agGrid!: AgGridAngular;
-
-  @Input() columnsToDisplayData: string[] = [];
-  @Input() queryFilterData: any[][] = [[], []];
 
   // Page number
   public page: number = 0;
@@ -72,6 +70,7 @@ export class TableComponent implements OnInit {
    * @param utilService
    */
   public constructor(
+    private utilService: UtilService,
     private logService: LogService,
     private comunicationService: ComunicationService
   ) {
@@ -125,7 +124,7 @@ export class TableComponent implements OnInit {
       getRows: (params: any) => {
         this.page = params.startRow / 10;
 
-        this.logService.search([[], []], this.page).subscribe(
+        this.logService.search([[], []], this.page, 'match').subscribe(
           (data) => {
             console.log(`asking for ${params.startRow} to ${params.endRow}`);
             console.log(this.page);
@@ -146,8 +145,11 @@ export class TableComponent implements OnInit {
     });
 
     this.comunicationService.queryFilterObservable.subscribe((data) => {
-      console.log(data);
       this.queryFilter(data);
+    });
+
+    this.comunicationService.stringToHighlightObservable.subscribe((data) => {
+      this.highlight(data);
     });
   }
 
@@ -177,7 +179,7 @@ export class TableComponent implements OnInit {
       getRows: (params: any) => {
         this.page = params.startRow / 10;
 
-        this.logService.search(filters, this.page).subscribe(
+        this.logService.search(filters, this.page, 'match').subscribe(
           (data) => {
             console.log(`asking for ${params.startRow} to ${params.endRow}`);
             console.log(`Page => ${this.page}`);
@@ -187,6 +189,38 @@ export class TableComponent implements OnInit {
           },
           (err) => console.log(err)
         );
+      },
+    };
+
+    this.gridApi.setDatasource(dataSource);
+  }
+
+  private highlight(stringToHighlight: string): void {
+    const dataSource = {
+      rowCount: null,
+      getRows: (params: any) => {
+        this.page = params.startRow / 10;
+
+        this.logService
+          .search(
+            [this.utilService.getAllFieldsName(), [stringToHighlight]],
+            this.page,
+            'wildcard'
+          )
+          .subscribe(
+            (data) => {
+              const highlightedData = this.utilService.highlightText(
+                data,
+                stringToHighlight
+              );
+              console.log(`asking for ${params.startRow} to ${params.endRow}`);
+              console.log(`Page => ${this.page}`);
+              let lastRow = data.length == 10 ? null : data.length;
+
+              params.successCallback(highlightedData, lastRow);
+            },
+            (err) => console.log(err)
+          );
       },
     };
 

@@ -1,0 +1,30 @@
+<mat-card style="margin-bottom: 10px">
+  <p><mat-icon> format_paint</mat-icon>Highlighting</p>
+  <form
+    [formGroup]="highlighter"
+    (ngSubmit)="stringToHighlightEmit()"
+    id="highlighter"
+  >
+    <div id="highlighter-form">
+      <mat-form-field appearance="legacy">
+        <mat-label>Type something that you want to highlight</mat-label>
+        <input
+          matInput
+          id="string_to_highlight"
+          formControlName="stringToHighlight"
+          type="text"
+          placeholder="Type something that you want to highlight"
+        />
+      </mat-form-field>
+
+      <button
+        id="submit-button"
+        mat-icon-button
+        mat-raised-button
+        color="primary"
+      >
+        <mat-icon matSuffix>highlight</mat-icon>
+      </button>
+    </div>
+  </form>
+</mat-card>
