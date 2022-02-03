@@ -1,52 +1,14 @@
 {
   "properties": {
-    "@timestamp": {
-      "type": "date"
-    },
-    "agent": {
-      "type": "text",
-      "fields": {
-        "keyword": {
-          "type": "keyword",
-          "ignore_above": 256
-        }
-      }
-    },
-    "bytes": {
-      "type": "long"
-    },
-    "clientip": {
+    "timestamp": {
       "type": "text"
     },
-    "event": {
-      "properties": {
-        "dataset": {
-          "type": "keyword"
-        }
-      }
-    },
-    "extension": {
+    "cluster_id": {
       "type": "text",
       "fields": {
         "keyword": {
           "type": "keyword",
           "ignore_above": 256
-        }
-      }
-    },
-    "geo": {
-      "properties": {
-        "coordinates": {
-          "type": "geo_point"
-        },
-        "dest": {
-          "type": "keyword"
-        },
-        "src": {
-          "type": "keyword"
-        },
-        "srcdest": {
-          "type": "keyword"
         }
       }
     },
@@ -59,7 +21,7 @@
         }
       }
     },
-    "index": {
+    "log_level": {
       "type": "text",
       "fields": {
         "keyword": {
@@ -68,30 +30,14 @@
         }
       }
     },
-    "ip": {
-      "type": "text"
-    },
-    "ip_range": {
-      "type": "ip_range"
-    },
-    "machine": {
-      "properties": {
-        "os": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
-          }
-        },
-        "ram": {
-          "type": "long"
+    "logger": {
+      "type": "text",
+      "fields": {
+        "keyword": {
+          "type": "keyword",
+          "ignore_above": 256
         }
       }
-    },
-    "memory": {
-      "type": "double"
     },
     "message": {
       "type": "text",
@@ -102,13 +48,7 @@
         }
       }
     },
-    "phpmemory": {
-      "type": "long"
-    },
-    "referer": {
-      "type": "text"
-    },
-    "request": {
+    "node_id": {
       "type": "text",
       "fields": {
         "keyword": {
@@ -117,7 +57,7 @@
         }
       }
     },
-    "response": {
+    "node_role": {
       "type": "text",
       "fields": {
         "keyword": {
@@ -126,7 +66,7 @@
         }
       }
     },
-    "tags": {
+    "stacktrace": {
       "type": "text",
       "fields": {
         "keyword": {
@@ -135,13 +75,7 @@
         }
       }
     },
-    "timestamp": {
-      "type": "date"
-    },
-    "timestamp_range": {
-      "type": "date_range"
-    },
-    "url": {
+    "thread": {
       "type": "text",
       "fields": {
         "keyword": {
@@ -149,12 +83,6 @@
           "ignore_above": 256
         }
       }
-    },
-    "utc_time": {
-      "type": "date"
     }
   }
 }
-
-
-

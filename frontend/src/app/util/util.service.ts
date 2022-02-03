@@ -82,7 +82,7 @@ export class UtilService {
 
   /**
    *
-   * Replace a string that should be highlighted with HTML elements
+   * Replace all ocurrences of a string that should be highlighted with HTML elements
    * to achieve that
    *
    * @param text Text where to look for replacement

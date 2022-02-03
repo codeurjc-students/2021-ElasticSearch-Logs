@@ -59,7 +59,6 @@ public class LogService {
             SearchHit[] searchHits = response.getHits().getHits();
             if (page == 0) return getLogs(searchHits);
 
-
             //Fetch until the page have been gotten
             while (searchHits != null && searchHits.length > 0) {
                 SearchScrollRequest scrollRequest = new SearchScrollRequest(scrollId);
@@ -98,10 +97,10 @@ public class LogService {
     private SearchRequest getSearchRequest(SearchRequestDTO searchRequestDTO, String type) {
         return switch (type) {
             case "match" -> SearchUtil.buildSearchRequest(
-                    Indices.LOG_INDEX_SAMPLE,
+                    Indices.LOG_INDEX,
                     searchRequestDTO,type,true);
             case "wildcard" -> SearchUtil.buildSearchRequest(
-                    Indices.LOG_INDEX_SAMPLE,
+                    Indices.LOG_INDEX,
                     searchRequestDTO,type,false);
             case default -> null;
         };
@@ -125,6 +124,7 @@ public class LogService {
         final List<Log> logs = new ArrayList<>(hitsNumber);
 
         for (SearchHit hit : searchHits) {
+            System.out.println(hit.getSourceAsString());
             logs.add(MAPPER.readValue(hit.getSourceAsString(), Log.class));
         }
         return logs;

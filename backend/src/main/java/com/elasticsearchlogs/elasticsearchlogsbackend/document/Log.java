@@ -1,213 +1,117 @@
 package com.elasticsearchlogs.elasticsearchlogsbackend.document;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.sql.Timestamp;
-import java.util.LinkedHashMap;
-import java.util.List;
+
 
 public class Log {
 
-    private String agent;
-    private String bytes;
-    private String clientip;
-    private LinkedHashMap<String, String> event;
-    private String extension;
-    private Geo geo;
-    private String host;
-    private String index;
-    private String ip;
-    private String ip_range;
-    private LinkedHashMap<String, String> machine;
-    private String memory;
-    private String message;
-    private String phpmemory;
-    private String referer;
-    private String request;
-    private String response;
-    private List<String> tags;
     private Timestamp timestamp;
-    private String timestamp_range;
-    private String url;
+    private String cluster_id;
+    private String message;
+    private String host;
+    private String log_level;
+    private String logger;
+    private String node_id;
+    private String node_role;
+    private String stacktrace;
+    private String thread;
 
-    private Timestamp utc_time;
-
-    public Log() {
+    public Log(){
 
     }
 
-    public String getAgent() {
-        return agent;
-    }
-
-    public void setAgent(String agent) {
-        this.agent = agent;
-    }
-
-    public String getBytes() {
-        return bytes;
-    }
-
-    public void setBytes(String bytes) {
-        this.bytes = bytes;
-    }
-
-    public String getClientip() {
-        return clientip;
-    }
-
-    public void setClientip(String clientip) {
-        this.clientip = clientip;
-    }
-
-    public LinkedHashMap<String, String> getEvent() {
-        return event;
-    }
-
-    public void setEvent(LinkedHashMap<String, String> event) {
-        this.event = event;
-    }
-
-    public String getExtension() {
-        return extension;
-    }
-
-    public void setExtension(String extension) {
-        this.extension = extension;
-    }
-
-    public Geo getGeo() {
-        return geo;
-    }
-
-    public void setGeo(Geo geo) {
-        this.geo = geo;
-    }
-
-    public String getHost() {
-        return host;
-    }
-
-    public void setHost(String host) {
-        this.host = host;
-    }
-
-    public String getIndex() {
-        return index;
-    }
-
-    public void setIndex(String index) {
-        this.index = index;
-    }
-
-    public String getIp() {
-        return ip;
-    }
-
-    public void setIp(String ip) {
-        this.ip = ip;
-    }
-
-    public String getIp_range() {
-        return ip_range;
-    }
-
-    public void setIp_range(String ip_range) {
-        this.ip_range = ip_range;
-    }
-
-    public LinkedHashMap<String, String> getMachine() {
-        return machine;
-    }
-
-    public void setMachine(LinkedHashMap<String, String> machine) {
-        this.machine = machine;
-    }
-
-    public String getMemory() {
-        return memory;
-    }
-
-    public void setMemory(String memory) {
-        this.memory = memory;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public String getPhpmemory() {
-        return phpmemory;
-    }
-
-    public void setPhpmemory(String phpmemory) {
-        this.phpmemory = phpmemory;
-    }
-
-    public String getReferer() {
-        return referer;
-    }
-
-    public void setReferer(String referer) {
-        this.referer = referer;
-    }
-
-    public String getRequest() {
-        return request;
-    }
-
-    public void setRequest(String request) {
-        this.request = request;
-    }
-
-    public String getResponse() {
-        return response;
-    }
-
-    public void setResponse(String response) {
-        this.response = response;
-    }
-
-    public List<String> getTags() {
-        return tags;
-    }
-
-    public void setTags(List<String> tags) {
-        this.tags = tags;
-    }
-
+    @JsonProperty("timestamp")
     public Timestamp getTimestamp() {
         return timestamp;
     }
 
+    @JsonProperty("@timestamp")
     public void setTimestamp(Timestamp timestamp) {
         this.timestamp = timestamp;
     }
 
-    public String getTimestamp_range() {
-        return timestamp_range;
+    @JsonProperty("cluster_id")
+    public String getCluster_id() {
+        return cluster_id;
+    }
+    @JsonProperty("cluster_id")
+    public void setCluster_id(String cluster_id) {
+        this.cluster_id = cluster_id;
+    }
+    @JsonProperty("message")
+    public String getMessage() {
+        return message;
+    }
+    @JsonProperty("message")
+    public void setMessage(String message) {
+        this.message = message;
+    }
+    @JsonProperty("host")
+    public String getHost() {
+        return host;
     }
 
-    public void setTimestamp_range(String timestamp_range) {
-        this.timestamp_range = timestamp_range;
+    @JsonProperty("host")
+    public void setHost(String host) {
+        this.host = host;
+    }
+    @JsonProperty("log_leve")
+    public String getLog_level() {
+        return log_level;
     }
 
-    public String getUrl() {
-        return url;
+    @JsonProperty("log_level")
+    public void setLog_level(String log_level) {
+        this.log_level = log_level;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    @JsonProperty("logger")
+    public String getLogger() {
+        return logger;
     }
 
-    public Timestamp getUtc_time() {
-        return utc_time;
+    @JsonProperty("logger")
+    public void setLogger(String logger) {
+        this.logger = logger;
     }
 
-    public void setUtc_time(Timestamp utc_time) {
-        this.utc_time = utc_time;
+    @JsonProperty("node_id")
+    public String getNode_id() {
+        return node_id;
     }
 
+    @JsonProperty("node_id")
+    public void setNode_id(String node_id) {
+        this.node_id = node_id;
+    }
+
+    @JsonProperty("node_role")
+    public String getNode_role() {
+        return node_role;
+    }
+
+    @JsonProperty("node_role")
+    public void setNode_role(String node_role) {
+        this.node_role = node_role;
+    }
+
+    @JsonProperty("stacktrace")
+    public String getStacktrace() {
+        return stacktrace;
+    }
+    @JsonProperty("stacktrace")
+    public void setStacktrace(String stacktrace) {
+        this.stacktrace = stacktrace;
+    }
+    @JsonProperty("thread")
+    public String getThread() {
+        return thread;
+    }
+
+    @JsonProperty("thread")
+    public void setThread(String thread) {
+        this.thread = thread;
+    }
 }
