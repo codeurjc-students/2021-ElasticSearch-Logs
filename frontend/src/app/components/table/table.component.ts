@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { LogService } from '../../service/log.service';
 
-import { COLUMN_DEFS } from './table.config';
+import { COLUMN_DEFS } from '../../config/table.config';
 
 import { AgGridAngular } from 'ag-grid-angular';
 import { ComunicationService } from 'src/app/service/comunication.service';
@@ -203,7 +203,12 @@ export class TableComponent implements OnInit {
 
         this.logService
           .search(
-            [this.utilService.getAllFieldsName(), [stringToHighlight]],
+            [
+              this.utilService
+                .getAllFieldsName()
+                .filter((e) => e != 'timestamp'),
+              [stringToHighlight],
+            ],
             this.page,
             'wildcard'
           )

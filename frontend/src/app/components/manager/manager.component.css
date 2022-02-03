@@ -24,11 +24,16 @@ mat-panel-title {
 mat-icon {
   margin-right: 5px;
 }
+
 .expansion-body {
   overflow-y: scroll;
   height: 500px;
 }
 
+#expansion-body-colums-to-display {
+  overflow-y: hidden;
+  height: 380px;
+}
 .expansion-body > p {
   font-size: 16px;
   font-family: "Roboto", sans-serif;

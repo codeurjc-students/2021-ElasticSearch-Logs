@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 
-import { COLUMN_DEFS } from '../components/table/table.config';
+import { COLUMN_DEFS } from '../config/table.config';
 
 @Injectable({
   providedIn: 'root',
@@ -106,5 +106,18 @@ export class UtilService {
     }
 
     return text;
+  }
+
+  /**
+   * Build form controls based on the columns name and an initial param
+   * @param initParam The param to set at the FormControl
+   * @returns An object with the FormControls
+   */
+  public buildFormControl(initParam: any): any {
+    return COLUMN_DEFS.reduce(
+      (acc, column) =>
+        Object.assign(acc, { [column.field]: new FormControl(initParam) }),
+      {}
+    );
   }
 }

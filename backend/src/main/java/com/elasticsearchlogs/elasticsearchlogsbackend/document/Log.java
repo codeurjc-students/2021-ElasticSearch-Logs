@@ -57,7 +57,7 @@ public class Log {
     public void setHost(String host) {
         this.host = host;
     }
-    @JsonProperty("log_leve")
+    @JsonProperty("log_level")
     public String getLog_level() {
         return log_level;
     }

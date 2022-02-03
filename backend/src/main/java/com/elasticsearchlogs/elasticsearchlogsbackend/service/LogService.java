@@ -124,7 +124,6 @@ public class LogService {
         final List<Log> logs = new ArrayList<>(hitsNumber);
 
         for (SearchHit hit : searchHits) {
-            System.out.println(hit.getSourceAsString());
             logs.add(MAPPER.readValue(hit.getSourceAsString(), Log.class));
         }
         return logs;

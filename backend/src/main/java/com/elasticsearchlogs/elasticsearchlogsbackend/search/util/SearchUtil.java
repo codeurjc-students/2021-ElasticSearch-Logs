@@ -119,6 +119,8 @@ public final class SearchUtil {
         return boolQuery;
     }
 
+
+
     /**
      * It creates a match query builder
      *
@@ -138,7 +140,7 @@ public final class SearchUtil {
                     .matchQuery(field, searchTerm)
                     .operator(Operator.AND);
             case "wildcard" -> QueryBuilders
-                    .wildcardQuery("host", "*" + searchTerm + "*");
+                    .wildcardQuery(field, "*" + searchTerm + "*");
             case default -> null;
         };
     }
