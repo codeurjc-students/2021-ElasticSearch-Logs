@@ -1,0 +1,28 @@
+#dialog-container {
+  width: 300px;
+  height: 200px;
+}
+
+#dialog-title {
+  display: flex;
+  align-items: center;
+}
+
+#dialog-title h2 {
+  margin-bottom: 0;
+}
+
+mat-icon {
+  font-size: 28px;
+  margin-right: 5px;
+}
+
+mat-radio-group {
+  display: flex;
+  flex-direction: column;
+  overflow-y: hidden;
+}
+
+mat-radio-button {
+  padding: 10px;
+}

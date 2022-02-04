@@ -42,6 +42,12 @@ mat-icon {
   padding-bottom: 0;
 }
 
+#config-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
 ::ng-deep .mat-expansion-panel-body {
   padding: 0 !important;
 }
