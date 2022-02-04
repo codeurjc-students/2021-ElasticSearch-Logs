@@ -23,6 +23,8 @@ export class QueryFilterComponent {
   }
 
   queryFilterEmit(): void {
+    console.log(this.utilService.buildFormControl(''));
+    // console.log(this.queryFilter);
     const data = this.utilService.getDataFromForm(this.queryFilter);
     this.comunicationService.sendQueryFilters(data);
   }

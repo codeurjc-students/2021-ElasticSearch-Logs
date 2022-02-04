@@ -1,7 +1,6 @@
 package com.elasticsearchlogs.elasticsearchlogsbackend.search.util;
 
 import com.elasticsearchlogs.elasticsearchlogsbackend.search.SearchRequestDTO;
-import com.elasticsearchlogs.elasticsearchlogsbackend.utils.Indices;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.index.query.*;
@@ -30,7 +29,9 @@ public final class SearchUtil {
             boolean strictQuery) {
         try {
 
-            final BoolQueryBuilder boolQuery = getBoolQueryBuilder(searchRequestDTO.getFields(), searchRequestDTO.getSearchTerms(), type, strictQuery);
+            final BoolQueryBuilder boolQuery = Objects.equals(type, "match")
+                    ? getBoolQueryBuilder(searchRequestDTO.getFields(), searchRequestDTO.getSearchTerms(), type, strictQuery)
+                    : getBoolQueryBuilder(searchRequestDTO.getFields(), searchRequestDTO.getSearchTerms().get(0), type, strictQuery);
 
             return applyOptions(indexName, searchRequestDTO, getSearchSourceBuilder(searchRequestDTO, boolQuery));
 
@@ -108,7 +109,7 @@ public final class SearchUtil {
             String searchTerm = searchTermsIterator.next();
 
             System.out.println("FIELDS =>" + field);
-            System.out.println("TERM =>" + searchTerm);
+            System.out.println("TERMS =>" + searchTerm);
 
             QueryBuilder query = getMatchQueryBuilder(field, searchTerm, type);
 
@@ -119,6 +120,36 @@ public final class SearchUtil {
         return boolQuery;
     }
 
+    /**
+     * It creates a bool query builder
+     *
+     * @param fields     Fields to look at the searchTerms
+     * @param searchTerm Search term to look at the fields
+     * @return A BoolQueryBuilder based on several match queries
+     * @author cristian
+     */
+    private static BoolQueryBuilder getBoolQueryBuilder(final List<String> fields,
+                                                        String searchTerm,
+                                                        String type,
+                                                        boolean strictQuery) {
+
+
+        final BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
+
+        if ( searchTerm == null || searchTerm.isEmpty() || searchTerm.isBlank()) return boolQuery;
+
+        for (String field : fields) {
+            System.out.println("FIELDS =>" + field);
+            System.out.println("TERM =>" + searchTerm);
+
+            QueryBuilder query = getMatchQueryBuilder(field, searchTerm, type);
+
+            if (strictQuery) boolQuery.must(query);
+            else boolQuery.should(query);
+
+        }
+        return boolQuery;
+    }
 
 
     /**

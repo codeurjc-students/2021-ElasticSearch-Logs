@@ -5,9 +5,9 @@
 >
   <div *ngFor="let formControl of columns">
     <mat-checkbox
-      id="{{ formControl.headerName }}"
+      id="{{ formControl.field }}"
       type="checkbox"
-      formControlName="{{ formControl.headerName }}}"
+      formControlName="{{ formControl.field }}"
     >
       {{ formControl.headerName }}
     </mat-checkbox>
