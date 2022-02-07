@@ -2,7 +2,7 @@ export const COLUMN_DEFS = [
   {
     headerName: 'Timestamp',
     field: 'timestamp',
-    width: 250,
+    width: 260,
   },
   {
     headerName: 'Log Level',

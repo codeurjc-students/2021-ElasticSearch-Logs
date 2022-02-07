@@ -25,6 +25,6 @@ export class HighligtherComponent {
    */
   stringToHighlightEmit(): void {
     const fields = this.utilService.getDataFromForm(this.highlighter)[1];
-    this.comunicationService.sendstringToHighlight(fields[0]);
+    this.comunicationService.sendStringToHighlight(fields[0]);
   }
 }

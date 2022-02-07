@@ -1,4 +1,5 @@
-::ng-deep .ag-header-row-column {
+::ng-deep .ag-header-row-column,
+::ng-deep .ag-header-viewport {
   background-color: var(--primary);
   color: white;
 }
@@ -10,16 +11,4 @@
 ::ng-deep.ag-header-cell.ag-focus-managed:hover,
 ::ng-deep.ag-header-cell.ag-focus-managed:focus {
   background-color: var(--primary-dark) !important;
-}
-
-.small {
-  font-size: 8px;
-}
-
-.normal {
-  font-size: 16px;
-}
-
-.large {
-  font-size: 24px;
 }

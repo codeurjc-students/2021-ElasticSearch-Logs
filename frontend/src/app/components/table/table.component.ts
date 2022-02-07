@@ -64,6 +64,9 @@ export class TableComponent implements OnInit {
   // Height of each row
   public rowHeight: number;
 
+  // Font size of the rows
+  public fontSize: number;
+
   /**
    * Constructor
    * @param logService
@@ -97,9 +100,10 @@ export class TableComponent implements OnInit {
     };
 
     // Row options
-    this.rowHeight = 200;
+    this.rowHeight = 150;
     this.rowBuffer = 10;
     this.rowSelection = 'multiple';
+    this.fontSize = 14;
 
     // Infinite loading options
     this.cacheOverflowSize = 5;
@@ -150,6 +154,10 @@ export class TableComponent implements OnInit {
 
     this.comunicationService.stringToHighlightObservable.subscribe((data) => {
       this.highlight(data);
+    });
+
+    this.comunicationService.fontSizeObservable.subscribe((data) => {
+      this.changeFontSize(data);
     });
   }
 
@@ -230,5 +238,25 @@ export class TableComponent implements OnInit {
     };
 
     this.gridApi.setDatasource(dataSource);
+  }
+
+  private changeFontSize(data: string) {
+    switch (data) {
+      case 'small':
+        this.fontSize = 12;
+        this.rowHeight = 5;
+        this.gridApi.resetRowHeights();
+        break;
+      case 'normal':
+        this.fontSize = 14;
+        this.rowHeight = 100;
+        this.gridApi.resetRowHeights();
+        break;
+      case 'large':
+        this.fontSize = 16;
+        this.rowHeight = 150;
+        this.gridApi.resetRowHeights();
+        break;
+    }
   }
 }

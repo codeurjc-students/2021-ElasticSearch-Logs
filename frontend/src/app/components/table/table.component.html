@@ -1,6 +1,7 @@
-<div class="ag-theme-material">
+<div class="ag-theme-material" id="" [ngStyle]="{ 'fontSize.px': fontSize }">
   <ag-grid-angular
     #agGrid
+    id="ag-table"
     style="width: 100%; height: 100vh"
     [columnDefs]="columnDefs"
     [defaultColDef]="defaultColDef"
