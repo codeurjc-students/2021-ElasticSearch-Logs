@@ -20,7 +20,9 @@ export class ComunicationService {
   private stringToHighlightSubject = new Subject<string>();
   stringToHighlightObservable = this.stringToHighlightSubject.asObservable();
 
-  private fontSizeSubject = new Subject<string>();
+  private fontSizeSubject = new Subject<
+    keyof { small: number; normal: number; large: number }
+  >();
   fontSizeObservable = this.fontSizeSubject.asObservable();
 
   sendColDefs(colDefs: string[]) {
@@ -38,7 +40,9 @@ export class ComunicationService {
     this.stringToHighlightSubject.next(stringToHighlight);
   }
 
-  sendFontSize(fontSize: string) {
+  sendFontSize(
+    fontSize: keyof { small: number; normal: number; large: number }
+  ) {
     this.fontSize = fontSize;
     this.fontSizeSubject.next(fontSize);
   }

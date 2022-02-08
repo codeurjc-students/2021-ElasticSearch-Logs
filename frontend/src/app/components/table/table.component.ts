@@ -2,6 +2,7 @@ import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { LogService } from '../../service/log.service';
 
 import { COLUMN_DEFS } from '../../config/table.config';
+import { TABLE_STYLES } from '../../config/style.config';
 
 import { AgGridAngular } from 'ag-grid-angular';
 import { ComunicationService } from 'src/app/service/comunication.service';
@@ -240,23 +241,13 @@ export class TableComponent implements OnInit {
     this.gridApi.setDatasource(dataSource);
   }
 
-  private changeFontSize(data: string) {
-    switch (data) {
-      case 'small':
-        this.fontSize = 12;
-        this.rowHeight = 5;
-        this.gridApi.resetRowHeights();
-        break;
-      case 'normal':
-        this.fontSize = 14;
-        this.rowHeight = 100;
-        this.gridApi.resetRowHeights();
-        break;
-      case 'large':
-        this.fontSize = 16;
-        this.rowHeight = 150;
-        this.gridApi.resetRowHeights();
-        break;
-    }
+  /**
+   * Change the table data font size
+   * @param data A key wich posible values { small: 12; normal: 14; large: 16 }
+   */
+  private changeFontSize(
+    data: keyof { small: number; normal: number; large: number }
+  ) {
+    this.fontSize = TABLE_STYLES.fontSize[data];
   }
 }

@@ -9,7 +9,7 @@ import { UtilService } from 'src/app/util/util.service';
   styleUrls: ['./dialog-config.component.css'],
 })
 export class DialogConfigComponent implements OnInit {
-  public fontSize: string = '';
+  public fontSize: keyof { small: number; normal: number; large: number };
 
   constructor(private comunicationService: ComunicationService) {
     this.fontSize = 'normal';
