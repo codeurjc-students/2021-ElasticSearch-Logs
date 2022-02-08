@@ -109,7 +109,7 @@ export class TableComponent implements OnInit {
     this.maxConcurrentDatasourceRequests = 5;
     this.maxBlocksInCache = 1;
     this.cacheBlockSize = 10;
-    this.infiniteInitialRowCount = 5;
+    this.infiniteInitialRowCount = 7;
 
     this.context = { componentParent: this };
   }

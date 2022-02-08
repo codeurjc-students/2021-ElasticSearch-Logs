@@ -19,9 +19,9 @@ export class ColumnUpdaterComponent {
     private utilService: UtilService,
     private comunicationService: ComunicationService
   ) {
-    this.columns = COLUMN_DEFS;
+    this.columns = COLUMN_DEFS.filter((column) => column.field != 'status');
     this.columnsToDisplay = new FormGroup(
-      this.utilService.buildFormControl(false)
+      this.utilService.buildFormControl(this.columns, false)
     );
   }
 

@@ -18,13 +18,13 @@ export class QueryFilterComponent {
     private utilService: UtilService,
     private comunicationService: ComunicationService
   ) {
-    this.columns = COLUMN_DEFS;
-    this.queryFilter = new FormGroup(this.utilService.buildFormControl(''));
+    this.columns = COLUMN_DEFS.filter((column) => column.field != 'status');
+    this.queryFilter = new FormGroup(
+      this.utilService.buildFormControl(this.columns, '')
+    );
   }
 
   queryFilterEmit(): void {
-    console.log(this.utilService.buildFormControl(''));
-    // console.log(this.queryFilter);
     const data = this.utilService.getDataFromForm(this.queryFilter);
     this.comunicationService.sendQueryFilters(data);
   }

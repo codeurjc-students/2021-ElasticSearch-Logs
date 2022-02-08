@@ -1,7 +1,7 @@
 export const COLUMN_DEFS = [
   {
     headerName: '',
-    field: '',
+    field: 'status',
     width: 60,
     cellRenderer: 'loadingRenderer',
     cellStyle: {
