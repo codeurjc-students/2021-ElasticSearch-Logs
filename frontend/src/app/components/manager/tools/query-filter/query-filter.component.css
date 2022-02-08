@@ -12,3 +12,13 @@ form {
 mat-form-field {
   width: 100%;
 }
+
+#buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+#buttons button {
+  width: -webkit-fill-available;
+}

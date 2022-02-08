@@ -1,4 +1,12 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
 import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
 import { ComunicationService } from 'src/app/service/comunication.service';
 import { LogService } from 'src/app/service/log.service';
@@ -10,7 +18,7 @@ import { COLUMN_DEFS } from '../../../../config/table.config';
   templateUrl: './query-filter.component.html',
   styleUrls: ['./query-filter.component.css'],
 })
-export class QueryFilterComponent {
+export class QueryFilterComponent implements OnChanges {
   public columns: any;
   public queryFilter: FormGroup;
 
@@ -22,6 +30,9 @@ export class QueryFilterComponent {
     this.queryFilter = new FormGroup(
       this.utilService.buildFormControl(this.columns, '')
     );
+  }
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log('cambios recibidos');
   }
 
   queryFilterEmit(): void {
