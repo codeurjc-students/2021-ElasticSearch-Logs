@@ -86,8 +86,6 @@ export class TableComponent implements OnInit {
 
     this.defaultColDef = {
       wrapText: true,
-      filter: true,
-      cellRenderer: 'loadingRenderer',
     };
 
     this.components = {
@@ -95,7 +93,7 @@ export class TableComponent implements OnInit {
         if (params.value !== undefined) {
           return params.value;
         } else {
-          return '<img src="/assets/img/loading.gif"></img>';
+          return ' <img width="50px" height="50px" src="/assets/img/loading.gif"></img>';
         }
       },
     };
@@ -131,10 +129,7 @@ export class TableComponent implements OnInit {
 
         this.logService.search([[], []], this.page, 'match').subscribe(
           (data) => {
-            console.log(`asking for ${params.startRow} to ${params.endRow}`);
-            console.log(this.page);
             let lastRow = data.length == 10 ? null : data.length;
-
             params.successCallback(data, lastRow);
           },
           (err) => console.log(err)
@@ -190,10 +185,7 @@ export class TableComponent implements OnInit {
 
         this.logService.search(filters, this.page, 'match').subscribe(
           (data) => {
-            console.log(`asking for ${params.startRow} to ${params.endRow}`);
-            console.log(`Page => ${this.page}`);
             let lastRow = data.length == 10 ? null : data.length;
-
             params.successCallback(data, lastRow);
           },
           (err) => console.log(err)
@@ -227,10 +219,7 @@ export class TableComponent implements OnInit {
                 data,
                 stringToHighlight
               );
-              console.log(`asking for ${params.startRow} to ${params.endRow}`);
-              console.log(`Page => ${this.page}`);
               let lastRow = data.length == 10 ? null : data.length;
-
               params.successCallback(highlightedData, lastRow);
             },
             (err) => console.log(err)

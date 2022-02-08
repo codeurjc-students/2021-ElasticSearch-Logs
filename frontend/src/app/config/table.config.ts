@@ -1,5 +1,18 @@
 export const COLUMN_DEFS = [
   {
+    headerName: '',
+    field: '',
+    width: 60,
+    cellRenderer: 'loadingRenderer',
+    cellStyle: {
+      display: 'flex',
+      'justify-content': 'center',
+      'align-items': 'center',
+    },
+    wrapText: false,
+    suppressMovable: true,
+  },
+  {
     headerName: 'Timestamp',
     field: 'timestamp',
     width: 260,
