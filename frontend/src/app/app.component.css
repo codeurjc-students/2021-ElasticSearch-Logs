@@ -1,17 +1,19 @@
 * {
   scroll-behavior: smooth;
 }
-.main-container {
+
+
+#main-container{
   display: flex;
-  overflow: hidden;
+  justify-content: space-between;
 }
 
-.table {
-  width: 80%;
-  height: 100vh;
+#container-body{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 }
 
-.manager {
-  width: 20%;
-  height: 100vh;
+#table{
+  height: 500px;
 }

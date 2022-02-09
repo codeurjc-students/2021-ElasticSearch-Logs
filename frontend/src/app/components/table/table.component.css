@@ -12,14 +12,3 @@
   background-color: var(--primary-dark) !important;
 }
 
-.small {
-  font-size: 8px;
-}
-
-.normal {
-  font-size: 16px;
-}
-
-.large {
-  font-size: 24px;
-}

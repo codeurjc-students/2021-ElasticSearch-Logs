@@ -31,6 +31,7 @@ import { FormsModule } from '@angular/forms';
 import { HighligtherComponent } from './components/manager/tools/highligther/highligther.component';
 import { StylerComponent } from './components/manager/tools/styler/styler.component';
 import { DialogConfigComponent } from './components/manager/tools/styler/dialog-config/dialog-config.component';
+import { DisplayerComponent } from './components/displayer/displayer.component';
 @NgModule({
   imports: [
     BrowserModule,
@@ -61,6 +62,7 @@ import { DialogConfigComponent } from './components/manager/tools/styler/dialog-
     HighligtherComponent,
     StylerComponent,
     DialogConfigComponent,
+    DisplayerComponent,
   ],
   providers: [LogService],
   bootstrap: [AppComponent],
