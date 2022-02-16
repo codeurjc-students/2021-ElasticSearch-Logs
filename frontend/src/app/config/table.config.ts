@@ -1,8 +1,26 @@
 export const COLUMN_DEFS = [
   {
+    headerName: '#',
+    field: 'status',
+    width: 60,
+    valueGetter: 'node.id',
+    cellRenderer: (params: any) => {
+      return params.value !== undefined 
+        ? "" 
+        : '<img width="50px" height="50px" src="/assets/img/loading.gif"></img>'
+    },
+    cellStyle: {
+      display: 'flex',
+      'justify-content': 'center',
+      'align-items': 'center',
+    },
+    wrapText: false,
+    suppressMovable: true,
+  },
+  {
     headerName: 'Timestamp',
     field: 'timestamp',
-    width: 250,
+    width: 260,
   },
   {
     headerName: 'Log Level',

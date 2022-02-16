@@ -113,8 +113,8 @@ export class UtilService {
    * @param initParam The param to set at the FormControl
    * @returns An object with the FormControls
    */
-  public buildFormControl(initParam: any): any {
-    return COLUMN_DEFS.reduce(
+  public buildFormControl(columns: any[], initParam: any): any {
+    return columns.reduce(
       (acc, column) =>
         Object.assign(acc, { [column.field]: new FormControl(initParam) }),
       {}

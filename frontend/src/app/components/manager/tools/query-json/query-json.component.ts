@@ -1,7 +1,7 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { DiffEditorModel } from 'ngx-monaco-editor';
-import { ComunicationService } from 'src/app/service/comunication.service';
+import { ManagerComunicationService } from 'src/app/service/managerComunication.service';
 
 @Component({
   selector: 'app-query-json',
@@ -9,8 +9,7 @@ import { ComunicationService } from 'src/app/service/comunication.service';
   styleUrls: ['./query-json.component.css'],
 })
 export class QueryJsonComponent {
-  @Output('ngModelChange') update = new EventEmitter();
-
+  
   code: string;
   valid: boolean;
 
@@ -26,14 +25,14 @@ export class QueryJsonComponent {
     },
   };
 
-  constructor(private comunicationService: ComunicationService) {
+  constructor(private ManagerComunicationService: ManagerComunicationService) {
     this.code = '';
     this.valid = false;
   }
 
   sendJSON() {
     const filters = JSON.parse(this.code);
-    this.comunicationService.sendQueryFilters([
+    this.ManagerComunicationService.sendQueryFilters([
       Object.keys(filters),
       Object.values(filters),
     ]);

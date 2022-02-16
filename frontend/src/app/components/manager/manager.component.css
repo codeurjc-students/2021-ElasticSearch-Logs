@@ -25,6 +25,9 @@ mat-icon {
   margin-right: 5px;
 }
 
+#deleteIcon {
+  margin-right: 0;
+}
 .expansion-body {
   overflow-y: scroll;
   height: 500px;
@@ -34,11 +37,18 @@ mat-icon {
   overflow-y: hidden;
   height: 380px;
 }
-.expansion-body > p {
+
+#subtitle-container {
+  display: flex;
+  align-items: baseline;
+}
+
+.expansion-body p {
   font-size: 16px;
   font-family: "Roboto", sans-serif;
   font-weight: 500;
   padding: 30px;
+  padding-right: 5px;
   padding-bottom: 0;
 }
 

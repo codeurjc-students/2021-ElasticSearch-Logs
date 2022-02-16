@@ -1,4 +1,4 @@
-.submit-button {
+.form-button {
   margin-top: 20px;
 }
 
@@ -8,4 +8,14 @@ form {
   margin-top: 20px;
   display: flex;
   flex-direction: column;
+}
+
+#buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+#buttons button {
+  width: -webkit-fill-available;
 }

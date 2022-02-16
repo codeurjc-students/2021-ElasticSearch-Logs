@@ -5,13 +5,24 @@
       <h2>Font Size</h2>
     </div>
 
-    <mat-radio-group aria-label="Select an option">
-      <mat-radio-button value="8">Small</mat-radio-button>
-      <mat-radio-button value="16" checked>Normal</mat-radio-button>
-      <mat-radio-button value="24">Large</mat-radio-button>
+    <mat-radio-group aria-label="Select an option" [(ngModel)]="fontSize">
+      <mat-radio-button value="small">Small</mat-radio-button>
+      <mat-radio-button checked value="normal" checked>
+        Normal
+      </mat-radio-button>
+      <mat-radio-button value="large">Large</mat-radio-button>
     </mat-radio-group>
   </div>
   <div mat-dialog-actions>
+    <button
+      class="submit-button"
+      mat-raised-button
+      color="primary"
+      (click)="fontSizeEmit()"
+    >
+      Apply
+    </button>
+
     <button mat-button mat-dialog-close>Close</button>
   </div>
 </div>

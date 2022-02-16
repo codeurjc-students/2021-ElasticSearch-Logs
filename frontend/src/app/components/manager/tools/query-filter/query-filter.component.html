@@ -12,14 +12,23 @@
     </mat-form-field>
   </div>
 
-  <!--On submit update the table-->
-  <button
-    class="submit-button"
-    [disabled]="!queryFilter.valid"
-    type="submit"
-    mat-raised-button
-    color="primary"
-  >
-    Submit
-  </button>
+  <div id="buttons">
+    <button
+      [disabled]="!queryFilter.valid"
+      type="submit"
+      mat-raised-button
+      color="primary"
+    >
+      Submit
+    </button>
+
+    <button
+      type="button"
+      onclick="form.reset()"
+      mat-raised-button
+      color="secondary"
+    >
+      Clear
+    </button>
+  </div>
 </form>

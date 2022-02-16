@@ -4,11 +4,12 @@ import { Subject } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
-export class ComunicationService {
+export class ManagerComunicationService {
   colDefs: string[] = [];
   queryFilters: any[][] = [];
   queryJSON: string = '';
   stringToHighlight: string = '';
+  fontSize: string = '';
 
   private colDefsSubject = new Subject<string[]>();
   colDefsObservable = this.colDefsSubject.asObservable();
@@ -18,6 +19,11 @@ export class ComunicationService {
 
   private stringToHighlightSubject = new Subject<string>();
   stringToHighlightObservable = this.stringToHighlightSubject.asObservable();
+
+  private fontSizeSubject = new Subject<
+    keyof { small: number; normal: number; large: number }
+  >();
+  fontSizeObservable = this.fontSizeSubject.asObservable();
 
   sendColDefs(colDefs: string[]) {
     this.colDefs = colDefs;
@@ -29,8 +35,15 @@ export class ComunicationService {
     this.queryFilterSubject.next(queryFilters);
   }
 
-  sendstringToHighlight(stringToHighlight: string) {
+  sendStringToHighlight(stringToHighlight: string) {
     this.stringToHighlight = stringToHighlight;
     this.stringToHighlightSubject.next(stringToHighlight);
+  }
+
+  sendFontSize(
+    fontSize: keyof { small: number; normal: number; large: number }
+  ) {
+    this.fontSize = fontSize;
+    this.fontSizeSubject.next(fontSize);
   }
 }

@@ -1,19 +1,34 @@
 * {
   scroll-behavior: smooth;
+  /* overflow-y: hidden; */
 }
 
 
 #main-container{
   display: flex;
   justify-content: space-between;
+  height: 100vh;
 }
 
 #container-body{
   display: flex;
   flex-direction: column;
   width: 100%;
+  height: 100%;
+  margin-left: 20vw;
+}
+
+#manager{
+  height: 100%;
+  width: 20%;
+  position: fixed;
+  left: 0;
 }
 
 #table{
-  height: 500px;
+  height: 80%;
+}
+
+#displayer{
+  height: 20%;
 }

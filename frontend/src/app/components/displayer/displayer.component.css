@@ -1,0 +1,22 @@
+#displayer-title{
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+mat-card-title{
+    margin-bottom: 0;
+}
+
+mat-chip-list{
+    margin-left: 10px;
+}
+
+table{
+    width: 100%;
+}
+
+th{
+    width: 200px;
+}
+

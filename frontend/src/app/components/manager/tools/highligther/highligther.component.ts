@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { ComunicationService } from 'src/app/service/comunication.service';
+import { ManagerComunicationService } from 'src/app/service/managerComunication.service';
 import { UtilService } from 'src/app/util/util.service';
 
 @Component({
@@ -13,7 +13,7 @@ export class HighligtherComponent {
 
   constructor(
     private utilService: UtilService,
-    private comunicationService: ComunicationService
+    private ManagerComunicationService: ManagerComunicationService
   ) {
     this.highlighter = new FormGroup({
       stringToHighlight: new FormControl(''),
@@ -25,6 +25,6 @@ export class HighligtherComponent {
    */
   stringToHighlightEmit(): void {
     const fields = this.utilService.getDataFromForm(this.highlighter)[1];
-    this.comunicationService.sendstringToHighlight(fields[0]);
+    this.ManagerComunicationService.sendStringToHighlight(fields[0]);
   }
 }

@@ -2,9 +2,11 @@ import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { LogService } from '../../service/log.service';
 
 import { COLUMN_DEFS } from '../../config/table.config';
+import { TABLE_STYLES } from '../../config/style.config';
 
 import { AgGridAngular } from 'ag-grid-angular';
-import { ComunicationService } from 'src/app/service/comunication.service';
+import { ManagerComunicationService } from 'src/app/service/managerComunication.service';
+import { TableManagerComunicationService } from 'src/app/service/tableComunication.service';
 import { UtilService } from 'src/app/util/util.service';
 
 @Component({
@@ -41,9 +43,6 @@ export class TableComponent implements OnInit {
   // Grid context
   public context: object;
 
-  // Custom componenets
-  public components: any;
-
   // Grid data model
   public rowModelType: string;
 
@@ -64,6 +63,9 @@ export class TableComponent implements OnInit {
   // Height of each row
   public rowHeight: number;
 
+  // Font size of the rows
+  public fontSize: number;
+
   /**
    * Constructor
    * @param logService
@@ -72,7 +74,8 @@ export class TableComponent implements OnInit {
   public constructor(
     private utilService: UtilService,
     private logService: LogService,
-    private comunicationService: ComunicationService
+    private managerComunicationService: ManagerComunicationService,
+    private tableManagerComunicationService: TableManagerComunicationService
   ) {
     // Basic config
     this.rowModelType = 'infinite';
@@ -80,34 +83,31 @@ export class TableComponent implements OnInit {
     // Colums definition
     this.columnDefs = COLUMN_DEFS;
 
+    // Default columns defs
     this.defaultColDef = {
       wrapText: true,
-      filter: true,
-      cellRenderer: 'loadingRenderer',
-    };
-
-    this.components = {
-      loadingRenderer: function (params: any) {
-        if (params.value !== undefined) {
-          return params.value;
-        } else {
-          return '<img src="/assets/img/loading.gif"></img>';
-        }
+      cellRenderer:(params: any) => {
+        return params.value != undefined || null ? params.value : params.value; 
       },
+      style: {
+        height: '50%',
+      }
     };
 
     // Row options
-    this.rowHeight = 200;
+    this.rowHeight = 150;
     this.rowBuffer = 10;
     this.rowSelection = 'multiple';
+    this.fontSize = 14;
 
     // Infinite loading options
     this.cacheOverflowSize = 5;
     this.maxConcurrentDatasourceRequests = 5;
     this.maxBlocksInCache = 1;
     this.cacheBlockSize = 10;
-    this.infiniteInitialRowCount = 5;
+    this.infiniteInitialRowCount = 7;
 
+    // Table context
     this.context = { componentParent: this };
   }
 
@@ -126,10 +126,7 @@ export class TableComponent implements OnInit {
 
         this.logService.search([[], []], this.page, 'match').subscribe(
           (data) => {
-            console.log(`asking for ${params.startRow} to ${params.endRow}`);
-            console.log(this.page);
             let lastRow = data.length == 10 ? null : data.length;
-
             params.successCallback(data, lastRow);
           },
           (err) => console.log(err)
@@ -139,17 +136,26 @@ export class TableComponent implements OnInit {
     params.api.setDatasource(dataSource);
   }
 
+  onSelectionChanged(params: any) {
+    const selectedRows = this.gridApi.getSelectedRows()[0];
+    this.tableManagerComunicationService.sendRowProperties(selectedRows);
+  }
+
   ngOnInit(): void {
-    this.comunicationService.colDefsObservable.subscribe((data) => {
+    this.managerComunicationService.colDefsObservable.subscribe((data) => {
       this.updateColDefs(data);
     });
 
-    this.comunicationService.queryFilterObservable.subscribe((data) => {
+    this.managerComunicationService.queryFilterObservable.subscribe((data) => {
       this.queryFilter(data);
     });
 
-    this.comunicationService.stringToHighlightObservable.subscribe((data) => {
+    this.managerComunicationService.stringToHighlightObservable.subscribe((data) => {
       this.highlight(data);
+    });
+
+    this.managerComunicationService.fontSizeObservable.subscribe((data) => {
+      this.changeFontSize(data);
     });
   }
 
@@ -181,10 +187,7 @@ export class TableComponent implements OnInit {
 
         this.logService.search(filters, this.page, 'match').subscribe(
           (data) => {
-            console.log(`asking for ${params.startRow} to ${params.endRow}`);
-            console.log(`Page => ${this.page}`);
             let lastRow = data.length == 10 ? null : data.length;
-
             params.successCallback(data, lastRow);
           },
           (err) => console.log(err)
@@ -218,10 +221,7 @@ export class TableComponent implements OnInit {
                 data,
                 stringToHighlight
               );
-              console.log(`asking for ${params.startRow} to ${params.endRow}`);
-              console.log(`Page => ${this.page}`);
               let lastRow = data.length == 10 ? null : data.length;
-
               params.successCallback(highlightedData, lastRow);
             },
             (err) => console.log(err)
@@ -230,5 +230,15 @@ export class TableComponent implements OnInit {
     };
 
     this.gridApi.setDatasource(dataSource);
+  }
+
+  /**
+   * Change the table data font size
+   * @param data A key wich posible values { small: 12; normal: 14; large: 16 }
+   */
+  private changeFontSize(
+    data: keyof { small: number; normal: number; large: number }
+  ) {
+    this.fontSize = TABLE_STYLES.fontSize[data];
   }
 }

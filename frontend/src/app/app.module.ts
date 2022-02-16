@@ -25,6 +25,8 @@ import { MatRadioModule } from '@angular/material/radio';
 import { QueryJsonComponent } from './components/manager/tools/query-json/query-json.component';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDialogModule } from '@angular/material/dialog';
+import {MatChipsModule} from '@angular/material/chips';
+import {MatTableModule} from '@angular/material/table';
 
 import { MonacoEditorModule } from 'ngx-monaco-editor';
 import { FormsModule } from '@angular/forms';
@@ -49,6 +51,8 @@ import { DisplayerComponent } from './components/displayer/displayer.component';
     MatMenuModule,
     MatRadioModule,
     MatDialogModule,
+    MatChipsModule,
+    MatTableModule,
     FormsModule,
     MonacoEditorModule.forRoot(),
   ],

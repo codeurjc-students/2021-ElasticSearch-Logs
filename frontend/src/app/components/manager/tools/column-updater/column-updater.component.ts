@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { UtilService } from 'src/app/util/util.service';
 import { Output, EventEmitter } from '@angular/core';
-import { ComunicationService } from 'src/app/service/comunication.service';
+import { ManagerComunicationService } from 'src/app/service/managerComunication.service';
 
 import { COLUMN_DEFS } from '../../../../config/table.config';
 
@@ -17,11 +17,11 @@ export class ColumnUpdaterComponent {
 
   constructor(
     private utilService: UtilService,
-    private comunicationService: ComunicationService
+    private ManagerComunicationService: ManagerComunicationService
   ) {
-    this.columns = COLUMN_DEFS;
+    this.columns = COLUMN_DEFS.filter((column) => column.field != 'status');
     this.columnsToDisplay = new FormGroup(
-      this.utilService.buildFormControl(false)
+      this.utilService.buildFormControl(this.columns, false)
     );
   }
 
@@ -32,6 +32,6 @@ export class ColumnUpdaterComponent {
     const fields: string[] = this.utilService.getDataFromForm(
       this.columnsToDisplay
     )[0];
-    this.comunicationService.sendColDefs(fields);
+    this.ManagerComunicationService.sendColDefs(fields);
   }
 }
