@@ -1,6 +1,6 @@
 mat-form-field {
   margin-right: 10px;
-  width: 90%;
+  width: 83%;
 }
 
 p {
@@ -14,12 +14,13 @@ mat-icon {
   font-size: 18px;
 }
 
-#submit-button {
-  border-radius: 10px;
+#highlighter-submit-button {
+  border-radius: 7px;
 }
 
 #highlighter-form {
   display: flex;
   align-items: baseline;
+  flex-wrap: wrap;
   flex-direction: row;
 }

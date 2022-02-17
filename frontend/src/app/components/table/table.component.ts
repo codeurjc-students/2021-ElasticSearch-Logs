@@ -8,6 +8,7 @@ import { AgGridAngular } from 'ag-grid-angular';
 import { ManagerComunicationService } from 'src/app/service/managerComunication.service';
 import { TableManagerComunicationService } from 'src/app/service/tableComunication.service';
 import { UtilService } from 'src/app/util/util.service';
+import { ViewportScroller } from '@angular/common';
 
 @Component({
   selector: 'app-table',

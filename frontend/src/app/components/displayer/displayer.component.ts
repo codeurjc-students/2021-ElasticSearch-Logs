@@ -10,12 +10,15 @@ import { TABLE_STYLES } from '../../config/style.config';
 })
 export class DisplayerComponent implements OnInit {
 
+  selectedLog:boolean;
   logLevelChip: keyof { ERROR: string; WARN: string; INFO: string } = 'INFO';
   logLevelStyle:string = 'secondary'
   displayedColumns: string[] = ['position', 'name'];
   dataSource:any = [];
 
-  constructor(private tableManagerComunicationService: TableManagerComunicationService) { }
+  constructor(private tableManagerComunicationService: TableManagerComunicationService) {
+    this.selectedLog = false;
+   }
 
   ngOnInit(): void {
     this.tableManagerComunicationService.rowPropertiesObservable.subscribe((data) => {
@@ -27,6 +30,7 @@ export class DisplayerComponent implements OnInit {
     this.dataSource = Object.entries(data)
     this.logLevelChip = data.log_level;
     this.logLevelStyle = 'primary'
+    this.selectedLog = true;
   }
 
 }

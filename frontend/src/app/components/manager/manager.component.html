@@ -10,6 +10,23 @@
     <mat-accordion>
       <!--Highlighter-->
       <app-highligther></app-highligther>
+ 
+
+       <!--Time shortcuts-->
+       <mat-expansion-panel hideToggle>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <mat-icon>date_range</mat-icon> Time Queries
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="expansion-body">
+         
+          <p>Range query</p>
+          <app-time-shortcuts></app-time-shortcuts>
+        </div>
+      </mat-expansion-panel>
+
+
 
       <!--Filters-->
       <mat-expansion-panel hideToggle>

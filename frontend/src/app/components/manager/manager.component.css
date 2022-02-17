@@ -1,6 +1,7 @@
 mat-card {
-  height: 100%;
+  border-width: 0;
   background-color: #f9f9f9;
+  box-shadow: none !important;
 }
 
 mat-card-title {
@@ -47,9 +48,12 @@ mat-icon {
   font-size: 16px;
   font-family: "Roboto", sans-serif;
   font-weight: 500;
-  padding: 30px;
   padding-right: 5px;
   padding-bottom: 0;
+}
+
+.expansion-body  {
+  padding: 30px;
 }
 
 #config-options {

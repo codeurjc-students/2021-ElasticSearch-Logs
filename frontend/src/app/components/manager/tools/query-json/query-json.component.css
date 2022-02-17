@@ -10,7 +10,6 @@ ngx-monaco-editor {
 }
 
 #editor {
-  padding: 30px;
   padding-top: 0;
   display: flex;
   flex-direction: column;

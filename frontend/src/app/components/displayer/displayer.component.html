@@ -1,4 +1,4 @@
-<mat-card class="example-card">
+<mat-card class="example-card" *ngIf="selectedLog; else noLog">
   <div id="displayer-title">
     <mat-card-title>Log Displayer</mat-card-title>
     <mat-chip-list>
@@ -28,7 +28,13 @@
     </table>
 
   </mat-card-content>
-
-
-
 </mat-card>
+
+<ng-template #noLog>
+  <div id="logPreSelect">
+    <div id="logPreSelectContent">
+      <p> Select a row to display the log</p>
+      <mat-icon aria-hidden="false" aria-label="Example home icon">visibility</mat-icon>
+    </div>
+  </div>
+</ng-template>

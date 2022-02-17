@@ -1,5 +1,6 @@
 * {
   scroll-behavior: smooth;
+  background-color: #f9f9f9;
   /* overflow-y: hidden; */
 }
 
@@ -19,10 +20,11 @@
 }
 
 #manager{
-  height: 100%;
+  height:-webkit-fill-available;
   width: 20%;
   position: fixed;
   left: 0;
+  overflow-y: scroll;
 }
 
 #table{
@@ -31,4 +33,8 @@
 
 #displayer{
   height: 20%;
+}
+
+#container-manager{
+  overflow-y: hidden;
 }

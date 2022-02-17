@@ -1,22 +1,48 @@
-#displayer-title{
+#displayer-title {
     display: flex;
     align-items: center;
     margin-bottom: 20px;
 }
 
-mat-card-title{
+mat-card-title {
     margin-bottom: 0;
 }
 
-mat-chip-list{
+mat-chip-list {
     margin-left: 10px;
 }
 
-table{
+table {
     width: 100%;
 }
 
-th{
+th {
     width: 200px;
 }
 
+mat-card {
+    height: 100%;
+    box-shadow: none !important;
+    border-width: 0;
+    background-color: white;
+}
+
+#logPreSelect {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    background-color: var(--primary-light);
+    color: white;
+}
+
+#logPreSelect p{
+    font-size: 32px;
+}
+
+#logPreSelectContent{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}

@@ -1,0 +1,57 @@
+mat-expansion-panel-header {
+    padding: 16px;
+}
+
+p {
+    font-size: 16px;
+    font-family: "Roboto", sans-serif;
+    font-weight: 500;
+    padding-bottom: 0;
+}
+
+mat-icon {
+    font-size: 18px;
+}
+
+#datePicker {
+    width: 100%;
+}
+
+#moreOptions {
+    margin: 0;
+}
+
+mat-expansion-panel-header {
+    padding: 5px 10px;
+    background-color: var(--primary) !important;
+    color: white;
+}
+
+.mat-expansion-indicator::after {
+    color: white;
+}
+
+.mat-card .mat-divider-horizontal {
+    position: relative;
+}
+
+#listTitle {
+    padding: 16px 0;
+    font-family: "Roboto", sans-serif;
+    font-weight: 500;
+    color: black;
+}
+
+#shortcutName {
+    font-weight: 500;
+}
+
+.mat-list-item-content {
+    padding: 0 !important;
+}
+
+#time-shortcut-submit-button{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

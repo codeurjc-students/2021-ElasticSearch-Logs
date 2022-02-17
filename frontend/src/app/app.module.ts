@@ -25,8 +25,11 @@ import { MatRadioModule } from '@angular/material/radio';
 import { QueryJsonComponent } from './components/manager/tools/query-json/query-json.component';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDialogModule } from '@angular/material/dialog';
-import {MatChipsModule} from '@angular/material/chips';
-import {MatTableModule} from '@angular/material/table';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatTableModule } from '@angular/material/table';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatListModule } from '@angular/material/list';
 
 import { MonacoEditorModule } from 'ngx-monaco-editor';
 import { FormsModule } from '@angular/forms';
@@ -34,6 +37,7 @@ import { HighligtherComponent } from './components/manager/tools/highligther/hig
 import { StylerComponent } from './components/manager/tools/styler/styler.component';
 import { DialogConfigComponent } from './components/manager/tools/styler/dialog-config/dialog-config.component';
 import { DisplayerComponent } from './components/displayer/displayer.component';
+import { TimeShortcutsComponent } from './components/manager/tools/time-shortcuts/time-shortcuts.component';
 @NgModule({
   imports: [
     BrowserModule,
@@ -53,6 +57,9 @@ import { DisplayerComponent } from './components/displayer/displayer.component';
     MatDialogModule,
     MatChipsModule,
     MatTableModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatListModule,
     FormsModule,
     MonacoEditorModule.forRoot(),
   ],
@@ -67,8 +74,9 @@ import { DisplayerComponent } from './components/displayer/displayer.component';
     StylerComponent,
     DialogConfigComponent,
     DisplayerComponent,
+    TimeShortcutsComponent,
   ],
   providers: [LogService],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }
