@@ -31,6 +31,8 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatListModule } from '@angular/material/list';
 
+import { NgxEchartsModule } from 'ngx-echarts';
+
 import { MonacoEditorModule } from 'ngx-monaco-editor';
 import { FormsModule } from '@angular/forms';
 import { HighligtherComponent } from './components/manager/tools/highligther/highligther.component';
@@ -38,6 +40,7 @@ import { StylerComponent } from './components/manager/tools/styler/styler.compon
 import { DialogConfigComponent } from './components/manager/tools/styler/dialog-config/dialog-config.component';
 import { DisplayerComponent } from './components/displayer/displayer.component';
 import { TimeShortcutsComponent } from './components/manager/tools/time-shortcuts/time-shortcuts.component';
+import { TimelineComponent } from './components/timeline/timeline.component';
 @NgModule({
   imports: [
     BrowserModule,
@@ -61,6 +64,9 @@ import { TimeShortcutsComponent } from './components/manager/tools/time-shortcut
     MatNativeDateModule,
     MatListModule,
     FormsModule,
+    NgxEchartsModule.forRoot({
+      echarts: () => import('echarts')
+    }),
     MonacoEditorModule.forRoot(),
   ],
   declarations: [
@@ -75,6 +81,7 @@ import { TimeShortcutsComponent } from './components/manager/tools/time-shortcut
     DialogConfigComponent,
     DisplayerComponent,
     TimeShortcutsComponent,
+    TimelineComponent,
   ],
   providers: [LogService],
   bootstrap: [AppComponent],
