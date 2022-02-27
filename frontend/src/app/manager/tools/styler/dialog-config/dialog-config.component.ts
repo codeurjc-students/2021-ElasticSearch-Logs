@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ManagerComunicationService } from 'src/app/service/managerComunication.service';
-
+import { ManagerComunicationService } from 'src/app/core/service/managerComunication.service';
 
 @Component({
   selector: 'app-dialog-config',
@@ -16,7 +15,7 @@ export class DialogConfigComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  fontSizeEmit(): void { 
+  fontSizeEmit(): void {
     this.ManagerComunicationService.sendFontSize(this.fontSize);
   }
 }

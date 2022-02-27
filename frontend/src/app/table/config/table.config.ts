@@ -1,3 +1,16 @@
+export const TABLE_STYLES = {
+  fontSize: {
+    small: 12,
+    normal: 14,
+    large: 16,
+  },
+  logLevel: {
+    ERROR: 'primary',
+    INFO: 'secondary',
+    WARN: 'secondary',
+  },
+};
+
 export const COLUMN_DEFS = [
   {
     headerName: '#',
@@ -5,9 +18,9 @@ export const COLUMN_DEFS = [
     width: 60,
     valueGetter: 'node.id',
     cellRenderer: (params: any) => {
-      return params.value !== undefined 
-        ? "" 
-        : '<img width="50px" height="50px" src="/assets/img/loading.gif"></img>'
+      return params.value !== undefined
+        ? ''
+        : '<img width="50px" height="50px" src="/assets/img/loading.gif"></img>';
     },
     cellStyle: {
       display: 'flex',

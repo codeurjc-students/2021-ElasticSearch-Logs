@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
-import { UtilService } from 'src/app/util/util.service';
-import { Output, EventEmitter } from '@angular/core';
-import { ManagerComunicationService } from 'src/app/service/managerComunication.service';
+import { Component } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 
-import { COLUMN_DEFS } from '../../../../config/table.config';
+import { ManagerComunicationService } from 'src/app/core/service/managerComunication.service';
+import { DataProcessor } from 'src/app/core/util/dataProcessor.util';
+
+import { COLUMN_DEFS } from '../../../table/config/table.config';
 
 @Component({
   selector: 'app-column-updater',
@@ -16,7 +16,7 @@ export class ColumnUpdaterComponent {
   public columnsToDisplay: FormGroup;
 
   constructor(
-    private utilService: UtilService,
+    private utilService: DataProcessor,
     private ManagerComunicationService: ManagerComunicationService
   ) {
     this.columns = COLUMN_DEFS.filter((column) => column.field != 'status');

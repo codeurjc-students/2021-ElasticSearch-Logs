@@ -1,17 +1,9 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnChanges,
-  OnInit,
-  Output,
-  SimpleChanges,
-} from '@angular/core';
-import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
-import { ManagerComunicationService } from 'src/app/service/managerComunication.service';
-import { LogService } from 'src/app/service/log.service';
-import { UtilService } from 'src/app/util/util.service';
-import { COLUMN_DEFS } from '../../../../config/table.config';
+import { Component, OnChanges, SimpleChanges } from '@angular/core';
+import { FormGroup } from '@angular/forms';
+import { ManagerComunicationService } from 'src/app/core/service/managerComunication.service';
+import { DataProcessor } from 'src/app/core/util/dataProcessor.util';
+
+import { COLUMN_DEFS } from '../../../table/config/table.config';
 
 @Component({
   selector: 'app-query-filter',
@@ -23,7 +15,7 @@ export class QueryFilterComponent implements OnChanges {
   public queryFilter: FormGroup;
 
   constructor(
-    private utilService: UtilService,
+    private utilService: DataProcessor,
     private ManagerComunicationService: ManagerComunicationService
   ) {
     this.columns = COLUMN_DEFS.filter((column) => column.field != 'status');

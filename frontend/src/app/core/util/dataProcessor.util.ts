@@ -2,12 +2,12 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 
-import { COLUMN_DEFS } from '../config/table.config';
+import { COLUMN_DEFS } from '../../table/config/table.config';
 
 @Injectable({
   providedIn: 'root',
 })
-export class UtilService {
+export class DataProcessor {
   constructor(private httpClient: HttpClient) {}
 
   /**

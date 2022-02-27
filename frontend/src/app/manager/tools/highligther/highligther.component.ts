@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { ManagerComunicationService } from 'src/app/service/managerComunication.service';
-import { UtilService } from 'src/app/util/util.service';
+import { ManagerComunicationService } from 'src/app/core/service/managerComunication.service';
+import { DataProcessor } from 'src/app/core/util/dataProcessor.util';
 
 @Component({
   selector: 'app-highligther',
@@ -12,7 +12,7 @@ export class HighligtherComponent {
   public highlighter: FormGroup;
 
   constructor(
-    private utilService: UtilService,
+    private utilService: DataProcessor,
     private ManagerComunicationService: ManagerComunicationService
   ) {
     this.highlighter = new FormGroup({

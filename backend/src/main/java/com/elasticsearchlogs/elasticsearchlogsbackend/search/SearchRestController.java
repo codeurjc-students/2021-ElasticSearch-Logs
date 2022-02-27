@@ -2,7 +2,6 @@ package com.elasticsearchlogs.elasticsearchlogsbackend.search;
 
 import com.elasticsearchlogs.elasticsearchlogsbackend.search.model.document.Log;
 import com.elasticsearchlogs.elasticsearchlogsbackend.search.model.dto.SearchRequestDTO;
-import com.elasticsearchlogs.elasticsearchlogsbackend.search.SearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

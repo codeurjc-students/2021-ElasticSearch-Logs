@@ -1,14 +1,12 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { LogService } from '../../service/log.service';
-
-import { COLUMN_DEFS } from '../../config/table.config';
-import { TABLE_STYLES } from '../../config/style.config';
+import { Component, OnInit, ViewChild } from '@angular/core';
 
 import { AgGridAngular } from 'ag-grid-angular';
-import { ManagerComunicationService } from 'src/app/service/managerComunication.service';
-import { TableManagerComunicationService } from 'src/app/service/tableComunication.service';
-import { UtilService } from 'src/app/util/util.service';
-import { ViewportScroller } from '@angular/common';
+
+import { LogService } from './table.service';
+import { COLUMN_DEFS, TABLE_STYLES } from './config';
+import { ManagerComunicationService } from '../core/service/managerComunication.service';
+import { TableManagerComunicationService } from '../core/service/tableComunication.service';
+import { DataProcessor } from '../core/util/dataProcessor.util';
 
 @Component({
   selector: 'app-table',
@@ -73,7 +71,7 @@ export class TableComponent implements OnInit {
    * @param utilService
    */
   public constructor(
-    private utilService: UtilService,
+    private utilService: DataProcessor,
     private logService: LogService,
     private managerComunicationService: ManagerComunicationService,
     private tableManagerComunicationService: TableManagerComunicationService

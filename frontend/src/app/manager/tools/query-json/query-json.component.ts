@@ -1,7 +1,5 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { FormGroup } from '@angular/forms';
-import { DiffEditorModel } from 'ngx-monaco-editor';
-import { ManagerComunicationService } from 'src/app/service/managerComunication.service';
+import { Component } from '@angular/core';
+import { ManagerComunicationService } from 'src/app/core/service/managerComunication.service';
 
 @Component({
   selector: 'app-query-json',
@@ -9,7 +7,6 @@ import { ManagerComunicationService } from 'src/app/service/managerComunication.
   styleUrls: ['./query-json.component.css'],
 })
 export class QueryJsonComponent {
-  
   code: string;
   valid: boolean;
 

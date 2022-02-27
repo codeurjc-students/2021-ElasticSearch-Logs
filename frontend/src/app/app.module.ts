@@ -1,89 +1,28 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
-
 import { AppComponent } from './app.component';
-import { LogService } from './service/log.service';
-
-import { AgGridModule } from 'ag-grid-angular';
-import { ReactiveFormsModule } from '@angular/forms';
-import { ColumnUpdaterComponent } from './components/manager/tools/column-updater/column-updater.component';
-import { TableComponent } from './components/table/table.component';
-import { QueryFilterComponent } from './components/manager/tools/query-filter/query-filter.component';
-import { ManagerComponent } from './components/manager/manager.component';
-
+import { LogService } from './table/table.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { TimelineModule } from './timeline/timeline.module';
+import { DisplayerModule } from './displayer/displayer.module';
+import { CoreModule } from './core/core.module';
+import { TableModule } from './table/table.module';
+import { ManagerModule } from './manager/manager.module';
 
-import { MatInputModule } from '@angular/material/input';
-import { MatExpansionModule } from '@angular/material/expansion';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatIconModule } from '@angular/material/icon';
-import { MatDividerModule } from '@angular/material/divider';
-import { MatRadioModule } from '@angular/material/radio';
-import { QueryJsonComponent } from './components/manager/tools/query-json/query-json.component';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatChipsModule } from '@angular/material/chips';
-import { MatTableModule } from '@angular/material/table';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
-import { MatListModule } from '@angular/material/list';
-
-import { NgxEchartsModule } from 'ngx-echarts';
-
-import { MonacoEditorModule } from 'ngx-monaco-editor';
-import { FormsModule } from '@angular/forms';
-import { HighligtherComponent } from './components/manager/tools/highligther/highligther.component';
-import { StylerComponent } from './components/manager/tools/styler/styler.component';
-import { DialogConfigComponent } from './components/manager/tools/styler/dialog-config/dialog-config.component';
-import { DisplayerComponent } from './components/displayer/displayer.component';
-import { TimeShortcutsComponent } from './components/manager/tools/time-shortcuts/time-shortcuts.component';
-import { TimelineComponent } from './components/timeline/timeline.component';
 @NgModule({
   imports: [
     BrowserModule,
-    AgGridModule.withComponents(),
     HttpClientModule,
-    ReactiveFormsModule,
     BrowserAnimationsModule,
-    MatInputModule,
-    MatExpansionModule,
-    MatButtonModule,
-    MatCardModule,
-    MatCheckboxModule,
-    MatIconModule,
-    MatDividerModule,
-    MatMenuModule,
-    MatRadioModule,
-    MatDialogModule,
-    MatChipsModule,
-    MatTableModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatListModule,
-    FormsModule,
-    NgxEchartsModule.forRoot({
-      echarts: () => import('echarts')
-    }),
-    MonacoEditorModule.forRoot(),
+    CoreModule,
+    TableModule,
+    TimelineModule,
+    DisplayerModule,
+    ManagerModule,
   ],
-  declarations: [
-    AppComponent,
-    ColumnUpdaterComponent,
-    TableComponent,
-    QueryFilterComponent,
-    ManagerComponent,
-    QueryJsonComponent,
-    HighligtherComponent,
-    StylerComponent,
-    DialogConfigComponent,
-    DisplayerComponent,
-    TimeShortcutsComponent,
-    TimelineComponent,
-  ],
+  declarations: [AppComponent],
   providers: [LogService],
   bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
