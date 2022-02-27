@@ -1,7 +1,8 @@
 package com.elasticsearchlogs.elasticsearchlogsbackend.controller;
 
-import com.elasticsearchlogs.elasticsearchlogsbackend.document.Log;
-import com.elasticsearchlogs.elasticsearchlogsbackend.dao.SearchRequestDTO;
+import com.elasticsearchlogs.elasticsearchlogsbackend.search.model.document.Log;
+import com.elasticsearchlogs.elasticsearchlogsbackend.search.model.dto.SearchRequestDTO;
+import com.elasticsearchlogs.elasticsearchlogsbackend.search.SearchRestController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class LogRestControllerTest {
 
     @Autowired
-    private LogRestController logRestController;
+    private SearchRestController logRestController;
 
     private SearchRequestDTO createSearchRequestDTO(List<String> fields, List<String> searchTerms) {
         SearchRequestDTO searchRequestDTO = new SearchRequestDTO();

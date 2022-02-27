@@ -1,4 +1,4 @@
-package com.elasticsearchlogs.elasticsearchlogsbackend.service.queryBuilderAPI.atomicQBFactory.atomicQB;
+package com.elasticsearchlogs.elasticsearchlogsbackend.search.queryBuilderAPI.atomicQBFactory.atomicQB;
 
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;

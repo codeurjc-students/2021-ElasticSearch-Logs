@@ -1,4 +1,4 @@
-package com.elasticsearchlogs.elasticsearchlogsbackend.utils;
+package com.elasticsearchlogs.elasticsearchlogsbackend.common.utils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

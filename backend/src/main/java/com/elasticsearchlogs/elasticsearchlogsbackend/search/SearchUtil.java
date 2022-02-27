@@ -1,7 +1,7 @@
-package com.elasticsearchlogs.elasticsearchlogsbackend.search.util;
+package com.elasticsearchlogs.elasticsearchlogsbackend.search;
 
-import com.elasticsearchlogs.elasticsearchlogsbackend.dao.SearchRequestDTO;
-import com.elasticsearchlogs.elasticsearchlogsbackend.service.queryBuilderAPI.queryBuilderAPI;
+import com.elasticsearchlogs.elasticsearchlogsbackend.search.model.dto.SearchRequestDTO;
+import com.elasticsearchlogs.elasticsearchlogsbackend.search.queryBuilderAPI.QueryBuilderAPI;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.index.query.*;
@@ -10,7 +10,8 @@ import org.elasticsearch.search.sort.SortOrder;
 
 public final class SearchUtil {
 
-    private SearchUtil() {
+    private SearchUtil() throws InstantiationException {
+        throw new InstantiationException("This class is not supposed to be instantiated");
     }
 
     /**
@@ -28,7 +29,7 @@ public final class SearchUtil {
             boolean strictQuery) {
         try {
 
-            final BoolQueryBuilder boolQuery = queryBuilderAPI
+            final BoolQueryBuilder boolQuery = QueryBuilderAPI
                     .createCompoundQB(type, searchRequestDTO.getFields(), searchRequestDTO.getSearchTerms(), strictQuery);
 
             return applyOptions(indexName, searchRequestDTO, getSearchSourceBuilder(searchRequestDTO, boolQuery));

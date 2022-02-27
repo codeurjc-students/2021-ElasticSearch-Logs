@@ -1,4 +1,4 @@
-package com.elasticsearchlogs.elasticsearchlogsbackend.document;
+package com.elasticsearchlogs.elasticsearchlogsbackend.search.model.document;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

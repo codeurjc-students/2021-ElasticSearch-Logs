@@ -1,10 +1,9 @@
-package com.elasticsearchlogs.elasticsearchlogsbackend.service;
+package com.elasticsearchlogs.elasticsearchlogsbackend.search;
 
-import com.elasticsearchlogs.elasticsearchlogsbackend.document.Log;
-import com.elasticsearchlogs.elasticsearchlogsbackend.document.OpenViduLog;
-import com.elasticsearchlogs.elasticsearchlogsbackend.dao.SearchRequestDTO;
-import com.elasticsearchlogs.elasticsearchlogsbackend.search.util.SearchUtil;
-import com.elasticsearchlogs.elasticsearchlogsbackend.utils.Indices;
+import com.elasticsearchlogs.elasticsearchlogsbackend.search.model.document.Log;
+import com.elasticsearchlogs.elasticsearchlogsbackend.search.model.document.OpenViduLog;
+import com.elasticsearchlogs.elasticsearchlogsbackend.search.model.dto.SearchRequestDTO;
+import com.elasticsearchlogs.elasticsearchlogsbackend.common.utils.Indices;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.elasticsearch.action.search.*;
@@ -97,12 +96,8 @@ public class SearchService {
      */
     private SearchRequest getSearchRequest(SearchRequestDTO searchRequestDTO, String type) {
         return switch (type) {
-            case "match" -> SearchUtil.buildSearchRequest(
-                    Indices.LOG_INDEX,
-                    searchRequestDTO, type, true);
-            case "wildcard" -> SearchUtil.buildSearchRequest(
-                    Indices.LOG_INDEX,
-                    searchRequestDTO, type, false);
+            case "match" -> SearchUtil.buildSearchRequest(Indices.LOG_INDEX, searchRequestDTO, type, true);
+            case "wildcard" -> SearchUtil.buildSearchRequest(Indices.LOG_INDEX, searchRequestDTO, type, false);
             case default -> null;
         };
     }

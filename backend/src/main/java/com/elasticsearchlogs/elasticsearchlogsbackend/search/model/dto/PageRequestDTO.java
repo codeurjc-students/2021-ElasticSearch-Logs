@@ -1,4 +1,4 @@
-package com.elasticsearchlogs.elasticsearchlogsbackend.dao;
+package com.elasticsearchlogs.elasticsearchlogsbackend.search.model.dto;
 
 public class PageRequestDTO {
 

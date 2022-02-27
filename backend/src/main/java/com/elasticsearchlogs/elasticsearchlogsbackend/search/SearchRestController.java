@@ -1,8 +1,8 @@
-package com.elasticsearchlogs.elasticsearchlogsbackend.controller;
+package com.elasticsearchlogs.elasticsearchlogsbackend.search;
 
-import com.elasticsearchlogs.elasticsearchlogsbackend.document.Log;
-import com.elasticsearchlogs.elasticsearchlogsbackend.dao.SearchRequestDTO;
-import com.elasticsearchlogs.elasticsearchlogsbackend.service.SearchService;
+import com.elasticsearchlogs.elasticsearchlogsbackend.search.model.document.Log;
+import com.elasticsearchlogs.elasticsearchlogsbackend.search.model.dto.SearchRequestDTO;
+import com.elasticsearchlogs.elasticsearchlogsbackend.search.SearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,12 +10,12 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/log")
-public class LogRestController {
+public class SearchRestController {
 
     private final SearchService service;
 
     @Autowired
-    public LogRestController(SearchService service) {
+    public SearchRestController(SearchService service) {
         this.service = service;
     }
 

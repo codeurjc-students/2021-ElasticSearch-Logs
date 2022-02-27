@@ -1,4 +1,4 @@
-package com.elasticsearchlogs.elasticsearchlogsbackend.configuration;
+package com.elasticsearchlogs.elasticsearchlogsbackend.common.configuration;
 
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;

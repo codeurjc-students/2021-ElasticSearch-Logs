@@ -1,4 +1,4 @@
-package com.elasticsearchlogs.elasticsearchlogsbackend.utils;
+package com.elasticsearchlogs.elasticsearchlogsbackend.common.utils;
 
 public final class Indices {
 
