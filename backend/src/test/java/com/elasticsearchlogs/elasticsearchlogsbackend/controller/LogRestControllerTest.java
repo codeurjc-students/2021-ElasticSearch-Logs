@@ -1,7 +1,7 @@
 package com.elasticsearchlogs.elasticsearchlogsbackend.controller;
 
 import com.elasticsearchlogs.elasticsearchlogsbackend.document.Log;
-import com.elasticsearchlogs.elasticsearchlogsbackend.search.SearchRequestDTO;
+import com.elasticsearchlogs.elasticsearchlogsbackend.dao.SearchRequestDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

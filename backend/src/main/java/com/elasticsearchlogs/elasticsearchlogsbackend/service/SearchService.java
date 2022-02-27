@@ -1,7 +1,8 @@
 package com.elasticsearchlogs.elasticsearchlogsbackend.service;
 
 import com.elasticsearchlogs.elasticsearchlogsbackend.document.Log;
-import com.elasticsearchlogs.elasticsearchlogsbackend.search.SearchRequestDTO;
+import com.elasticsearchlogs.elasticsearchlogsbackend.document.OpenViduLog;
+import com.elasticsearchlogs.elasticsearchlogsbackend.dao.SearchRequestDTO;
 import com.elasticsearchlogs.elasticsearchlogsbackend.search.util.SearchUtil;
 import com.elasticsearchlogs.elasticsearchlogsbackend.utils.Indices;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -22,14 +23,14 @@ import java.util.Collections;
 import java.util.List;
 
 @Service
-public class LogService {
+public class SearchService {
     private static final ObjectMapper MAPPER = new ObjectMapper();
-    private static final Logger LOG = LoggerFactory.getLogger(Log.class);
+    private static final Logger LOG = LoggerFactory.getLogger(OpenViduLog.class);
 
     private final RestHighLevelClient client;
 
     @Autowired
-    public LogService(RestHighLevelClient client) {
+    public SearchService(RestHighLevelClient client) {
         this.client = client;
     }
 
@@ -98,10 +99,10 @@ public class LogService {
         return switch (type) {
             case "match" -> SearchUtil.buildSearchRequest(
                     Indices.LOG_INDEX,
-                    searchRequestDTO,type,true);
+                    searchRequestDTO, type, true);
             case "wildcard" -> SearchUtil.buildSearchRequest(
                     Indices.LOG_INDEX,
-                    searchRequestDTO,type,false);
+                    searchRequestDTO, type, false);
             case default -> null;
         };
     }
@@ -124,7 +125,7 @@ public class LogService {
         final List<Log> logs = new ArrayList<>(hitsNumber);
 
         for (SearchHit hit : searchHits) {
-            logs.add(MAPPER.readValue(hit.getSourceAsString(), Log.class));
+            logs.add(MAPPER.readValue(hit.getSourceAsString(), OpenViduLog.class));
         }
         return logs;
     }

@@ -87,16 +87,16 @@ export class TableComponent implements OnInit {
     // Default columns defs
     this.defaultColDef = {
       wrapText: true,
-      cellRenderer:(params: any) => {
-        return params.value != undefined || null ? params.value : params.value; 
+      cellRenderer: (params: any) => {
+        return params.value != undefined || null ? params.value : params.value;
       },
       style: {
         height: '50%',
-      }
+      },
     };
 
     // Row options
-    this.rowHeight = 150;
+    this.rowHeight = 100;
     this.rowBuffer = 10;
     this.rowSelection = 'multiple';
     this.fontSize = 14;
@@ -151,9 +151,11 @@ export class TableComponent implements OnInit {
       this.queryFilter(data);
     });
 
-    this.managerComunicationService.stringToHighlightObservable.subscribe((data) => {
-      this.highlight(data);
-    });
+    this.managerComunicationService.stringToHighlightObservable.subscribe(
+      (data) => {
+        this.highlight(data);
+      }
+    );
 
     this.managerComunicationService.fontSizeObservable.subscribe((data) => {
       this.changeFontSize(data);

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
 import { ManagerComunicationService } from 'src/app/service/managerComunication.service';
-import { UtilService } from 'src/app/util/util.service';
+
 
 @Component({
   selector: 'app-dialog-config',

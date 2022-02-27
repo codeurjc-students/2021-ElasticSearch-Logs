@@ -1,4 +1,4 @@
-package com.elasticsearchlogs.elasticsearchlogsbackend.search;
+package com.elasticsearchlogs.elasticsearchlogsbackend.dao;
 
 import org.elasticsearch.search.sort.SortOrder;
 
