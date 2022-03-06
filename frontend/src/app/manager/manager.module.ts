@@ -25,6 +25,7 @@ import { TimeShortcutsComponent } from './tools/time-shortcuts/time-shortcuts.co
 import { DialogConfigComponent } from './tools/styler/dialog-config/dialog-config.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MonacoEditorModule } from 'ngx-monaco-editor';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @NgModule({
   declarations: [
@@ -58,6 +59,7 @@ import { MonacoEditorModule } from 'ngx-monaco-editor';
     MatDatepickerModule,
     MatNativeDateModule,
     MatListModule,
+    MatFormFieldModule,
   ],
 })
 export class ManagerModule {}

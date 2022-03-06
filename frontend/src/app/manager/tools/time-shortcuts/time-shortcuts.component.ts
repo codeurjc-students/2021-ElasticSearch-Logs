@@ -15,8 +15,10 @@ export class TimeShortcutsComponent implements OnInit {
   public date: Date = new Date();
 
   public range = new FormGroup({
-    start: new FormControl(),
-    end: new FormControl(),
+    startDate: new FormControl(),
+    endDate: new FormControl(),
+    startTime: new FormControl('00:00'),
+    endTime: new FormControl('00:00'),
   });
 
   public shortcuts = [
@@ -46,14 +48,29 @@ export class TimeShortcutsComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  private getDate(days: number): number {
-    return new Date().setDate(this.date.getDate() - days);
+  onFormCall() {
+    const from = this.buildDate(
+      this.range.value.startDate,
+      this.range.value.startTime
+    );
+
+    const to = this.buildDate(
+      this.range.value.endDate,
+      this.range.value.endTime
+    );
+
+    this.managerComunicationService.sendRangeFilters([from, to]);
   }
 
   onShorcutCall(dateNumber: number) {
     const from = new Date(dateNumber).toISOString().replace('Z', '+00:00');
     const to = new Date().toISOString().replace('Z', '+00:00');
-
     this.managerComunicationService.sendRangeFilters([from, to]);
+  }
+
+  private buildDate(dateValue: Date, timeValue: any): string {
+    const date = new Date(dateValue);
+    date.setHours(timeValue.slice(0, 2), timeValue.slice(3, 5));
+    return date.toISOString().replace('Z', '+00:00');
   }
 }
