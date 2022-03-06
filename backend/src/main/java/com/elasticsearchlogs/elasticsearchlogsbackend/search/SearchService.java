@@ -1,9 +1,9 @@
 package com.elasticsearchlogs.elasticsearchlogsbackend.search;
 
-import com.elasticsearchlogs.elasticsearchlogsbackend.search.model.document.Log;
-import com.elasticsearchlogs.elasticsearchlogsbackend.search.model.document.OpenViduLog;
-import com.elasticsearchlogs.elasticsearchlogsbackend.search.model.dto.SearchRequestDTO;
-import com.elasticsearchlogs.elasticsearchlogsbackend.common.utils.Indices;
+import com.elasticsearchlogs.elasticsearchlogsbackend.search.document.Log;
+import com.elasticsearchlogs.elasticsearchlogsbackend.search.document.OpenViduLog;
+import com.elasticsearchlogs.elasticsearchlogsbackend.search.dto.SearchRequestDTO;
+import com.elasticsearchlogs.elasticsearchlogsbackend.indices.IndicesService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.elasticsearch.action.search.*;
@@ -27,10 +27,13 @@ public class SearchService {
     private static final Logger LOG = LoggerFactory.getLogger(OpenViduLog.class);
 
     private final RestHighLevelClient client;
+    private final IndicesService indicesService;
 
     @Autowired
-    public SearchService(RestHighLevelClient client) {
+    public SearchService(RestHighLevelClient client, IndicesService indicesService) {
         this.client = client;
+        this.indicesService = indicesService;
+
     }
 
     /**
@@ -49,9 +52,21 @@ public class SearchService {
             return Collections.emptyList();
         }
 
+        return ExecSearchRequest(searchRequestDTO.getPage(), request);
+    }
+
+
+    /**
+     * Execute a given search request and get the logs of this search
+     *
+     * @param page    The reference number of the page that we want
+     * @param request The request that is going to be executed
+     * @return A list with the logs of the request
+     * @author cristian
+     */
+    private List<Log> ExecSearchRequest(int page, SearchRequest request) {
         try {
             SearchResponse response = client.search(request, RequestOptions.DEFAULT);
-            int page = searchRequestDTO.getPage();
             int currentPage = 1;
 
             //First fetch
@@ -96,8 +111,22 @@ public class SearchService {
      */
     private SearchRequest getSearchRequest(SearchRequestDTO searchRequestDTO, String type) {
         return switch (type) {
-            case "match" -> SearchUtil.buildSearchRequest(Indices.LOG_INDEX, searchRequestDTO, type, true);
-            case "wildcard" -> SearchUtil.buildSearchRequest(Indices.LOG_INDEX, searchRequestDTO, type, false);
+            case "match" -> SearchUtil.buildSearchRequest(
+                    searchRequestDTO,
+                    type,
+                    true,
+                    indicesService.getMostRecentIndices());
+            case "wildcard" -> SearchUtil.buildSearchRequest(
+                    searchRequestDTO,
+                    type,
+                    false,
+                    indicesService.getMostRecentIndices());
+            case "range" -> SearchUtil.buildSearchRequest(
+                    searchRequestDTO,
+                    type,
+                    false,
+                    indicesService.getIndicesFromTo(searchRequestDTO.getSearchTerms()));
+
             case default -> null;
         };
     }
@@ -122,6 +151,7 @@ public class SearchService {
         for (SearchHit hit : searchHits) {
             logs.add(MAPPER.readValue(hit.getSourceAsString(), OpenViduLog.class));
         }
+
         return logs;
     }
 

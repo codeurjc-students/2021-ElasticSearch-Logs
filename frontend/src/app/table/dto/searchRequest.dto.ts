@@ -1,8 +1,8 @@
 export interface SearchRequest {
-    fields: String[]
-    searchTerms: String[]
-    sortBy?: String
-    order?: String
-    page: number
-    size: number
+  fields: string[];
+  searchTerms: string[];
+  sortBy?: string;
+  order?: string;
+  page: number;
+  size: number;
 }

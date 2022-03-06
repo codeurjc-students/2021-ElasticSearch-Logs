@@ -1,10 +1,11 @@
-package com.elasticsearchlogs.elasticsearchlogsbackend.search.queryBuilderAPI.compoundQBFactory.compoundQB;
+package com.elasticsearchlogs.elasticsearchlogsbackend.search.queryBuilderAPI.complexQBFactory.complexQB;
 
 import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilder;
 
 import java.util.List;
 
-public interface CompoundQB {
+public interface ComplexQB {
 
     /**
      * It returns a bool query based on the type
@@ -16,5 +17,5 @@ public interface CompoundQB {
      * @return A BoolQueryBuilder
      * @author cristian
      */
-    BoolQueryBuilder getBoolQB(String type, List<String> fields, List<String> searchTerms, boolean strictQuery);
+    QueryBuilder getQueryBuilder(String type, List<String> fields, List<String> searchTerms, boolean strictQuery);
 }

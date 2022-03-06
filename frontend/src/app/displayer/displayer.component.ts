@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { TableManagerComunicationService } from 'src/app/core/service/tableComunication.service';
+import { TableManagerComunicationService } from 'src/app/shared/service/tableComunication.service';
 
 @Component({
   selector: 'app-displayer',

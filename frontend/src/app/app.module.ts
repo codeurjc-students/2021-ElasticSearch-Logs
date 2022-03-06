@@ -6,7 +6,7 @@ import { LogService } from './table/table.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TimelineModule } from './timeline/timeline.module';
 import { DisplayerModule } from './displayer/displayer.module';
-import { CoreModule } from './core/core.module';
+import { CoreModule } from './shared/core.module';
 import { TableModule } from './table/table.module';
 import { ManagerModule } from './manager/manager.module';
 

@@ -1,12 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-
 import { AgGridAngular } from 'ag-grid-angular';
-
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { LogService } from './table.service';
 import { COLUMN_DEFS, TABLE_STYLES } from './config';
-import { ManagerComunicationService } from '../core/service/managerComunication.service';
-import { TableManagerComunicationService } from '../core/service/tableComunication.service';
-import { DataProcessor } from '../core/util/dataProcessor.util';
+import { ManagerComunicationService } from '../shared/service/managerComunication.service';
+import { TableManagerComunicationService } from '../shared/service/tableComunication.service';
+import { DataProcessor } from '../shared/util/dataProcessor.util';
+import { DateService } from '../shared/service/date.service';
 
 @Component({
   selector: 'app-table',
@@ -74,7 +74,9 @@ export class TableComponent implements OnInit {
     private utilService: DataProcessor,
     private logService: LogService,
     private managerComunicationService: ManagerComunicationService,
-    private tableManagerComunicationService: TableManagerComunicationService
+    private tableManagerComunicationService: TableManagerComunicationService,
+    private dateService: DateService,
+    private snackBar: MatSnackBar
   ) {
     // Basic config
     this.rowModelType = 'infinite';
@@ -122,17 +124,10 @@ export class TableComponent implements OnInit {
       rowCount: null,
       getRows: (params: any) => {
         this.page = params.startRow / 10;
-
-        this.logService.search([[], []], this.page, 'match').subscribe(
-          (data) => {
-            let lastRow = data.length == 10 ? null : data.length;
-            params.successCallback(data, lastRow);
-          },
-          (err) => console.log(err)
-        );
+        this.query([[], []], this.page, 'match', '@timestamp', 'DESC', params);
       },
     };
-    params.api.setDatasource(dataSource);
+    this.gridApi.setDatasource(dataSource);
   }
 
   onSelectionChanged(params: any) {
@@ -158,6 +153,10 @@ export class TableComponent implements OnInit {
     this.managerComunicationService.fontSizeObservable.subscribe((data) => {
       this.changeFontSize(data);
     });
+
+    this.managerComunicationService.rangeFiltersObservable.subscribe((data) => {
+      this.dateFilter(data);
+    });
   }
 
   /**
@@ -178,21 +177,14 @@ export class TableComponent implements OnInit {
 
   /**
    * Search in the database based on the filters
-   * @param filters An array woth 2 arrays, the SearchTerms and the Fields
+   * @param filters An array with 2 arrays, the SearchTerms and the Fields
    */
   private queryFilter(filters: any[][]): void {
     const dataSource = {
       rowCount: null,
       getRows: (params: any) => {
         this.page = params.startRow / 10;
-
-        this.logService.search(filters, this.page, 'match').subscribe(
-          (data) => {
-            let lastRow = data.length == 10 ? null : data.length;
-            params.successCallback(data, lastRow);
-          },
-          (err) => console.log(err)
-        );
+        this.query(filters, this.page, 'match', '@timestamp', 'DESC', params);
       },
     };
 
@@ -204,29 +196,21 @@ export class TableComponent implements OnInit {
       rowCount: null,
       getRows: (params: any) => {
         this.page = params.startRow / 10;
-
-        this.logService
-          .search(
-            [
-              this.utilService
-                .getAllFieldsName()
-                .filter((e) => e != 'timestamp'),
-              [stringToHighlight],
-            ],
-            this.page,
-            'wildcard'
-          )
-          .subscribe(
-            (data) => {
-              const highlightedData = this.utilService.highlightText(
-                data,
-                stringToHighlight
-              );
-              let lastRow = data.length == 10 ? null : data.length;
-              params.successCallback(highlightedData, lastRow);
-            },
-            (err) => console.log(err)
-          );
+        const filters = [
+          this.utilService.getAllFieldsName().filter((e) => e != 'timestamp'),
+          [stringToHighlight],
+        ];
+        this.logService.search(filters, this.page, 'wildcard').subscribe(
+          (data) => {
+            const highlightedData = this.utilService.highlightText(
+              data,
+              stringToHighlight
+            );
+            let lastRow = data.length == 10 ? null : data.length;
+            params.successCallback(highlightedData, lastRow);
+          },
+          (err) => console.log(err)
+        );
       },
     };
 
@@ -241,5 +225,50 @@ export class TableComponent implements OnInit {
     data: keyof { small: number; normal: number; large: number }
   ) {
     this.fontSize = TABLE_STYLES.fontSize[data];
+  }
+
+  private dateFilter(dates: string[]) {
+    console.log(dates);
+
+    const dataSource = {
+      rowCount: null,
+      getRows: (params: any) => {
+        this.page = params.startRow / 10;
+        this.query(
+          [['@timestamp'], dates],
+          this.page,
+          'range',
+          '@timestamp',
+          'DESC',
+          params
+        );
+      },
+    };
+
+    this.gridApi.setDatasource(dataSource);
+  }
+
+  private query(
+    filters: any[][],
+    page: number,
+    type: string,
+    sortBy: string,
+    order: string,
+    params: any
+  ) {
+    this.logService.search(filters, this.page, type, sortBy, order).subscribe(
+      (data) => {
+        if (data.length === 0) {
+          this.snackBar.open('No rows to show!', 'Close', {
+            verticalPosition: 'bottom',
+            horizontalPosition: 'right',
+            duration: 2000,
+          });
+        }
+        let lastRow = data.length == 10 ? null : data.length;
+        params.successCallback(data, lastRow);
+      },
+      (err) => console.log(err)
+    );
   }
 }

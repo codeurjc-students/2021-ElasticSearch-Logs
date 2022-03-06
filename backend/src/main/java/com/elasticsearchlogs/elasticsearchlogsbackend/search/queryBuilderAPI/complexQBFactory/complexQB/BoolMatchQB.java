@@ -1,6 +1,6 @@
-package com.elasticsearchlogs.elasticsearchlogsbackend.search.queryBuilderAPI.compoundQBFactory.compoundQB;
+package com.elasticsearchlogs.elasticsearchlogsbackend.search.queryBuilderAPI.complexQBFactory.complexQB;
 
-import com.elasticsearchlogs.elasticsearchlogsbackend.search.queryBuilderAPI.atomicQBFactory.AtomicQBFactory;
+import com.elasticsearchlogs.elasticsearchlogsbackend.search.queryBuilderAPI.simpleQBFactory.SimpleQBFactory;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
@@ -8,9 +8,9 @@ import org.elasticsearch.index.query.QueryBuilders;
 import java.util.Iterator;
 import java.util.List;
 
-public class BoolMatchQB implements CompoundQB {
+public class BoolMatchQB implements ComplexQB {
 
-    public BoolQueryBuilder getBoolQB(final String type,
+    public BoolQueryBuilder getQueryBuilder(final String type,
                                       final List<String> fields,
                                       final List<String> searchTerms,
                                       final boolean strictQuery) {
@@ -23,7 +23,7 @@ public class BoolMatchQB implements CompoundQB {
             String field = fieldsIterator.next();
             String searchTerm = searchTermsIterator.next();
 
-            QueryBuilder query = AtomicQBFactory.getAtomicQB(type, field, searchTerm);
+            QueryBuilder query = SimpleQBFactory.getAtomicQB(type, field, searchTerm);
 
             if (strictQuery) boolQuery.must(query);
             else boolQuery.should(query);

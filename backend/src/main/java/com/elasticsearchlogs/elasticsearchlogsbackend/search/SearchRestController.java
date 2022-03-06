@@ -1,7 +1,7 @@
 package com.elasticsearchlogs.elasticsearchlogsbackend.search;
 
-import com.elasticsearchlogs.elasticsearchlogsbackend.search.model.document.Log;
-import com.elasticsearchlogs.elasticsearchlogsbackend.search.model.dto.SearchRequestDTO;
+import com.elasticsearchlogs.elasticsearchlogsbackend.search.document.Log;
+import com.elasticsearchlogs.elasticsearchlogsbackend.search.dto.SearchRequestDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,12 +19,17 @@ public class SearchRestController {
     }
 
     @PostMapping("/match-search")
-    public List<Log> boolSearch(@RequestBody final SearchRequestDTO searchRequestDTO) {
+    public List<Log> boolMatchSearch(@RequestBody final SearchRequestDTO searchRequestDTO) {
         return service.search(searchRequestDTO,"match");
     }
 
     @PostMapping("/wildcard-search")
-    public List<Log> termSearch(@RequestBody final SearchRequestDTO searchRequestDTO) {
+    public List<Log> boolWildcardSearch(@RequestBody final SearchRequestDTO searchRequestDTO) {
         return service.search(searchRequestDTO,"wildcard");
+    }
+
+    @PostMapping("/range-search")
+    public List<Log> rangeSearch(@RequestBody final SearchRequestDTO searchRequestDTO) {
+        return service.search(searchRequestDTO,"range");
     }
 }

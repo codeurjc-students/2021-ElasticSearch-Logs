@@ -10,6 +10,7 @@ export class ManagerComunicationService {
   queryJSON: string = '';
   stringToHighlight: string = '';
   fontSize: string = '';
+  rangeFilters: string[] = [];
 
   private colDefsSubject = new Subject<string[]>();
   colDefsObservable = this.colDefsSubject.asObservable();
@@ -24,6 +25,9 @@ export class ManagerComunicationService {
     keyof { small: number; normal: number; large: number }
   >();
   fontSizeObservable = this.fontSizeSubject.asObservable();
+
+  private rangeFiltersSubject = new Subject<string[]>();
+  rangeFiltersObservable = this.rangeFiltersSubject.asObservable();
 
   sendColDefs(colDefs: string[]) {
     this.colDefs = colDefs;
@@ -45,5 +49,10 @@ export class ManagerComunicationService {
   ) {
     this.fontSize = fontSize;
     this.fontSizeSubject.next(fontSize);
+  }
+
+  sendRangeFilters(rangeFilters: string[]) {
+    this.rangeFilters = rangeFilters;
+    this.rangeFiltersSubject.next(rangeFilters);
   }
 }

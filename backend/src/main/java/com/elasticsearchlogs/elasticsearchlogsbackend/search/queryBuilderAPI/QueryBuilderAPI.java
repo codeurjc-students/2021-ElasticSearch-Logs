@@ -1,8 +1,7 @@
 package com.elasticsearchlogs.elasticsearchlogsbackend.search.queryBuilderAPI;
 
-import com.elasticsearchlogs.elasticsearchlogsbackend.search.queryBuilderAPI.atomicQBFactory.AtomicQBFactory;
-import com.elasticsearchlogs.elasticsearchlogsbackend.search.queryBuilderAPI.compoundQBFactory.CompoundQBFactory;
-import org.elasticsearch.index.query.BoolQueryBuilder;
+import com.elasticsearchlogs.elasticsearchlogsbackend.search.queryBuilderAPI.simpleQBFactory.SimpleQBFactory;
+import com.elasticsearchlogs.elasticsearchlogsbackend.search.queryBuilderAPI.complexQBFactory.ComplexQBFactory;
 import org.elasticsearch.index.query.QueryBuilder;
 
 import java.util.List;
@@ -23,8 +22,8 @@ public class QueryBuilderAPI {
      * @return A QueryBuilder to perform the search
      * @author cristian
      */
-    private static QueryBuilder createAtomicQB(final String type, final String field, String searchTerm) {
-        return AtomicQBFactory.getAtomicQB(type, field, searchTerm);
+    private static QueryBuilder createSimpleQB(final String type, final String field, String searchTerm) {
+        return SimpleQBFactory.getAtomicQB(type, field, searchTerm);
     }
 
     /**
@@ -37,8 +36,12 @@ public class QueryBuilderAPI {
      * @return A BoolQueryBuilder
      * @author cristian
      */
-    public static BoolQueryBuilder createCompoundQB(final String type, final List<String> fields, final List<String> searchTerms, boolean strictQuery) {
-        return CompoundQBFactory.getCompoundQB(type, fields, searchTerms, strictQuery);
+    public static QueryBuilder createComplexQB(
+            final String type,
+            final List<String> fields,
+            final List<String> searchTerms,
+            boolean strictQuery) {
+        return ComplexQBFactory.getCompoundQB(type, fields, searchTerms, strictQuery);
     }
 
 }

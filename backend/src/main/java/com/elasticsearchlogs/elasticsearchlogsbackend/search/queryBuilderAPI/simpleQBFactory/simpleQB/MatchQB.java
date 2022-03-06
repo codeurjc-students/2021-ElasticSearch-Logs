@@ -1,12 +1,13 @@
-package com.elasticsearchlogs.elasticsearchlogsbackend.search.queryBuilderAPI.atomicQBFactory.atomicQB;
+package com.elasticsearchlogs.elasticsearchlogsbackend.search.queryBuilderAPI.simpleQBFactory.simpleQB;
 
+import org.elasticsearch.index.query.Operator;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 
-public class  WildcardQB implements AtomicQB {
+public class MatchQB implements SimpleQB {
 
     /**
-     * Wrap a wildcard query in a QueryBuilder
+     * Wrap a matchQuery in a QueryBuilder
      *
      * @param field      The field to look for the value
      * @param searchTerm The field value to look for
@@ -18,6 +19,9 @@ public class  WildcardQB implements AtomicQB {
         if (field == null || searchTerm.isEmpty() || searchTerm.isBlank()) return null;
 
         return QueryBuilders
-                .wildcardQuery(field, "*" + searchTerm + "*");
+                .matchQuery(field, searchTerm)
+                .operator(Operator.AND);
     }
+
+
 }

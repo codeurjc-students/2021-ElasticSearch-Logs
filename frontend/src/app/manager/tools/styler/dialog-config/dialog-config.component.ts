@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ManagerComunicationService } from 'src/app/core/service/managerComunication.service';
+import { ManagerComunicationService } from 'src/app/shared/service/managerComunication.service';
 
 @Component({
   selector: 'app-dialog-config',

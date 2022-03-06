@@ -18,14 +18,22 @@ export class LogService {
    * @param filters An array made of 2 arrays, the first one are the search terms
    * and the second one are the fields. Pass 2 empty arrays to get data without any
    * filter
-   * @returns
+   * @returns An observable of logs
    */
-  public search(filters: any, page: number, type: string): Observable<any[]> {
+  public search(
+    filters: string[][],
+    page: number,
+    type: string,
+    sortBy?: string,
+    order?: string
+  ): Observable<any[]> {
     const searchRequest: SearchRequest = {
       fields: filters[0],
       searchTerms: filters[1],
-      page: page,
+      page,
       size: 10,
+      sortBy,
+      order,
     };
 
     return this.httpClient.post<Log[]>(

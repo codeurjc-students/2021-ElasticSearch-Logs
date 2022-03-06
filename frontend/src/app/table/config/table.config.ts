@@ -1,3 +1,5 @@
+import { DatePipe } from '@angular/common';
+
 export const TABLE_STYLES = {
   fontSize: {
     small: 12,
@@ -34,6 +36,14 @@ export const COLUMN_DEFS = [
     headerName: 'Timestamp',
     field: 'timestamp',
     width: 260,
+    // cellRenderer: (params: any) => {
+    //   const datepipe: DatePipe = new DatePipe('en-US');
+    //   let formattedDate = datepipe.transform(
+    //     params.value,
+    //     'dd/MM/YYYY HH:mm:ss'
+    //   );
+    //   return formattedDate;
+    // },
   },
   {
     headerName: 'Log Level',

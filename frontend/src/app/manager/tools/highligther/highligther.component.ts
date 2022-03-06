@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { ManagerComunicationService } from 'src/app/core/service/managerComunication.service';
-import { DataProcessor } from 'src/app/core/util/dataProcessor.util';
+import { ManagerComunicationService } from 'src/app/shared/service/managerComunication.service';
+import { DataProcessor } from 'src/app/shared/util/dataProcessor.util';
 
 @Component({
   selector: 'app-highligther',

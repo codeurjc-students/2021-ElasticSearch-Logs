@@ -1,10 +1,11 @@
-package com.elasticsearchlogs.elasticsearchlogsbackend.common.configuration;
+package com.elasticsearchlogs.elasticsearchlogsbackend.client;
 
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.impl.client.BasicCredentialsProvider;
+import org.elasticsearch.client.ElasticsearchClient;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestClientBuilder;
 import org.elasticsearch.client.RestHighLevelClient;
@@ -36,6 +37,7 @@ public class ClientConfig extends AbstractElasticsearchConfiguration {
     @Bean
     @Override
     public @NotNull RestHighLevelClient elasticsearchClient() {
+
         URL url = buildURL();
         if (url == null) throw new RuntimeException("The provided URL is malformed");
 

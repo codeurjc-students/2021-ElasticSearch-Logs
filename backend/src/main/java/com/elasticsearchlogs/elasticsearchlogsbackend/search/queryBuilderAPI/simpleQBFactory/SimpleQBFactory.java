@@ -1,13 +1,14 @@
-package com.elasticsearchlogs.elasticsearchlogsbackend.search.queryBuilderAPI.atomicQBFactory;
+package com.elasticsearchlogs.elasticsearchlogsbackend.search.queryBuilderAPI.simpleQBFactory;
 
-import com.elasticsearchlogs.elasticsearchlogsbackend.search.queryBuilderAPI.atomicQBFactory.atomicQB.MatchQB;
+import com.elasticsearchlogs.elasticsearchlogsbackend.search.queryBuilderAPI.simpleQBFactory.simpleQB.MatchQB;
+import com.elasticsearchlogs.elasticsearchlogsbackend.search.queryBuilderAPI.simpleQBFactory.simpleQB.WildcardQB;
 import org.elasticsearch.index.query.QueryBuilder;
 
 import java.util.Objects;
 
-public class AtomicQBFactory {
+public class SimpleQBFactory {
 
-    private AtomicQBFactory() throws InstantiationException {
+    private SimpleQBFactory() throws InstantiationException {
         throw new InstantiationException("This class is not supposed to be instantiated");
     }
 
@@ -26,8 +27,11 @@ public class AtomicQBFactory {
         }
 
         if (Objects.equals(type, "wildcard")) {
-            return new MatchQB().getQueryBuilder(field, searchTerm);
+            return new WildcardQB().getQueryBuilder(field, searchTerm);
         }
+
+
+
 
         return null;
     }

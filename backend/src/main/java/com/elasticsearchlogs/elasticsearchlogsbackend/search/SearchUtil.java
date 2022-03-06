@@ -1,6 +1,6 @@
 package com.elasticsearchlogs.elasticsearchlogsbackend.search;
 
-import com.elasticsearchlogs.elasticsearchlogsbackend.search.model.dto.SearchRequestDTO;
+import com.elasticsearchlogs.elasticsearchlogsbackend.search.dto.SearchRequestDTO;
 import com.elasticsearchlogs.elasticsearchlogsbackend.search.queryBuilderAPI.QueryBuilderAPI;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.common.unit.TimeValue;
@@ -17,22 +17,22 @@ public final class SearchUtil {
     /**
      * It creates de SearchRequest and set up the configuration
      *
-     * @param indexName        The name of the index
+     * @param indices          The name of the indices
      * @param searchRequestDTO The DTO to filter the data
      * @return A SearchRequest with the data
      * @author cristian
      */
     public static SearchRequest buildSearchRequest(
-            final String indexName,
             final SearchRequestDTO searchRequestDTO,
             String type,
-            boolean strictQuery) {
+            boolean strictQuery,
+            final String... indices) {
         try {
 
-            final BoolQueryBuilder boolQuery = QueryBuilderAPI
-                    .createCompoundQB(type, searchRequestDTO.getFields(), searchRequestDTO.getSearchTerms(), strictQuery);
+            final QueryBuilder boolQuery = QueryBuilderAPI
+                    .createComplexQB(type, searchRequestDTO.getFields(), searchRequestDTO.getSearchTerms(), strictQuery);
 
-            return applyOptions(indexName, searchRequestDTO, getSearchSourceBuilder(searchRequestDTO, boolQuery));
+            return applyOptions(searchRequestDTO, getSearchSourceBuilder(searchRequestDTO, boolQuery), indices);
 
         } catch (final Exception e) {
             e.printStackTrace();
@@ -44,15 +44,16 @@ public final class SearchUtil {
     /**
      * Set sorting and other options
      *
-     * @param indexName           The name of the index where to search
+     * @param indices             The name of the indices where to search
      * @param searchRequestDTO    The DTO to extract the options
      * @param searchSourceBuilder The SearchSourceBuilder to apply the options
      * @return The SearchRequest ready to being used
      * @author cristian
      */
-    private static SearchRequest applyOptions(String indexName,
-                                              SearchRequestDTO searchRequestDTO,
-                                              SearchSourceBuilder searchSourceBuilder) {
+    private static SearchRequest applyOptions(
+            SearchRequestDTO searchRequestDTO,
+            SearchSourceBuilder searchSourceBuilder,
+            String... indices) {
         SearchSourceBuilder builder = searchSourceBuilder;
 
         if (searchRequestDTO.getSortBy() != null) {
@@ -62,7 +63,7 @@ public final class SearchUtil {
             );
         }
 
-        final SearchRequest request = new SearchRequest(indexName);
+        final SearchRequest request = new SearchRequest(indices);
         request.source(builder);
         request.scroll(TimeValue.timeValueMinutes(1L));
 

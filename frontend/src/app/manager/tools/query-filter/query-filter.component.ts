@@ -1,7 +1,7 @@
 import { Component, OnChanges, SimpleChanges } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { ManagerComunicationService } from 'src/app/core/service/managerComunication.service';
-import { DataProcessor } from 'src/app/core/util/dataProcessor.util';
+import { ManagerComunicationService } from 'src/app/shared/service/managerComunication.service';
+import { DataProcessor } from 'src/app/shared/util/dataProcessor.util';
 
 import { COLUMN_DEFS } from '../../../table/config/table.config';
 
@@ -16,7 +16,7 @@ export class QueryFilterComponent implements OnChanges {
 
   constructor(
     private utilService: DataProcessor,
-    private ManagerComunicationService: ManagerComunicationService
+    private managerComunicationService: ManagerComunicationService
   ) {
     this.columns = COLUMN_DEFS.filter((column) => column.field != 'status');
     this.queryFilter = new FormGroup(
@@ -29,6 +29,6 @@ export class QueryFilterComponent implements OnChanges {
 
   queryFilterEmit(): void {
     const data = this.utilService.getDataFromForm(this.queryFilter);
-    this.ManagerComunicationService.sendQueryFilters(data);
+    this.managerComunicationService.sendQueryFilters(data);
   }
 }

@@ -1,13 +1,15 @@
-package com.elasticsearchlogs.elasticsearchlogsbackend.search.model.document;
+package com.elasticsearchlogs.elasticsearchlogsbackend.search.document;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.sql.Timestamp;
+import java.util.Date;
 
 
 public class OpenViduLog implements Log {
 
-    private Timestamp timestamp;
+    private Date timestamp;
     private String cluster_id;
     private String message;
     private String host;
@@ -22,12 +24,12 @@ public class OpenViduLog implements Log {
     }
 
     @JsonProperty("timestamp")
-    public Timestamp getTimestamp() {
+    public Date getTimestamp() {
         return timestamp;
     }
 
     @JsonProperty("@timestamp")
-    public void setTimestamp(Timestamp timestamp) {
+    public void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
     }
 
