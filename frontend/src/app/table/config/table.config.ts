@@ -36,14 +36,14 @@ export const COLUMN_DEFS = [
     headerName: 'Timestamp',
     field: 'timestamp',
     width: 260,
-    // cellRenderer: (params: any) => {
-    //   const datepipe: DatePipe = new DatePipe('en-US');
-    //   let formattedDate = datepipe.transform(
-    //     params.value,
-    //     'dd/MM/YYYY HH:mm:ss'
-    //   );
-    //   return formattedDate;
-    // },
+    cellRenderer: (params: any) => {
+      const datepipe: DatePipe = new DatePipe('en-US');
+      let formattedDate = datepipe.transform(
+        params.value,
+        'HH:mm:ss - dd/MM/YYYY'
+      );
+      return formattedDate;
+    },
   },
   {
     headerName: 'Log Level',
