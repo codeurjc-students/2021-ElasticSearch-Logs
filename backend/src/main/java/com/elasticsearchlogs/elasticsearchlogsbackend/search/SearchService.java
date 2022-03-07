@@ -3,7 +3,7 @@ package com.elasticsearchlogs.elasticsearchlogsbackend.search;
 import com.elasticsearchlogs.elasticsearchlogsbackend.search.document.Log;
 import com.elasticsearchlogs.elasticsearchlogsbackend.search.document.OpenViduLog;
 import com.elasticsearchlogs.elasticsearchlogsbackend.search.dto.SearchRequestDTO;
-import com.elasticsearchlogs.elasticsearchlogsbackend.index.IndicesService;
+import com.elasticsearchlogs.elasticsearchlogsbackend.index.IndexService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.elasticsearch.action.search.*;
@@ -27,10 +27,10 @@ public class SearchService {
     private static final Logger LOG = LoggerFactory.getLogger(OpenViduLog.class);
 
     private final RestHighLevelClient client;
-    private final IndicesService indicesService;
+    private final IndexService indicesService;
 
     @Autowired
-    public SearchService(RestHighLevelClient client, IndicesService indicesService) {
+    public SearchService(RestHighLevelClient client, IndexService indicesService) {
         this.client = client;
         this.indicesService = indicesService;
 
@@ -116,12 +116,12 @@ public class SearchService {
                     searchRequestDTO,
                     type,
                     true,
-                    indicesService.getMostRecentIndices());
+                    indicesService.getMostRecentIndicesValues());
             case "wildcard" -> SearchUtil.buildSearchRequest(
                     searchRequestDTO,
                     type,
                     false,
-                    indicesService.getMostRecentIndices());
+                    indicesService.getMostRecentIndicesValues());
             case "range" -> SearchUtil.buildSearchRequest(
                     searchRequestDTO,
                     type,

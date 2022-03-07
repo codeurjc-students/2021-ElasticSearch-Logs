@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { EChartsOption } from 'echarts';
 import { ManagerComunicationService } from '../shared/service/managerComunication.service';
+import { TimeLineService } from './timeline.service';
 
 @Component({
   selector: 'app-timeline',
@@ -8,21 +9,9 @@ import { ManagerComunicationService } from '../shared/service/managerComunicatio
   styleUrls: ['./timeline.component.css'],
 })
 export class TimelineComponent implements OnInit {
-  constructor(private managerComunicationService: ManagerComunicationService) {}
+  indices: string[];
 
-  ngOnInit(): void {}
-
-  indices = [
-    '2022-03-07',
-    '2022-03-06',
-    '2022-03-05',
-    '2022-03-04',
-    '2022-03-03',
-    '2022-03-02',
-    '2022-03-01',
-  ];
-
-  selected = this.indices[0];
+  selected: string;
 
   isLoading = false;
   options: EChartsOption = {
@@ -115,9 +104,26 @@ export class TimelineComponent implements OnInit {
     ],
   };
 
+  constructor(
+    private managerComunicationService: ManagerComunicationService,
+    private timelineService: TimeLineService
+  ) {
+    this.indices = [];
+    this.selected = '';
+    timelineService.getIndices().subscribe({
+      next: (data) => {
+        this.indices = data;
+        this.selected = data[6];
+      },
+      error: (data) => console.error(data),
+    });
+  }
+
+  ngOnInit(): void {}
+
   onChartClick(event: any) {
-    const from = this.selected + 'T' + event.name + ':00.000+00:00';
-    const to = this.selected + 'T' + '23:59:59.999+00:00';
+    const from = this.selected + 'T' + event.name + ':00.000+01:00';
+    const to = this.selected + 'T' + '23:59:59.999+01:00';
     this.managerComunicationService.sendRangeFilters([from, to]);
   }
 }
