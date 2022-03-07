@@ -1,1 +1,16 @@
-<div echarts [options]="options" [loading]="isLoading" theme="macarons" class="demo-chart"></div>
+<mat-form-field>
+  <mat-select [(value)]="selected">
+    <mat-option *ngFor="let index of indices" [value]="index">
+      {{ index }}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+
+<div
+  echarts
+  [options]="options"
+  [loading]="isLoading"
+  (chartClick)="onChartClick($event)"
+  theme="macarons"
+  class="demo-chart"
+></div>

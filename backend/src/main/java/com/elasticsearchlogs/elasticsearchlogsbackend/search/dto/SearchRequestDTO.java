@@ -10,6 +10,9 @@ public class SearchRequestDTO extends PageRequestDTO {
     private String sortBy;
     private SortOrder order;
 
+    public SearchRequestDTO() {
+    }
+
     public List<String> getFields() {
         return fields;
     }

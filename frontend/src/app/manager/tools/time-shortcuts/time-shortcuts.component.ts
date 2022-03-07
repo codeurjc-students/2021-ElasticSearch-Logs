@@ -1,9 +1,6 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { number } from 'echarts';
 import { ManagerComunicationService } from 'src/app/shared/service/managerComunication.service';
-import { Log } from 'src/app/table/model';
-import { LogService } from 'src/app/table/table.service';
 
 @Component({
   selector: 'app-time-shortcuts',

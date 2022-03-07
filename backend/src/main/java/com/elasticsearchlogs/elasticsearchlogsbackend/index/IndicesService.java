@@ -1,4 +1,4 @@
-package com.elasticsearchlogs.elasticsearchlogsbackend.indices;
+package com.elasticsearchlogs.elasticsearchlogsbackend.index;
 
 import com.elasticsearchlogs.elasticsearchlogsbackend.search.document.OpenViduLog;
 import org.elasticsearch.action.admin.indices.get.GetIndexRequest;

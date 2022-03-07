@@ -3,7 +3,7 @@ package com.elasticsearchlogs.elasticsearchlogsbackend.search;
 import com.elasticsearchlogs.elasticsearchlogsbackend.search.document.Log;
 import com.elasticsearchlogs.elasticsearchlogsbackend.search.document.OpenViduLog;
 import com.elasticsearchlogs.elasticsearchlogsbackend.search.dto.SearchRequestDTO;
-import com.elasticsearchlogs.elasticsearchlogsbackend.indices.IndicesService;
+import com.elasticsearchlogs.elasticsearchlogsbackend.index.IndicesService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.elasticsearch.action.search.*;
@@ -66,6 +66,7 @@ public class SearchService {
      */
     private List<Log> ExecSearchRequest(int page, SearchRequest request) {
         try {
+            System.out.println(request);
             SearchResponse response = client.search(request, RequestOptions.DEFAULT);
             int currentPage = 1;
 
