@@ -1,6 +1,7 @@
 package com.elasticsearchlogs.elasticsearchlogsbackend.search;
 
 import com.elasticsearchlogs.elasticsearchlogsbackend.search.document.Log;
+import com.elasticsearchlogs.elasticsearchlogsbackend.search.dto.CountDTO;
 import com.elasticsearchlogs.elasticsearchlogsbackend.search.dto.SearchRequestDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -32,4 +33,11 @@ public class SearchRestController {
     public List<Log> rangeSearch(@RequestBody final SearchRequestDTO searchRequestDTO) {
         return service.search(searchRequestDTO,"range");
     }
+
+    @GetMapping("/count/all/{index}")
+    public List<CountDTO> countAll(@PathVariable final String index) {
+        return service.count(index);
+    }
+
+
 }

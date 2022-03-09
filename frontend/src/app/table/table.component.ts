@@ -125,7 +125,7 @@ export class TableComponent implements OnInit {
       rowCount: null,
       getRows: (params: any) => {
         this.page = params.startRow / 10;
-        this.query([[], []], 'match', '@timestamp', 'DESC', params);
+        this.query([[], []], 'match', '@timestamp', 'ASC', params);
       },
     };
     this.gridApi.setDatasource(dataSource);
@@ -238,7 +238,7 @@ export class TableComponent implements OnInit {
       getRows: (params: any) => {
         this.page = params.startRow / 10;
         const filters = [['@timestamp'], dates];
-        this.query(filters, 'range', '@timestamp', 'DESC', params);
+        this.query(filters, 'range', '@timestamp', 'ASC', params);
       },
     };
 

@@ -2,6 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { Log } from '../table/model';
+import { LogCount } from './dto';
 
 @Injectable({
   providedIn: 'root',
@@ -20,5 +22,11 @@ export class TimeLineService {
    */
   public getIndices(): Observable<string[]> {
     return this.httpClient.get<string[]>(`${this.url}/index/all`);
+  }
+
+  public getLogsCountPerHour(index: string): Observable<LogCount[]> {
+    return this.httpClient.get<LogCount[]>(
+      `${this.url}/log/count/all/${index}`
+    );
   }
 }

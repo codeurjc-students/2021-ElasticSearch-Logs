@@ -20,6 +20,10 @@ export class TimeShortcutsComponent implements OnInit {
 
   public shortcuts = [
     {
+      name: 'Today',
+      date: new Date().setDate(this.date.getDate()),
+    },
+    {
       name: '30 minutes ago',
       date: new Date().setMinutes(this.date.getMinutes() - 30),
     },
@@ -59,9 +63,20 @@ export class TimeShortcutsComponent implements OnInit {
     this.managerComunicationService.sendRangeFilters([from, to]);
   }
 
-  onShorcutCall(dateNumber: number) {
-    const from = new Date(dateNumber).toISOString().replace('Z', '+00:00');
-    const to = new Date().toISOString().replace('Z', '+00:00');
+  onShorcutCall(dateNumber: number, name: string) {
+    let from;
+    let to;
+    if (name === 'Today') {
+      from =
+        new Date(dateNumber).toISOString().substring(0, 10) +
+        'T00:00:00.000+00:00';
+      to =
+        new Date(dateNumber).toISOString().substring(0, 10) +
+        'T23:59:59.999+00:00';
+    } else {
+      from = new Date(dateNumber).toISOString().replace('Z', '+00:00');
+      to = new Date().toISOString().replace('Z', '+00:00');
+    }
     this.managerComunicationService.sendRangeFilters([from, to]);
   }
 

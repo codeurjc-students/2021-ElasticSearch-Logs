@@ -2,6 +2,7 @@ package com.elasticsearchlogs.elasticsearchlogsbackend.search;
 
 import com.elasticsearchlogs.elasticsearchlogsbackend.search.document.Log;
 import com.elasticsearchlogs.elasticsearchlogsbackend.search.document.OpenViduLog;
+import com.elasticsearchlogs.elasticsearchlogsbackend.search.dto.CountDTO;
 import com.elasticsearchlogs.elasticsearchlogsbackend.search.dto.SearchRequestDTO;
 import com.elasticsearchlogs.elasticsearchlogsbackend.index.IndexService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -9,7 +10,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.elasticsearch.action.search.*;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.client.core.CountRequest;
+import org.elasticsearch.client.core.CountResponse;
 import org.elasticsearch.common.unit.TimeValue;
+import org.elasticsearch.rest.RestStatus;
 import org.elasticsearch.search.SearchHit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,9 +56,66 @@ public class SearchService {
             return Collections.emptyList();
         }
 
-        return ExecSearchRequest(searchRequestDTO.getPage(), request);
+        return execSearchRequest(searchRequestDTO.getPage(), request);
     }
 
+
+    /**
+     * Get the SearchRequest based on the type
+     *
+     * @param searchRequestDTO The DTO with the data to build the SearchRequest
+     * @param type             The type of SearchRequest that is intended to perform
+     * @return The SearchRequest or null if the type is not defined
+     * @author cristian
+     */
+    private SearchRequest getSearchRequest(SearchRequestDTO searchRequestDTO, String type) {
+        return switch (type) {
+            case "match" -> SearchUtil.buildSearchRequest(
+                    searchRequestDTO,
+                    type,
+                    true,
+                    indicesService.getMostRecentIndicesValues());
+            case "wildcard" -> SearchUtil.buildSearchRequest(
+                    searchRequestDTO,
+                    type,
+                    false,
+                    indicesService.getMostRecentIndicesValues());
+            case "range" -> SearchUtil.buildSearchRequest(
+                    searchRequestDTO,
+                    type,
+                    false,
+                    indicesService.getIndicesFromTo(searchRequestDTO.getSearchTerms()));
+
+            case default -> null;
+        };
+    }
+
+    public List<CountDTO> count(String date) {
+
+        List<CountDTO> countDTOList = new ArrayList<>();
+
+        for (int i = 0; i < 24; i++) {
+            String hour = String.format("%02d", i);
+            String from = date + "T" + hour + ":00:00.000+00:00";
+            String to = date + "T" + hour + ":59:59.999+00:00";
+
+            System.out.println(from);
+            System.out.println(to);
+
+            CountRequest request = SearchUtil.buildCountRequest(
+                    from,
+                    to,
+                    "@timestamp",
+                    "range",
+                    false,
+                    indicesService.getIndex(date)
+            );
+
+            countDTOList.add(execCountRequest(request, hour + ":00"));
+        }
+
+        return countDTOList;
+    }
 
     /**
      * Execute a given search request and get the logs of this search
@@ -64,9 +125,8 @@ public class SearchService {
      * @return A list with the logs of the request
      * @author cristian
      */
-    private List<Log> ExecSearchRequest(int page, SearchRequest request) {
+    private List<Log> execSearchRequest(int page, SearchRequest request) {
         try {
-            System.out.println(request);
             SearchResponse response = client.search(request, RequestOptions.DEFAULT);
             int currentPage = 1;
 
@@ -100,36 +160,6 @@ public class SearchService {
             LOG.error(e.getMessage(), e);
             return Collections.emptyList();
         }
-    }
-
-    /**
-     * Get the SearchRequest based on the type
-     *
-     * @param searchRequestDTO The DTO with the data to build the SearchRequest
-     * @param type             The type of SearchRequest that is intended to perform
-     * @return The SearchRequest or null if the type is not defined
-     * @author cristian
-     */
-    private SearchRequest getSearchRequest(SearchRequestDTO searchRequestDTO, String type) {
-        return switch (type) {
-            case "match" -> SearchUtil.buildSearchRequest(
-                    searchRequestDTO,
-                    type,
-                    true,
-                    indicesService.getMostRecentIndicesValues());
-            case "wildcard" -> SearchUtil.buildSearchRequest(
-                    searchRequestDTO,
-                    type,
-                    false,
-                    indicesService.getMostRecentIndicesValues());
-            case "range" -> SearchUtil.buildSearchRequest(
-                    searchRequestDTO,
-                    type,
-                    false,
-                    indicesService.getIndicesFromTo(searchRequestDTO.getSearchTerms()));
-
-            case default -> null;
-        };
     }
 
     /**
@@ -170,5 +200,22 @@ public class SearchService {
         clearScrollRequest.addScrollId(scrollId);
         ClearScrollResponse clearScrollResponse = client.clearScroll(clearScrollRequest, RequestOptions.DEFAULT);
         return clearScrollResponse.isSucceeded();
+    }
+
+    private CountDTO execCountRequest(CountRequest request, String hour) {
+        try {
+            CountResponse countResponse = client.count(request, RequestOptions.DEFAULT);
+
+            long count = countResponse.getCount();
+            RestStatus status = countResponse.status();
+            Boolean terminatedEarly = countResponse.isTerminatedEarly();
+
+            if (status.equals(RestStatus.OK) && terminatedEarly == null) {
+                return new CountDTO(hour, count);
+            }
+        } catch (IOException e) {
+            LOG.error(e.getMessage(), e);
+        }
+        return new CountDTO(hour, 0);
     }
 }

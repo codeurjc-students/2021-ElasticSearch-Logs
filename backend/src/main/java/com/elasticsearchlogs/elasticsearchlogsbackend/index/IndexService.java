@@ -34,6 +34,10 @@ public final class IndexService {
         return indices.keySet().toArray(new String[0]);
     }
 
+    public String getIndex(String key){
+        return indices.get(key);
+    }
+
     public String[] getIndicesFromTo(List<String> dates) {
 
         return indices

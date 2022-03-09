@@ -3,6 +3,8 @@ package com.elasticsearchlogs.elasticsearchlogsbackend.search;
 import com.elasticsearchlogs.elasticsearchlogsbackend.search.dto.SearchRequestDTO;
 import com.elasticsearchlogs.elasticsearchlogsbackend.search.queryBuilderAPI.QueryBuilderAPI;
 import org.elasticsearch.action.search.SearchRequest;
+import org.elasticsearch.client.core.CountRequest;
+import org.elasticsearch.common.collect.List;
 import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.index.query.*;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
@@ -24,15 +26,15 @@ public final class SearchUtil {
      */
     public static SearchRequest buildSearchRequest(
             final SearchRequestDTO searchRequestDTO,
-            String type,
-            boolean strictQuery,
+            final String type,
+            final boolean strictQuery,
             final String... indices) {
         try {
 
             final QueryBuilder boolQuery = QueryBuilderAPI
                     .createComplexQB(type, searchRequestDTO.getFields(), searchRequestDTO.getSearchTerms(), strictQuery);
 
-            return applyOptions(searchRequestDTO, getSearchSourceBuilder(searchRequestDTO, boolQuery), indices);
+            return applySearchOptions(searchRequestDTO, getSearchSourceBuilder(searchRequestDTO.getSize(), boolQuery), indices);
 
         } catch (final Exception e) {
             e.printStackTrace();
@@ -40,6 +42,19 @@ public final class SearchUtil {
         }
     }
 
+    public static CountRequest buildCountRequest(
+            final String from,
+            final String to,
+            final String field,
+            final String type,
+            final boolean strictQuery,
+            final String index) {
+
+        final QueryBuilder rangeQuery = QueryBuilderAPI
+                .createComplexQB(type, List.of(field), List.of(from, to), strictQuery);
+
+        return applyCountOptions(getSearchSourceBuilder(0, rangeQuery), rangeQuery, index);
+    }
 
     /**
      * Set sorting and other options
@@ -50,22 +65,33 @@ public final class SearchUtil {
      * @return The SearchRequest ready to being used
      * @author cristian
      */
-    private static SearchRequest applyOptions(
+    private static SearchRequest applySearchOptions(
             SearchRequestDTO searchRequestDTO,
             SearchSourceBuilder searchSourceBuilder,
             String... indices) {
-        SearchSourceBuilder builder = searchSourceBuilder;
+
 
         if (searchRequestDTO.getSortBy() != null) {
-            builder = builder.sort(
+            searchSourceBuilder = searchSourceBuilder.sort(
                     searchRequestDTO.getSortBy(),
                     searchRequestDTO.getOrder() != null ? searchRequestDTO.getOrder() : SortOrder.ASC
             );
         }
 
         final SearchRequest request = new SearchRequest(indices);
-        request.source(builder);
+        request.source(searchSourceBuilder);
         request.scroll(TimeValue.timeValueMinutes(1L));
+
+        return request;
+    }
+
+    private static CountRequest applyCountOptions(SearchSourceBuilder searchSourceBuilder,
+                                                  QueryBuilder query,
+                                                  String index) {
+
+        final CountRequest request = new CountRequest(index);
+        searchSourceBuilder.query(query);
+        request.source(searchSourceBuilder);
 
         return request;
     }
@@ -73,14 +99,13 @@ public final class SearchUtil {
     /**
      * It builds the SearchSourceBuilder and add pagination options
      *
-     * @param searchRequestDTO The DTO to filter the data
-     * @param queryBuilder     The query that contains the sub-queries
+     * @param size         The size to apply to the query result
+     * @param queryBuilder The query that contains the sub-queries
      * @return A SearchSourceBuilder to perform the search
      * @author cristian
      */
-    private static SearchSourceBuilder getSearchSourceBuilder(SearchRequestDTO searchRequestDTO,
+    private static SearchSourceBuilder getSearchSourceBuilder(int size,
                                                               QueryBuilder queryBuilder) {
-        final int size = searchRequestDTO.getSize();
 
         return new SearchSourceBuilder()
                 .size(size)
