@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { EChartsOption } from 'echarts';
+import { Component, ElementRef, OnInit } from '@angular/core';
+import { EChartsOption, EChartsType } from 'echarts';
+
 import { ManagerComunicationService } from '../shared/service/managerComunication.service';
+import { TimeLineService } from './timeline.service';
 
 @Component({
   selector: 'app-timeline',
@@ -8,23 +10,11 @@ import { ManagerComunicationService } from '../shared/service/managerComunicatio
   styleUrls: ['./timeline.component.css'],
 })
 export class TimelineComponent implements OnInit {
-  constructor(private managerComunicationService: ManagerComunicationService) {}
-
-  ngOnInit(): void {}
-
-  indices = [
-    '2022-03-07',
-    '2022-03-06',
-    '2022-03-05',
-    '2022-03-04',
-    '2022-03-03',
-    '2022-03-02',
-    '2022-03-01',
-  ];
-
-  selected = this.indices[0];
-
+  echartsInstance: EChartsType | any;
+  indices: string[];
+  selected: string;
   isLoading = false;
+
   options: EChartsOption = {
     axisPointer: {
       show: true,
@@ -62,33 +52,7 @@ export class TimelineComponent implements OnInit {
       },
 
       boundaryGap: false,
-      data: [
-        '00:00',
-        '01:00',
-        '02:00',
-        '03:00',
-        '04:00',
-        '05:00',
-        '06:00',
-        '07:00',
-        '08:00',
-        '09:00',
-        '10:00',
-        '11:00',
-        '12:00',
-        '13:00',
-        '14:00',
-        '15:00',
-        '16:00',
-        '17:00',
-        '18:00',
-        '19:00',
-        '20:00',
-        '21:00',
-        '22:00',
-        '23:00',
-        '24:00',
-      ].reverse(),
+      data: [],
     },
     series: [
       {
@@ -107,17 +71,63 @@ export class TimelineComponent implements OnInit {
           shadowBlur: 10,
           shadowOffsetY: 8,
         },
-        data: [
-          0, 150, 25, 340, 40, 5, 6, 170, 80, 69, 180, 101, 12, 143, 48, 56, 16,
-          107, 218, 419, 220, 21, 202, 35, 24,
-        ],
+        data: [],
       },
     ],
   };
+
+  constructor(
+    private managerComunicationService: ManagerComunicationService,
+    private timelineService: TimeLineService
+  ) {
+    this.indices = [];
+    this.selected = '';
+
+    timelineService.getIndices().subscribe({
+      next: (data) => {
+        this.indices = data;
+        this.selected = data[data.length - 1];
+        this.updateDataSeries(this.selected);
+      },
+      error: (data) => console.error(data),
+    });
+  }
+
+  ngOnInit(): void {}
 
   onChartClick(event: any) {
     const from = this.selected + 'T' + event.name + ':00.000+01:00';
     const to = this.selected + 'T' + '23:59:59.999+01:00';
     this.managerComunicationService.sendRangeFilters([from, to]);
+  }
+
+  onChartInit(event: EChartsType) {
+    this.echartsInstance = event;
+  }
+
+  onSelect() {
+    this.updateDataSeries(this.selected);
+  }
+
+  private updateDataSeries(index: string) {
+    this.timelineService.getLogsCountPerHour(this.selected).subscribe({
+      next: (data) => {
+        console.log(data);
+        const hours = data.map((c) => c.hour).reverse();
+        const counts = data.map((c) => c.count).reverse();
+
+        this.echartsInstance.setOption({
+          yAxis: {
+            data: hours,
+          },
+          series: {
+            data: counts,
+          },
+        });
+      },
+      error: (error) => {
+        console.log(error);
+      },
+    });
   }
 }

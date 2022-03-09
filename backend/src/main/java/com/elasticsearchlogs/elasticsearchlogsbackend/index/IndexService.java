@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
-public final class IndicesService {
+public final class IndexService {
     private static final Logger LOG = LoggerFactory.getLogger(OpenViduLog.class);
 
     private final TreeMap<String, String> indices;
@@ -21,13 +21,21 @@ public final class IndicesService {
     private final RestHighLevelClient client;
 
     @Autowired
-    public IndicesService(RestHighLevelClient client) {
+    public IndexService(RestHighLevelClient client) {
         this.client = client;
         this.indices = getAvailableIndices();
     }
 
-    public String[] getMostRecentIndices() {
+    public String[] getMostRecentIndicesValues() {
         return indices.values().toArray(new String[0]);
+    }
+
+    public String[] getMostRecentIndicesKeys() {
+        return indices.keySet().toArray(new String[0]);
+    }
+
+    public String getIndex(String key){
+        return indices.get(key);
     }
 
     public String[] getIndicesFromTo(List<String> dates) {

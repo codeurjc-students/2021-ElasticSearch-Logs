@@ -1,6 +1,10 @@
 <mat-form-field>
   <mat-select [(value)]="selected">
-    <mat-option *ngFor="let index of indices" [value]="index">
+    <mat-option
+      (click)="onSelect()"
+      *ngFor="let index of indices"
+      [value]="index"
+    >
       {{ index }}
     </mat-option>
   </mat-select>
@@ -11,6 +15,7 @@
   [options]="options"
   [loading]="isLoading"
   (chartClick)="onChartClick($event)"
+  (chartInit)="onChartInit($event)"
   theme="macarons"
   class="demo-chart"
 ></div>

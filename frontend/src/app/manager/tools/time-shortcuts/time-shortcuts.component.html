@@ -51,7 +51,7 @@
   <mat-list-item *ngFor="let sc of shortcuts">
     <button
       id="time-shortcut-submit-button"
-      (click)="onShorcutCall(sc.date)"
+      (click)="onShorcutCall(sc.date, sc.name)"
       mat-icon-button
       mat-raised-button
       color="primary"
