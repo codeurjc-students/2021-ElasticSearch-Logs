@@ -116,8 +116,8 @@ export class TimelineComponent implements OnInit {
   };
 
   onChartClick(event: any) {
-    const from = this.selected + 'T' + event.name + ':00.000+00:00';
-    const to = this.selected + 'T' + '23:59:59.999+00:00';
+    const from = this.selected + 'T' + event.name + ':00.000+01:00';
+    const to = this.selected + 'T' + '23:59:59.999+01:00';
     this.managerComunicationService.sendRangeFilters([from, to]);
   }
 }
