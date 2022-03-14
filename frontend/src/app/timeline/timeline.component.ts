@@ -82,15 +82,6 @@ export class TimelineComponent implements OnInit {
   ) {
     this.indices = [];
     this.selected = '';
-
-    timelineService.getIndices().subscribe({
-      next: (data) => {
-        this.indices = data;
-        this.selected = data[data.length - 1];
-        this.updateDataSeries(this.selected);
-      },
-      error: (data) => console.error(data),
-    });
   }
 
   ngOnInit(): void {}
@@ -103,6 +94,15 @@ export class TimelineComponent implements OnInit {
 
   onChartInit(event: EChartsType) {
     this.echartsInstance = event;
+    this.timelineService.getIndices().subscribe({
+      next: (data) => {
+        this.indices = data;
+        this.selected = data[data.length - 1];
+        this.updateDataSeries(this.selected);
+      },
+      error: (data) => console.error(data),
+    });
+   
   }
 
   onSelect() {

@@ -233,6 +233,7 @@ export class TableComponent implements OnInit {
 
   private dateFilter(dates: string[]) {
     this.lastRow = 0;
+    console.table(dates);
     const dataSource = {
       rowCount: null,
       getRows: (params: any) => {
