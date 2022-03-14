@@ -18,6 +18,12 @@ public class IndexRestController {
         this.service = service;
     }
 
+    /**
+     * It gets all the available indices from OpenVidu
+     *
+     * @return A List with the name of all the indices
+     * @author cristian
+     */
     @GetMapping("/all")
     public List<String> boolMatchSearch() {
         return Arrays.asList(service.getMostRecentIndicesKeys());
