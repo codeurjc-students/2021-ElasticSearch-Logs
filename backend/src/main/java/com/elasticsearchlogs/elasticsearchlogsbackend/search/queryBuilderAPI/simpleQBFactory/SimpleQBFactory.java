@@ -30,9 +30,6 @@ public class SimpleQBFactory {
             return new WildcardQB().getQueryBuilder(field, searchTerm);
         }
 
-
-
-
         return null;
     }
 }

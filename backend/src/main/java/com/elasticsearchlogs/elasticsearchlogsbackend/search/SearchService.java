@@ -90,6 +90,13 @@ public class SearchService {
         };
     }
 
+    /**
+     * It counts the logs in a date
+     *
+     * @param date The date of the day to count the logs
+     * @return A list with key-value pairs with the hours and logs per hour
+     * @author cristian
+     */
     public List<CountDTO> count(String date) {
 
         List<CountDTO> countDTOList = new ArrayList<>();
@@ -202,6 +209,15 @@ public class SearchService {
         return clearScrollResponse.isSucceeded();
     }
 
+    /**
+     * It executes the given CountRequest
+     *
+     * @param request The Request to be executed
+     * @param hour    The hour to look for logs count
+     * @return The key-value pair with the hour and logs count
+     *
+     * @author cristian
+     */
     private CountDTO execCountRequest(CountRequest request, String hour) {
         try {
             CountResponse countResponse = client.count(request, RequestOptions.DEFAULT);

@@ -42,6 +42,18 @@ public final class SearchUtil {
         }
     }
 
+    /**
+     * It creates a count request and set up the configuration
+     *
+     * @param from        Date to look from
+     * @param to          Date to look form
+     * @param field       Field to look for
+     * @param type        The type of the query
+     * @param strictQuery Indicates the query operator
+     * @param index       The index to look for
+     * @return The CountRequest to be executed
+     * @author cristian
+     */
     public static CountRequest buildCountRequest(
             final String from,
             final String to,
@@ -85,6 +97,15 @@ public final class SearchUtil {
         return request;
     }
 
+    /**
+     * It applies the source to the query
+     *
+     * @param searchSourceBuilder The builder to apply the query
+     * @param query               The query to be applied to the builder
+     * @param index               The index to look for
+     * @return The CountRequest to be executed
+     * @author cristian
+     */
     private static CountRequest applyCountOptions(SearchSourceBuilder searchSourceBuilder,
                                                   QueryBuilder query,
                                                   String index) {

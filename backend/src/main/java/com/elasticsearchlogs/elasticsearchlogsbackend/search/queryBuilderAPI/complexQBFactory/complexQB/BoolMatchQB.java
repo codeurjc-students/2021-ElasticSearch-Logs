@@ -10,10 +10,20 @@ import java.util.List;
 
 public class BoolMatchQB implements ComplexQB {
 
+    /**
+     * It returns a BoolQueryBuilder based on match queries
+     *
+     * @param type        The type of the sub queries
+     * @param fields      The fields of the dto
+     * @param searchTerms The search terms of the dto
+     * @param strictQuery Unused at the moment, but it aims to implement queries with OR or AND operators
+     * @return A BoolQueryBuilder made of match queries
+     * @author cristian
+     */
     public BoolQueryBuilder getQueryBuilder(final String type,
-                                      final List<String> fields,
-                                      final List<String> searchTerms,
-                                      final boolean strictQuery) {
+                                            final List<String> fields,
+                                            final List<String> searchTerms,
+                                            final boolean strictQuery) {
         final BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
 
         Iterator<String> fieldsIterator = fields.iterator();

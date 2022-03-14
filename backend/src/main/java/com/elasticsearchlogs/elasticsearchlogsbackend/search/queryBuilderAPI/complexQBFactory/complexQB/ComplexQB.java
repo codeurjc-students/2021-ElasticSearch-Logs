@@ -8,7 +8,7 @@ import java.util.List;
 public interface ComplexQB {
 
     /**
-     * It returns a bool query based on the type
+     * It returns a complex query based on the type
      *
      * @param type        The type of the sub queries
      * @param fields      The fields of the dto
