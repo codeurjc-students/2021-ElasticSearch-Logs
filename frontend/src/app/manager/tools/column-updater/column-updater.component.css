@@ -1,20 +1,20 @@
 .form-button {
-  margin-top: 20px;
+    margin-top: 20px;
 }
 
 form {
-  padding: 0;
-  margin-top: 20px;
-  display: flex;
-  flex-direction: column;
+    padding: 0;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
 }
 
 #buttons {
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
 }
 
 #buttons button {
-  width: -webkit-fill-available;
+    width: -webkit-fill-available;
 }

@@ -1,34 +1,34 @@
-<form [formGroup]="queryFilter" (ngSubmit)="queryFilterEmit()" id="queryFilter">
-  <div *ngFor="let formControl of columns">
-    <mat-form-field appearance="standard">
-      <mat-label>{{ formControl.headerName }}</mat-label>
-      <input
-        matInput
-        id="{{ formControl.field }}"
-        type="text"
-        formControlName="{{ formControl.field }}"
-        placeholder="{{ formControl.headerName }}"
-      />
-    </mat-form-field>
-  </div>
+<form
+    [formGroup]="queryFilter"
+    (ngSubmit)="queryFilterEmit()"
+    id="queryFilter">
+    <div *ngFor="let formControl of columns">
+        <mat-form-field appearance="standard">
+            <mat-label>{{ formControl.headerName }}</mat-label>
+            <input
+                matInput
+                id="{{ formControl.field }}"
+                type="text"
+                formControlName="{{ formControl.field }}"
+                placeholder="{{ formControl.headerName }}" />
+        </mat-form-field>
+    </div>
 
-  <div id="buttons">
-    <button
-      [disabled]="!queryFilter.valid"
-      type="submit"
-      mat-raised-button
-      color="primary"
-    >
-      Submit
-    </button>
+    <div id="buttons">
+        <button
+            [disabled]="!queryFilter.valid"
+            type="submit"
+            mat-raised-button
+            color="primary">
+            Submit
+        </button>
 
-    <button
-      type="button"
-      onclick="form.reset()"
-      mat-raised-button
-      color="secondary"
-    >
-      Clear
-    </button>
-  </div>
+        <button
+            type="button"
+            onclick="form.reset()"
+            mat-raised-button
+            color="secondary">
+            Clear
+        </button>
+    </div>
 </form>

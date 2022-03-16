@@ -36,11 +36,11 @@ mat-card {
     color: white;
 }
 
-#logPreSelect p{
+#logPreSelect p {
     font-size: 32px;
 }
 
-#logPreSelectContent{
+#logPreSelectContent {
     display: flex;
     justify-content: center;
     flex-direction: column;

@@ -1,37 +1,33 @@
 <form
-  [formGroup]="columnsToDisplay"
-  (ngSubmit)="columnsToDisplayEmit()"
-  id="columnsToDisplay"
->
-  <div *ngFor="let formControl of columns">
-    <mat-checkbox
-      id="{{ formControl.field }}"
-      type="checkbox"
-      formControlName="{{ formControl.field }}"
-    >
-      {{ formControl.headerName }}
-    </mat-checkbox>
-  </div>
+    [formGroup]="columnsToDisplay"
+    (ngSubmit)="columnsToDisplayEmit()"
+    id="columnsToDisplay">
+    <div *ngFor="let formControl of columns">
+        <mat-checkbox
+            id="{{ formControl.field }}"
+            type="checkbox"
+            formControlName="{{ formControl.field }}">
+            {{ formControl.headerName }}
+        </mat-checkbox>
+    </div>
 
-  <div id="buttons">
-    <button
-      class="form-button"
-      [disabled]="!columnsToDisplay.valid"
-      type="submit"
-      mat-raised-button
-      color="primary"
-    >
-      Submit
-    </button>
+    <div id="buttons">
+        <button
+            class="form-button"
+            [disabled]="!columnsToDisplay.valid"
+            type="submit"
+            mat-raised-button
+            color="primary">
+            Submit
+        </button>
 
-    <button
-      class="form-button"
-      type="button"
-      onclick="form.reset()"
-      mat-raised-button
-      color="secondary"
-    >
-      Clear
-    </button>
-  </div>
+        <button
+            class="form-button"
+            type="button"
+            onclick="form.reset()"
+            mat-raised-button
+            color="secondary">
+            Clear
+        </button>
+    </div>
 </form>

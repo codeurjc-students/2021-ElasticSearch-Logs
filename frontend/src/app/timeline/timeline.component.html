@@ -1,21 +1,19 @@
 <mat-form-field>
-  <mat-select [(value)]="selected">
-    <mat-option
-      (click)="onSelect()"
-      *ngFor="let index of indices"
-      [value]="index"
-    >
-      {{ index }}
-    </mat-option>
-  </mat-select>
+    <mat-select [(value)]="selected">
+        <mat-option
+            (click)="onSelect()"
+            *ngFor="let index of indices"
+            [value]="index">
+            {{ index }}
+        </mat-option>
+    </mat-select>
 </mat-form-field>
 
 <div
-  echarts
-  [options]="options"
-  [loading]="isLoading"
-  (chartClick)="onChartClick($event)"
-  (chartInit)="onChartInit($event)"
-  theme="macarons"
-  class="demo-chart"
-></div>
+    echarts
+    [options]="options"
+    [loading]="isLoading"
+    (chartClick)="onChartClick($event)"
+    (chartInit)="onChartInit($event)"
+    theme="macarons"
+    id="timeline"></div>

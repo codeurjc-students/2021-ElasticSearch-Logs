@@ -1,19 +1,19 @@
 import { AfterViewChecked, Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'],
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit, AfterViewChecked {
-  loading: boolean;
+    loading: boolean;
 
-  constructor() {
-    this.loading = true;
-  }
-  ngAfterViewChecked(): void {
-    this.loading = false;
-  }
+    constructor() {
+        this.loading = true;
+    }
+    ngAfterViewChecked(): void {
+        this.loading = false;
+    }
 
-  ngOnInit() {}
+    ngOnInit() {}
 }

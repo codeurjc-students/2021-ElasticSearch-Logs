@@ -1,15 +1,15 @@
-<div id="main-container">
-  <div id="container-body">
-    <div id="container-table">
-      <app-table id="table"> </app-table>
+<div id="app">
+    <div id="app__right">
+        <div id="app__right__logs">
+            <app-table id="app__right__logs__table"> </app-table>
 
-      <app-timeline id="timeline"></app-timeline>
+            <app-timeline id="app__right__logs__timeline"></app-timeline>
+        </div>
+
+        <app-displayer id="app__right__displayer"></app-displayer>
     </div>
 
-    <app-displayer id="displayer"></app-displayer>
-  </div>
-
-  <div id="container-manager">
-    <app-manager id="manager"></app-manager>
-  </div>
+    <div id="app__left">
+        <app-manager id="app__left__manager"></app-manager>
+    </div>
 </div>

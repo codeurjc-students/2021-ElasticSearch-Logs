@@ -1,21 +1,23 @@
-<div class="ag-theme-material" id="" [ngStyle]="{ 'fontSize.px': fontSize }">
-  <ag-grid-angular
-    #agGrid
-    id="ag-table"
-    style="width: 100%; height: 80vh"
-    [columnDefs]="columnDefs"
-    [defaultColDef]="defaultColDef"
-    [rowBuffer]="rowBuffer"
-    [rowSelection]="rowSelection"
-    [rowModelType]="rowModelType"
-    [rowHeight]="rowHeight"
-    [cacheBlockSize]="cacheBlockSize"
-    [cacheOverflowSize]="cacheOverflowSize"
-    [maxConcurrentDatasourceRequests]="maxConcurrentDatasourceRequests"
-    [maxBlocksInCache]="maxBlocksInCache"
-    [infiniteInitialRowCount]="infiniteInitialRowCount"
-    (gridReady)="onGridReady($event)"
-    (selectionChanged)="onSelectionChanged($event)"
-  >
-  </ag-grid-angular>
+<div
+    class="ag-theme-material"
+    id="logs-grid"
+    [ngStyle]="{ 'fontSize.px': fontSize }">
+    <ag-grid-angular
+        #agGrid
+        id="ag-table"
+        style="width: 100%; height: 80vh"
+        [columnDefs]="columnDefs"
+        [defaultColDef]="defaultColDef"
+        [rowBuffer]="rowBuffer"
+        [rowSelection]="rowSelection"
+        [rowModelType]="rowModelType"
+        [rowHeight]="rowHeight"
+        [cacheBlockSize]="cacheBlockSize"
+        [cacheOverflowSize]="cacheOverflowSize"
+        [maxConcurrentDatasourceRequests]="maxConcurrentDatasourceRequests"
+        [maxBlocksInCache]="maxBlocksInCache"
+        [infiniteInitialRowCount]="infiniteInitialRowCount"
+        (gridReady)="onGridReady($event)"
+        (selectionChanged)="onSelectionChanged($event)">
+    </ag-grid-angular>
 </div>

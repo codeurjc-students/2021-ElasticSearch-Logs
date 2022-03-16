@@ -1,26 +1,26 @@
 mat-form-field {
-  margin-right: 10px;
-  width: 83%;
+    margin-right: 10px;
+    width: 83%;
 }
 
 p {
-  font-size: 16px;
-  font-family: "Roboto", sans-serif;
-  font-weight: 500;
-  padding-bottom: 0;
+    font-size: 16px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    padding-bottom: 0;
 }
 
 mat-icon {
-  font-size: 18px;
+    font-size: 18px;
 }
 
 #highlighter-submit-button {
-  border-radius: 7px;
+    border-radius: 7px;
 }
 
-#highlighter-form {
-  display: flex;
-  align-items: baseline;
-  flex-wrap: wrap;
-  flex-direction: row;
+#highlighter__container {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    flex-direction: row;
 }
