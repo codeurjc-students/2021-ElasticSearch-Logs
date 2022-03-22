@@ -8,7 +8,7 @@ import { COLUMN_DEFS } from '../../../table/config/table.config';
 @Component({
     selector: 'app-query-filter',
     templateUrl: './query-filter.component.html',
-    styleUrls: ['./query-filter.component.css'],
+    styleUrls: ['./query-filter.component.scss'],
 })
 export class QueryFilterComponent implements OnChanges {
     public columns: any;

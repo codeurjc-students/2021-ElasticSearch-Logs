@@ -106,9 +106,6 @@ public class SearchService {
             String from = date + "T" + hour + ":00:00.000+00:00";
             String to = date + "T" + hour + ":59:59.999+00:00";
 
-            System.out.println(from);
-            System.out.println(to);
-
             CountRequest request = SearchUtil.buildCountRequest(
                     from,
                     to,
@@ -189,7 +186,7 @@ public class SearchService {
         for (SearchHit hit : searchHits) {
             logs.add(MAPPER.readValue(hit.getSourceAsString(), OpenViduLog.class));
         }
-
+        
         return logs;
     }
 

@@ -64,12 +64,16 @@ export class TableComponent implements OnInit {
     // Font size of the rows
     public fontSize: number;
 
+    // Last row of the table
     private lastRow: number;
 
     /**
-     * Constructor
-     * @param logService
+     *
      * @param utilService
+     * @param logService
+     * @param managerComunicationService
+     * @param tableManagerComunicationService
+     * @param snackBar
      */
     public constructor(
         private utilService: DataProcessor,
@@ -218,6 +222,7 @@ export class TableComponent implements OnInit {
                         .filter((e) => e != 'timestamp'),
                     [stringToHighlight],
                 ];
+                this.lastRow = 0;
 
                 this.logService
                     .search(filters, this.page, 'wildcard')
@@ -271,6 +276,7 @@ export class TableComponent implements OnInit {
         order: string,
         params: any
     ) {
+        this.lastRow = 0;
         this.logService
             .search(filters, this.page, type, sortBy, order)
             .subscribe(
@@ -283,7 +289,20 @@ export class TableComponent implements OnInit {
             );
     }
 
+    /**
+     * It manage the state of the last row
+     * If the fetched block is empty, return the lastRow
+     * If the fetched block is a normal block, return null
+     * If the fetched block is a smaller block, return the last row + blockSize
+     *
+     * @param blockSize The size of the data block fetched
+     * @returns Null if we can continue scrolling, otherwise the last row
+     * @author cristian
+     */
     private getLastRow(blockSize: number): number | null {
+        if (blockSize === 0) {
+            return this.lastRow;
+        }
         if (blockSize === 10) {
             this.lastRow += 10;
             return null;

@@ -6,7 +6,7 @@ import { DataProcessor } from 'src/app/shared/util/dataProcessor.service';
 @Component({
     selector: 'app-highligther',
     templateUrl: './highligther.component.html',
-    styleUrls: ['./highligther.component.css'],
+    styleUrls: ['./highligther.component.scss'],
 })
 export class HighligtherComponent {
     public highlighter: FormGroup;

@@ -122,4 +122,20 @@ public class OpenViduLog implements Log {
     public void setThread(String thread) {
         this.thread = thread;
     }
+
+    @Override
+    public String toString() {
+        return "OpenViduLog{" +
+                "timestamp=" + timestamp +
+                ", cluster_id='" + cluster_id + '\'' +
+                ", message='" + message + '\'' +
+                ", host='" + host + '\'' +
+                ", log_level='" + log_level + '\'' +
+                ", logger='" + logger + '\'' +
+                ", node_id='" + node_id + '\'' +
+                ", node_role='" + node_role + '\'' +
+                ", stacktrace='" + stacktrace + '\'' +
+                ", thread='" + thread + '\'' +
+                '}';
+    }
 }
