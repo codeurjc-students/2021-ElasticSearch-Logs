@@ -125,7 +125,39 @@ describe('e2e tests', () => {
             });
         });
 
-        describe('Columns', () => {});
+        describe('Columns', () => {
+            describe('User select some columns to display', () => {
+                beforeEach(() => {
+                    cy.get('#column-updater').click();
+                });
+
+                it('Only Timestamp and Log Level should be displayed', () => {
+                    cy.get('#timestamp .mat-checkbox-inner-container')
+                        .click()
+                        .get('#log_level .mat-checkbox-inner-container')
+                        .click()
+                        .get('#column-updater-submit')
+                        .click()
+                        .get('#ag-table')
+                        .getAgGridData()
+                        .each((log: any) => {
+                            expect(Object.keys(log).length).to.be.equal(2);
+                        });
+                });
+            });
+
+            describe('User does not select any column to display', () => {
+                beforeEach(() => {
+                    cy.get('#column-updater').click();
+                });
+
+                it('An alert is shown to display an error', () => {
+                    cy.get('#column-updater-submit')
+                        .click()
+                        .get('snack-bar-container');
+                });
+            });
+        });
 
         describe('Query', () => {});
     });

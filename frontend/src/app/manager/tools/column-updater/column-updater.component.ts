@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { ManagerComunicationService } from 'src/app/shared/service/managerComunication.service';
 import { DataProcessor } from 'src/app/shared/util/dataProcessor.service';
@@ -17,7 +18,8 @@ export class ColumnUpdaterComponent {
 
     constructor(
         private utilService: DataProcessor,
-        private ManagerComunicationService: ManagerComunicationService
+        private ManagerComunicationService: ManagerComunicationService,
+        private snackBar: MatSnackBar
     ) {
         this.columns = COLUMN_DEFS.filter(
             (column) => column.field != 'status'
@@ -36,6 +38,14 @@ export class ColumnUpdaterComponent {
         const fields: string[] = this.utilService.getDataFromForm(
             this.columnsToDisplay
         )[0];
-        this.ManagerComunicationService.sendColDefs(fields);
+
+        if (fields.length > 0)
+            this.ManagerComunicationService.sendColDefs(fields);
+        else
+            this.snackBar.open('Select some columns to show!', 'Close', {
+                verticalPosition: 'bottom',
+                horizontalPosition: 'right',
+                duration: 2000,
+            });
     }
 }
