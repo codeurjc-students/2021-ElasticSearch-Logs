@@ -314,7 +314,7 @@ export class TableComponent implements OnInit {
         this.snackBar.open('No rows to show!', 'Close', {
             verticalPosition: 'bottom',
             horizontalPosition: 'right',
-            duration: 2000,
+            duration: 4000,
         });
     }
 }

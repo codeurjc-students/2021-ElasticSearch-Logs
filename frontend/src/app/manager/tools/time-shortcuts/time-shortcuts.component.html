@@ -3,10 +3,12 @@
         <mat-label>Enter a date range</mat-label>
         <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
             <input
+                data-cy="startDate"
                 matStartDate
                 formControlName="startDate"
                 placeholder="Start date" />
             <input
+                data-cy="endDate"
                 matEndDate
                 formControlName="endDate"
                 placeholder="End date" />
@@ -41,7 +43,12 @@
     </div>
 
     <div id="buttons">
-        <button type="submit" mat-raised-button color="primary">
+        <button
+            disabled="{{ !range.valid }}"
+            type="submit"
+            mat-raised-button
+            color="primary"
+            id="time-shortcuts-submit">
             Submit
         </button>
 
