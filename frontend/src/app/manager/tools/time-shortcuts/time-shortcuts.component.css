@@ -1,91 +1,91 @@
 mat-expansion-panel-header {
-  padding: 16px;
+    padding: 16px;
 }
 
 p {
-  font-size: 16px;
-  font-family: "Roboto", sans-serif;
-  font-weight: 500;
-  padding-bottom: 0;
+    font-size: 16px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    padding-bottom: 0;
 }
 
 mat-icon {
-  font-size: 18px;
+    font-size: 18px;
 }
 
 #datePicker {
-  width: 100%;
+    width: 100%;
 }
 
 #moreOptions {
-  margin: 0;
+    margin: 0;
 }
 
 mat-expansion-panel-header {
-  padding: 5px 10px;
-  background-color: var(--primary) !important;
-  color: white;
+    padding: 5px 10px;
+    background-color: var(--primary) !important;
+    color: white;
 }
 
 .mat-expansion-indicator::after {
-  color: white;
+    color: white;
 }
 
 .mat-card .mat-divider-horizontal {
-  position: relative;
+    position: relative;
 }
 
 #listTitle {
-  padding: 16px 0;
-  font-family: "Roboto", sans-serif;
-  font-weight: 500;
-  color: black;
+    padding: 16px 0;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    color: black;
 }
 
 #shortcutName {
-  font-weight: 500;
+    font-weight: 500;
 }
 
 .mat-list-item-content {
-  padding: 0 !important;
+    padding: 0 !important;
 }
 
-#time-shortcut-submit-button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.time-shortcut-submit-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 #time-box {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 #time-box input {
-  width: 25px;
+    width: 25px;
 }
 
 #container {
-  display: flex;
-  justify-content: space-between;
+    display: flex;
+    justify-content: space-between;
 }
 
 #startTime,
 #endTime {
-  width: 45%;
+    width: 45%;
 }
 
 #startTime {
-  margin-right: 10px;
+    margin-right: 10px;
 }
 
 #buttons {
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
 }
 
 #buttons button {
-  width: -webkit-fill-available;
+    width: -webkit-fill-available;
 }

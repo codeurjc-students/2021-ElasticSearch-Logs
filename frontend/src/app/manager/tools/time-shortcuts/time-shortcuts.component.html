@@ -1,64 +1,73 @@
 <form id="time-shortcuts" [formGroup]="range" (ngSubmit)="onFormCall()">
-  <mat-form-field id="datePicker">
-    <mat-label>Enter a date range</mat-label>
-    <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
-      <input
-        matStartDate
-        formControlName="startDate"
-        placeholder="Start date"
-      />
-      <input matEndDate formControlName="endDate" placeholder="End date" />
-    </mat-date-range-input>
-    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-    <mat-date-range-picker #picker></mat-date-range-picker>
+    <mat-form-field id="datePicker">
+        <mat-label>Enter a date range</mat-label>
+        <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+            <input
+                matStartDate
+                formControlName="startDate"
+                placeholder="Start date" />
+            <input
+                matEndDate
+                formControlName="endDate"
+                placeholder="End date" />
+        </mat-date-range-input>
+        <mat-datepicker-toggle
+            matSuffix
+            [for]="picker"></mat-datepicker-toggle>
+        <mat-date-range-picker #picker></mat-date-range-picker>
 
-    <mat-error *ngIf="range.controls.startDate.hasError('matStartDateInvalid')"
-      >Invalid start date</mat-error
-    >
-    <mat-error *ngIf="range.controls.endDate.hasError('matEndDateInvalid')"
-      >Invalid end date</mat-error
-    >
-  </mat-form-field>
-
-  <div id="container">
-    <mat-form-field id="startTime">
-      <mat-label>Start hour</mat-label>
-      <input formControlName="startTime" matInput type="time" />
+        <mat-error
+            *ngIf="
+                range.controls.startDate.hasError('matStartDateInvalid')
+            "
+            >Invalid start date</mat-error
+        >
+        <mat-error
+            *ngIf="range.controls.endDate.hasError('matEndDateInvalid')"
+            >Invalid end date</mat-error
+        >
     </mat-form-field>
 
-    <mat-form-field id="endTime">
-      <mat-label>End hour</mat-label>
-      <input matInput formControlName="endTime" type="time" />
-    </mat-form-field>
-  </div>
+    <div id="container">
+        <mat-form-field id="startTime">
+            <mat-label>Start hour</mat-label>
+            <input formControlName="startTime" matInput type="time" />
+        </mat-form-field>
 
-  <div id="buttons">
-    <button type="submit" mat-raised-button color="primary">Submit</button>
+        <mat-form-field id="endTime">
+            <mat-label>End hour</mat-label>
+            <input matInput formControlName="endTime" type="time" />
+        </mat-form-field>
+    </div>
 
-    <button
-      type="button"
-      onclick="form.reset()"
-      mat-raised-button
-      color="secondary"
-    >
-      Clear
-    </button>
-  </div>
+    <div id="buttons">
+        <button type="submit" mat-raised-button color="primary">
+            Submit
+        </button>
+
+        <button
+            type="button"
+            onclick="form.reset()"
+            mat-raised-button
+            color="secondary">
+            Clear
+        </button>
+    </div>
 </form>
 
 <mat-list>
-  <div mat-subheader id="listTitle">Shortcuts</div>
-  <mat-list-item *ngFor="let sc of shortcuts">
-    <button
-      id="time-shortcut-submit-button"
-      (click)="onShorcutCall(sc.date, sc.name)"
-      mat-icon-button
-      mat-raised-button
-      color="primary"
-    >
-      <mat-icon matSuffix>schedule</mat-icon>
-    </button>
-    <div mat-line id="shortcutName">{{ sc.name }}</div>
-    <div mat-line>{{ sc.date | date: "medium" }}</div>
-  </mat-list-item>
+    <div mat-subheader id="listTitle">Shortcuts</div>
+    <mat-list-item *ngFor="let sc of shortcuts">
+        <button
+            class="time-shortcut-submit-button"
+            id="{{ sc.id }}"
+            (click)="onShorcutCall(sc.date, sc.name)"
+            mat-icon-button
+            mat-raised-button
+            color="primary">
+            <mat-icon matSuffix>schedule</mat-icon>
+        </button>
+        <div mat-line id="shortcutName">{{ sc.name }}</div>
+        <div mat-line>{{ sc.date | date: 'medium' }}</div>
+    </mat-list-item>
 </mat-list>

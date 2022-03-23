@@ -1,3 +1,21 @@
+const parseDate = (dateAsString: string) => {
+    const [time, date] = dateAsString.split('-');
+    const [hour, min, sec] = time.split(':');
+    const [day, month, year] = date.split('/');
+
+    const dateToReturn = new Date();
+
+    dateToReturn.setFullYear(parseInt(year));
+    dateToReturn.setMonth(parseInt(month) - 1);
+    dateToReturn.setDate(parseInt(day));
+
+    dateToReturn.setHours(parseInt(hour));
+    dateToReturn.setMinutes(parseInt(min));
+    dateToReturn.setSeconds(parseInt(sec));
+
+    return dateToReturn;
+};
+
 describe('e2e tests', () => {
     beforeEach(() => {
         cy.visit('/');
@@ -53,7 +71,124 @@ describe('e2e tests', () => {
             });
         });
 
-        describe('Time queries', () => {});
+        describe('Time queries', () => {
+            beforeEach(() => {
+                cy.get('#time-shortcuts').click();
+            });
+
+            describe('User find a valid range', () => {});
+
+            describe('User find an invalid range', () => {});
+
+            describe('User click the buttons shortcuts', () => {
+                it('Today button should fetch correct data', () => {
+                    cy.get('#today')
+                        .click()
+                        .wait(2000)
+                        .get('#ag-table')
+                        .getAgGridData({ onlyColumns: ['Timestamp'] })
+                        .each((log: any) => {
+                            const today = new Date();
+                            const onlyDate = `${today.getDate()}/0${
+                                today.getMonth() + 1
+                            }/${today.getFullYear()}`;
+
+                            expect(log['Timestamp']).to.contain(onlyDate);
+                        });
+                });
+
+                it('30 minutes button should fetch correct data', () => {
+                    cy.get('#min30')
+                        .click()
+                        .wait(2000)
+                        .get('#ag-table')
+                        .getAgGridData({ onlyColumns: ['Timestamp'] })
+                        .each((log: any) => {
+                            const halfHourAgo = parseDate(
+                                log['Timestamp']
+                            );
+                            const today = new Date();
+                            const oneHourAgo = new Date();
+                            oneHourAgo.setHours(oneHourAgo.getHours() - 1);
+
+                            expect(halfHourAgo).to.be.lte(today);
+                            expect(halfHourAgo).to.be.gte(oneHourAgo);
+                        });
+                });
+
+                it('1 hour button should fetch correct data', () => {
+                    cy.get('#hour1')
+                        .click()
+                        .wait(2000)
+                        .get('#ag-table')
+                        .getAgGridData({ onlyColumns: ['Timestamp'] })
+                        .each((log: any) => {
+                            const oneHourAgo = parseDate(log['Timestamp']);
+                            const today = new Date();
+                            const twoHoursAgo = new Date();
+                            twoHoursAgo.setHours(
+                                twoHoursAgo.getHours() - 2
+                            );
+
+                            expect(oneHourAgo).to.be.lte(today);
+                            expect(oneHourAgo).to.be.gte(twoHoursAgo);
+                        });
+                });
+
+                it('6 hours button should fetch correct data', () => {
+                    cy.get('#hour6')
+                        .click()
+                        .wait(2000)
+                        .get('#ag-table')
+                        .getAgGridData({ onlyColumns: ['Timestamp'] })
+                        .each((log: any) => {
+                            const sixHoursAgo = parseDate(
+                                log['Timestamp']
+                            );
+                            const today = new Date();
+                            const sevenHoursAgo = new Date();
+                            sevenHoursAgo.setHours(
+                                sevenHoursAgo.getHours() - 7
+                            );
+
+                            expect(sixHoursAgo).to.be.lte(today);
+                            expect(sixHoursAgo).to.be.gte(sevenHoursAgo);
+                        });
+                });
+
+                it('1 day button should fetch correct data', () => {
+                    cy.get('#day1')
+                        .click()
+                        .wait(2000)
+                        .get('#ag-table')
+                        .getAgGridData({ onlyColumns: ['Timestamp'] })
+                        .each((log: any) => {
+                            const today = new Date();
+                            const onlyDate = `${today.getDate() - 1}/0${
+                                today.getMonth() + 1
+                            }/${today.getFullYear()}`;
+
+                            expect(log['Timestamp']).to.contain(onlyDate);
+                        });
+                });
+
+                it('1 week button should fetch correct data', () => {
+                    cy.get('#week1')
+                        .click()
+                        .wait(2000)
+                        .get('#ag-table')
+                        .getAgGridData({ onlyColumns: ['Timestamp'] })
+                        .each((log: any) => {
+                            const today = new Date();
+                            const onlyDate = `${today.getDate() - 6}/0${
+                                today.getMonth() + 1
+                            }/${today.getFullYear()}`;
+
+                            expect(log['Timestamp']).to.contain(onlyDate);
+                        });
+                });
+            });
+        });
 
         describe('Filter', () => {
             describe('User look for a value that exists', () => {
@@ -112,13 +247,11 @@ describe('e2e tests', () => {
                         .getAgGridData({ onlyColumns: ['Timestamp'] })
                         .each((log: any) => {
                             const today = new Date();
-                            const todayAsString = `${today.getDate()}/0${
+                            const onlyDate = `${today.getDate()}/0${
                                 today.getMonth() + 1
                             }/${today.getFullYear()}`;
 
-                            expect(log['Timestamp']).to.contain(
-                                todayAsString
-                            );
+                            expect(log['Timestamp']).to.contain(onlyDate);
                         })
                         .debug();
                 });
@@ -159,6 +292,46 @@ describe('e2e tests', () => {
             });
         });
 
-        describe('Query', () => {});
+        describe('Query', () => {
+            describe('User writes a correct query to fecth data ', () => {
+                beforeEach(() => {
+                    cy.get('#query-json').click();
+                });
+
+                it('Log level INFO should be fetched', () => {
+                    cy.get('#monaco-editor')
+                        .type('{"log_level": "INFO"}', {
+                            parseSpecialCharSequences: false,
+                        })
+                        .get('#query-json-submit')
+                        .click()
+                        .wait(2000)
+                        .get('#ag-table')
+                        .getAgGridData({
+                            onlyColumns: ['Log Level'],
+                        })
+                        .each((log) => {
+                            expect(log).to.deep.equal({
+                                'Log Level': 'INFO',
+                            });
+                        });
+                });
+            });
+
+            describe('User writes a incorrect query to fecth data ', () => {
+                beforeEach(() => {
+                    cy.get('#query-json').click();
+                });
+
+                it('Submit button should not be eneable', () => {
+                    cy.get('#monaco-editor')
+                        .type('Esto no es valido', {
+                            parseSpecialCharSequences: false,
+                        })
+                        .get('#query-json-submit')
+                        .should('be.disabled');
+                });
+            });
+        });
     });
 });
