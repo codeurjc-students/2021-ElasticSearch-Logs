@@ -183,7 +183,7 @@ public class SearchService {
 
         final List<Log> logs = new ArrayList<>(hitsNumber);
 
-        for (SearchHit hit : searchHits) {()
+        for (SearchHit hit : searchHits) {
             logs.add(MAPPER.readValue(hit.getSourceAsString(), OpenViduLog.class));
         }
         
