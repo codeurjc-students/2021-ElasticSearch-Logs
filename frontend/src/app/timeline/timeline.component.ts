@@ -27,7 +27,7 @@ export class TimelineComponent implements OnInit {
         grid: {
             top: '2%',
             left: '2%',
-            right: '1%',
+            right: '5%',
             bottom: '1%',
             containLabel: true,
         },
@@ -111,7 +111,6 @@ export class TimelineComponent implements OnInit {
     private updateDataSeries(index: string) {
         this.timelineService.getLogsCountPerHour(this.selected).subscribe({
             next: (data) => {
-                console.log(data);
                 const hours = data.map((c) => c.hour).reverse();
                 const counts = data.map((c) => c.count).reverse();
 

@@ -3,6 +3,7 @@
     background-color: #f9f9f9;
 }
 
+
 #app {
     display: flex;
     justify-content: space-between;
@@ -33,6 +34,7 @@
     
         #app__right__displayer {
             height: 20%;
+            width: 80vw;
         }
     }
     

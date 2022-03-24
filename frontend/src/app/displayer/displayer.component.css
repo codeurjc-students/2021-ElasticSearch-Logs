@@ -14,10 +14,16 @@ mat-chip-list {
 
 table {
     width: 100%;
+    table-layout: fixed;
 }
 
 th {
     width: 200px;
+}
+
+td {
+    word-wrap: break-word;
+    font-family: 'Ubuntu Mono', monospace;
 }
 
 mat-card {

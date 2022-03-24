@@ -29,7 +29,7 @@
                     Value
                 </th>
                 <td mat-cell *matCellDef="let element">
-                    {{ element[1] }}
+                    <div [innerHTML]="element[1]"></div>
                 </td>
             </ng-container>
 

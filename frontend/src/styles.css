@@ -1,40 +1,42 @@
-@import "ag-grid-community/dist/styles/ag-grid.css";
-@import "ag-grid-community/dist/styles/ag-theme-alpine.css";
+@import 'ag-grid-community/dist/styles/ag-grid.css';
+@import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu+Mono&display=swap');
 
 :root {
-  --primary: #d50000;
-  --primary-dark: #9b0000;
-  --primary-light: #ff5131;
+    --primary: #d50000;
+    --primary-dark: #9b0000;
+    --primary-light: #ff5131;
 }
 
 html,
 body {
-  height: 100%;
+    height: 100%;
+    overflow-x: hidden;
 }
 body {
-  margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+    margin: 0;
+    font-family: Roboto, 'Helvetica Neue', sans-serif;
 }
 
 /* width */
 ::-webkit-scrollbar {
-  width: 4px;
-  height: 5px;
+    width: 4px;
+    height: 5px;
 }
 
 /* Track */
 ::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 5px white;
-  border-radius: 10px;
+    box-shadow: inset 0 0 5px white;
+    border-radius: 10px;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: var(--primary);
-  border-radius: 10px;
+    background: var(--primary);
+    border-radius: 10px;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--primary-dark);
+    background: var(--primary-dark);
 }

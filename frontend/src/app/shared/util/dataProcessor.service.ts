@@ -93,7 +93,7 @@ export class DataProcessor {
      * @returns The new text highlighted
      */
     private replaceText(text: string, stringToHighlight: string): string {
-        if (text == null) return text;
+        if (text == null || stringToHighlight == null) return text;
 
         const upperText = text.toUpperCase();
         const upperString = stringToHighlight.toUpperCase();

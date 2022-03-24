@@ -6,6 +6,12 @@ import { COLUMN_DEFS, TABLE_STYLES } from './config';
 import { ManagerComunicationService } from '../shared/service/managerComunication.service';
 import { TableManagerComunicationService } from '../shared/service/tableComunication.service';
 import { DataProcessor } from '../shared/util/dataProcessor.service';
+import {
+    ColDef,
+    ColumnResizedEvent,
+    SelectionChangedEvent,
+} from 'ag-grid-community';
+import { param } from 'cypress/types/jquery';
 
 @Component({
     selector: 'app-table',
@@ -30,7 +36,7 @@ export class TableComponent implements OnInit {
     public columnDefs: object[];
 
     // Default columns config
-    public defaultColDef: object;
+    public defaultColDef: ColDef;
 
     // Rows pre-loaded off view
     public rowBuffer: number;
@@ -96,16 +102,59 @@ export class TableComponent implements OnInit {
                     ? params.value
                     : params.value;
             },
-            style: {
-                height: '50%',
+            cellStyle: {
+                height: '100%',
+                'line-height': '24px',
+                'font-family': '"Ubuntu Mono", monospace',
             },
+            resizable: true,
         };
 
         // Row options
-        this.rowHeight = 100;
+
+        let rowheight: keyof {
+            small: number;
+            normal: number;
+            large: number;
+        } = 'normal';
+
+        switch (localStorage.getItem('rowheight')) {
+            case 'small':
+                rowheight = 'small';
+                break;
+            case 'normal':
+                rowheight = 'normal';
+                break;
+            case 'large':
+                rowheight = 'large';
+                break;
+            default:
+                rowheight = 'normal';
+        }
+        this.rowHeight = TABLE_STYLES.rowHeight[rowheight];
         this.rowBuffer = 10;
         this.rowSelection = 'multiple';
-        this.fontSize = 14;
+
+        let size: keyof {
+            small: number;
+            normal: number;
+            large: number;
+        } = 'normal';
+
+        switch (localStorage.getItem('fontsize')) {
+            case 'small':
+                size = 'small';
+                break;
+            case 'normal':
+                size = 'normal';
+                break;
+            case 'large':
+                size = 'large';
+                break;
+            default:
+                size = 'normal';
+        }
+        this.fontSize = TABLE_STYLES.fontSize[size];
 
         // Infinite loading options
         this.cacheOverflowSize = 5;
@@ -135,6 +184,7 @@ export class TableComponent implements OnInit {
             },
         };
         this.gridApi.setDatasource(dataSource);
+        // console.log(this.columnApi.getColumnState());
     }
 
     ngOnInit(): void {
@@ -169,11 +219,16 @@ export class TableComponent implements OnInit {
         );
     }
 
-    onSelectionChanged(params: any) {
+    onSelectionChanged(params: SelectionChangedEvent) {
         const selectedRows = this.gridApi.getSelectedRows()[0];
         this.tableManagerComunicationService.sendRowProperties(
             selectedRows
         );
+    }
+
+    onColumnResized(params: ColumnResizedEvent) {
+        console.log(params.column?.getActualWidth());
+        window.location.reload();
     }
 
     /**
@@ -252,6 +307,8 @@ export class TableComponent implements OnInit {
         data: keyof { small: number; normal: number; large: number }
     ) {
         this.fontSize = TABLE_STYLES.fontSize[data];
+        this.rowHeight = TABLE_STYLES.rowHeight[data];
+        window.location.reload();
     }
 
     private dateFilter(dates: string[]) {

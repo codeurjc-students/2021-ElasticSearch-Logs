@@ -1,28 +1,27 @@
 <div id="dialog-container">
-  <div mat-dialog-content>
-    <div id="dialog-title">
-      <mat-icon>text_format</mat-icon>
-      <h2>Font Size</h2>
+    <div mat-dialog-content>
+        <div id="dialog-title">
+            <mat-icon>text_format</mat-icon>
+            <h2>Font Size</h2>
+        </div>
+
+        <mat-radio-group
+            aria-label="Select an option"
+            [(ngModel)]="fontSize">
+            <mat-radio-button value="small"> Small </mat-radio-button>
+            <mat-radio-button value="normal"> Normal </mat-radio-button>
+            <mat-radio-button value="large">Large</mat-radio-button>
+        </mat-radio-group>
     </div>
+    <div mat-dialog-actions>
+        <button
+            class="submit-button"
+            mat-raised-button
+            color="primary"
+            (click)="fontSizeEmit()">
+            Apply
+        </button>
 
-    <mat-radio-group aria-label="Select an option" [(ngModel)]="fontSize">
-      <mat-radio-button value="small"> Small</mat-radio-button>
-      <mat-radio-button checked value="normal" checked>
-        Normal
-      </mat-radio-button>
-      <mat-radio-button value="large">Large</mat-radio-button>
-    </mat-radio-group>
-  </div>
-  <div mat-dialog-actions>
-    <button
-      class="submit-button"
-      mat-raised-button
-      color="primary"
-      (click)="fontSizeEmit()"
-    >
-      Apply
-    </button>
-
-    <button mat-button mat-dialog-close>Close</button>
-  </div>
+        <button mat-button mat-dialog-close>Close</button>
+    </div>
 </div>

@@ -18,6 +18,7 @@
         [maxBlocksInCache]="maxBlocksInCache"
         [infiniteInitialRowCount]="infiniteInitialRowCount"
         (gridReady)="onGridReady($event)"
-        (selectionChanged)="onSelectionChanged($event)">
+        (selectionChanged)="onSelectionChanged($event)"
+        (columnResized)="onColumnResized($event)">
     </ag-grid-angular>
 </div>

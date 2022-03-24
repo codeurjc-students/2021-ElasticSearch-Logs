@@ -10,7 +10,7 @@ import { COLUMN_DEFS } from '../../../table/config/table.config';
     templateUrl: './query-filter.component.html',
     styleUrls: ['./query-filter.component.scss'],
 })
-export class QueryFilterComponent implements OnChanges {
+export class QueryFilterComponent {
     public columns: any;
     public queryFilter: FormGroup;
 
@@ -24,9 +24,6 @@ export class QueryFilterComponent implements OnChanges {
         this.queryFilter = new FormGroup(
             this.utilService.buildFormControl(this.columns, '')
         );
-    }
-    ngOnChanges(changes: SimpleChanges): void {
-        console.log('cambios recibidos');
     }
 
     queryFilterEmit(): void {
