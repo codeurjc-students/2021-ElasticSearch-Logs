@@ -90,6 +90,7 @@ public final class IndexService {
             LOG.info("Available indices =>" + availableIndices);
             return buildMapDatesToIndex(availableIndices);
         } catch (Exception e) {
+            LOG.error("Indices can't be retrieved");
             LOG.error(e.getMessage(), e);
             return new TreeMap<>();
         }

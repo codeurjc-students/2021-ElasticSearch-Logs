@@ -9,8 +9,12 @@ import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.index.query.*;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.sort.SortOrder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public final class SearchUtil {
+
+    private static final Logger LOG = LoggerFactory.getLogger(SearchService.class);
 
     private SearchUtil() throws InstantiationException {
         throw new InstantiationException("This class is not supposed to be instantiated");
@@ -109,7 +113,11 @@ public final class SearchUtil {
     private static CountRequest applyCountOptions(SearchSourceBuilder searchSourceBuilder,
                                                   QueryBuilder query,
                                                   String index) {
-
+        if (index == null){
+            LOG.info("The provided index is not available");
+            throw new RuntimeException("Index can't be null");
+        }
+        
         final CountRequest request = new CountRequest(index);
         searchSourceBuilder.query(query);
         request.source(searchSourceBuilder);

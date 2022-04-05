@@ -16,9 +16,17 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.elasticsearch.config.AbstractElasticsearchConfiguration;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 @Configuration
 @ComponentScan(basePackages = {"com.elasticsearchlogs.elasticsearchlogsbackend"})
@@ -78,6 +86,5 @@ public class ClientConfig extends AbstractElasticsearchConfiguration {
 
         return credentialsProvider;
     }
-
 
 }

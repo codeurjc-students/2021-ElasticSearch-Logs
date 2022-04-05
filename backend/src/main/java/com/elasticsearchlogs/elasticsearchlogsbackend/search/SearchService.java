@@ -28,7 +28,7 @@ import java.util.List;
 @Service
 public class SearchService {
     private static final ObjectMapper MAPPER = new ObjectMapper();
-    private static final Logger LOG = LoggerFactory.getLogger(OpenViduLog.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SearchService.class);
 
     private final RestHighLevelClient client;
     private final IndexService indicesService;

@@ -11,11 +11,11 @@ import java.util.List;
 @RequestMapping("/api/index")
 public class IndexRestController {
 
-    private final IndexService service;
+    private final IndexService indexService;
 
     @Autowired
-    public IndexRestController(IndexService service) {
-        this.service = service;
+    public IndexRestController(IndexService indexService) {
+        this.indexService = indexService;
     }
 
     /**
@@ -26,6 +26,6 @@ public class IndexRestController {
      */
     @GetMapping("/all")
     public List<String> boolMatchSearch() {
-        return Arrays.asList(service.getMostRecentIndicesKeys());
+        return Arrays.asList(indexService.getMostRecentIndicesKeys());
     }
 }
