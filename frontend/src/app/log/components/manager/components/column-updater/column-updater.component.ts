@@ -5,7 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ManagerComunicationService } from 'src/app/shared/service/managerComunication.service';
 import { DataProcessor } from 'src/app/shared/util/dataProcessor.service';
 
-import { COLUMN_DEFS } from '../../../table/config/table.config';
+import { COLUMN_DEFS } from '../../../table/components/config/table.config';
 
 @Component({
     selector: 'app-column-updater',

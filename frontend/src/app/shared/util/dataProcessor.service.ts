@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 
-import { COLUMN_DEFS } from '../../log/layout/table/config/table.config';
+import { COLUMN_DEFS } from '../../log/components/table/components/config/table.config';
 
 @Injectable({
     providedIn: 'root',

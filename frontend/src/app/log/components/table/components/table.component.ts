@@ -3,9 +3,9 @@ import { AgGridAngular } from 'ag-grid-angular';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { LogService } from './table.service';
 import { COLUMN_DEFS, TABLE_STYLES } from './config';
-import { ManagerComunicationService } from '../../../shared/service/managerComunication.service';
-import { TableManagerComunicationService } from '../../../shared/service/tableComunication.service';
-import { DataProcessor } from '../../../shared/util/dataProcessor.service';
+import { ManagerComunicationService } from '../../../../shared/service/managerComunication.service';
+import { TableManagerComunicationService } from '../../../../shared/service/tableComunication.service';
+import { DataProcessor } from '../../../../shared/util/dataProcessor.service';
 import {
     ColDef,
     ColumnResizedEvent,
