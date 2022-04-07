@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
 import { EChartsOption, EChartsType } from 'echarts';
 
-import { ManagerComunicationService } from '../shared/service/managerComunication.service';
+import { ManagerComunicationService } from '../../../shared/service/managerComunication.service';
 import { TimeLineService } from './timeline.service';
 
 @Component({

@@ -5,15 +5,6 @@ import { AfterViewChecked, Component, OnInit } from '@angular/core';
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss'],
 })
-export class AppComponent implements OnInit, AfterViewChecked {
-    loading: boolean;
-
-    constructor() {
-        this.loading = true;
-    }
-    ngAfterViewChecked(): void {
-        this.loading = false;
-    }
-
+export class AppComponent implements OnInit {
     ngOnInit() {}
 }

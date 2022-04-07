@@ -5,14 +5,14 @@ import { NgxEchartsModule } from 'ngx-echarts';
 import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
-  declarations: [TimelineComponent],
-  exports: [TimelineComponent],
-  imports: [
-    CommonModule,
-    NgxEchartsModule.forRoot({
-      echarts: () => import('echarts'),
-    }),
-    MatSelectModule,
-  ],
+    declarations: [TimelineComponent],
+    exports: [TimelineComponent],
+    imports: [
+        CommonModule,
+        NgxEchartsModule.forRoot({
+            echarts: () => import('echarts'),
+        }),
+        MatSelectModule,
+    ],
 })
 export class TimelineModule {}

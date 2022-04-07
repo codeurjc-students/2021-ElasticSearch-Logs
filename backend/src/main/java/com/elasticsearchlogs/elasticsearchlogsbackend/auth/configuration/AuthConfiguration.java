@@ -35,7 +35,6 @@ public class AuthConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        //PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
         auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder);
     }
 
@@ -57,8 +56,8 @@ public class AuthConfiguration extends WebSecurityConfigurerAdapter {
         // Disable form login authentication
         http.formLogin().disable();
 
+        // JWT filter
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-        //http.addFilter(new AuthenticationFilter(authenticationManagerBean()));
     }
 
     @Bean

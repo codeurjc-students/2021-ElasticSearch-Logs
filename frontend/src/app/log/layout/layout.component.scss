@@ -1,0 +1,52 @@
+* {
+    scroll-behavior: smooth;
+    background-color: #f9f9f9;
+}
+
+#app {
+    display: flex;
+    justify-content: space-between;
+    height: 100vh;
+
+    #app__right {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: 100%;
+        margin-left: 20vw;
+
+        #app__right__logs {
+            display: flex;
+            flex-direction: row;
+            width: 80vw;
+
+            #app__right__logs__table {
+                height: 100%;
+                width: 90%;
+            }
+
+            #app__right__logs__timeline {
+                height: 100%;
+                width: 10%;
+            }
+        }
+
+        #app__right__displayer {
+            height: 20%;
+            width: 80vw;
+        }
+    }
+
+    #app__left {
+        overflow-y: hidden;
+        width: 20vw;
+
+        #app__left__manager {
+            height: -webkit-fill-available;
+            width: 20%;
+            position: fixed;
+            left: 0;
+            overflow-y: scroll;
+        }
+    }
+}
