@@ -20,10 +20,10 @@ public class UserDetailsFinder implements UserDetailsService {
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    @Value("${spring.elasticsearch.rest.username}")
+    @Value("${user.username}")
     public String username;
 
-    @Value("${spring.elasticsearch.rest.password}")
+    @Value("${user.password}")
     public String password;
 
     public UserDetailsFinder(BCryptPasswordEncoder bCryptPasswordEncoder) {
@@ -40,7 +40,7 @@ public class UserDetailsFinder implements UserDetailsService {
 
         return new User(
                 this.username,
-                bCryptPasswordEncoder.encode(this.password),
+                this.password,
                 Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")));
     }
 }

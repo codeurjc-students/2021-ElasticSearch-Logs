@@ -16,12 +16,7 @@ import java.util.Arrays;
 public class ElasticSearchLogsBackendApplication {
 
     public static void main(String[] args) {
-        ApplicationContext apc = SpringApplication.run(ElasticSearchLogsBackendApplication.class, args);
-
-
-        for(String s: apc.getBeanDefinitionNames()){
-            System.out.println(s);
-        }
+       SpringApplication.run(ElasticSearchLogsBackendApplication.class, args);
     }
 
     @Bean
