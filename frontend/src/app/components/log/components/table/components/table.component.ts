@@ -111,56 +111,18 @@ export class TableComponent implements OnInit {
     };
 
     // Row options
-    let rowheight: keyof {
-      small: number;
-      normal: number;
-      large: number;
-    } = 'normal';
-
-    switch (localStorage.getItem('rowheight')) {
-      case 'small':
-        rowheight = 'small';
-        break;
-      case 'normal':
-        rowheight = 'normal';
-        break;
-      case 'large':
-        rowheight = 'large';
-        break;
-      default:
-        rowheight = 'normal';
-    }
-    this.rowHeight = TABLE_STYLES.rowHeight[rowheight];
+    const scale = this.tableService.getScale();
+    this.rowHeight = TABLE_STYLES.rowHeight[scale];
+    this.fontSize = TABLE_STYLES.fontSize[scale];
     this.rowBuffer = 10;
     this.rowSelection = 'multiple';
-
-    let size: keyof {
-      small: number;
-      normal: number;
-      large: number;
-    } = 'normal';
-
-    switch (localStorage.getItem('fontsize')) {
-      case 'small':
-        size = 'small';
-        break;
-      case 'normal':
-        size = 'normal';
-        break;
-      case 'large':
-        size = 'large';
-        break;
-      default:
-        size = 'normal';
-    }
-    this.fontSize = TABLE_STYLES.fontSize[size];
 
     // Infinite loading options
     this.cacheOverflowSize = 5;
     this.maxConcurrentDatasourceRequests = 5;
     this.maxBlocksInCache = 1;
     this.cacheBlockSize = 10;
-    this.infiniteInitialRowCount = 7;
+    this.infiniteInitialRowCount = 30;
     this.lastRow = 0;
 
     // Table context

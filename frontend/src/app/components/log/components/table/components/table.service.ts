@@ -54,4 +54,28 @@ export class TableService {
     });
     localStorage.setItem(`${currentUser}_column_state`, updatedState);
   }
+
+  public getScale() {
+    let rowheight: keyof {
+      small: number;
+      normal: number;
+      large: number;
+    } = 'normal';
+
+    switch (localStorage.getItem('rowheight')) {
+      case 'small':
+        rowheight = 'small';
+        break;
+      case 'normal':
+        rowheight = 'normal';
+        break;
+      case 'large':
+        rowheight = 'large';
+        break;
+      default:
+        rowheight = 'normal';
+    }
+
+    return rowheight;
+  }
 }
