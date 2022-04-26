@@ -12,8 +12,7 @@ import {
   ColumnResizedEvent,
   SelectionChangedEvent,
 } from 'ag-grid-community';
-import { param } from 'cypress/types/jquery';
-import { number } from 'echarts';
+
 
 @Component({
   selector: 'app-table',
@@ -227,6 +226,7 @@ export class TableComponent implements OnInit {
    * @author cristian
    */
   private queryFilter(filters: any[][]): void {
+    this.lastRow = 0;
     const dataSource = {
       rowCount: null,
       getRows: (params: any) => {
@@ -257,6 +257,7 @@ export class TableComponent implements OnInit {
               stringToHighlight
             );
 
+            if (hData.length === 0) this.displayNoRowsMessage();
             const lastRow = this.getLastRow(data.length);
             params.successCallback(hData, lastRow);
           },
@@ -303,7 +304,6 @@ export class TableComponent implements OnInit {
     order: string,
     params: any
   ) {
-    this.lastRow = 0;
     this.tableService.search(filters, this.page, type, sortBy, order).subscribe(
       (data) => {
         if (data.length === 0) this.displayNoRowsMessage();

@@ -43,6 +43,7 @@ public class AuthConfiguration extends WebSecurityConfigurerAdapter {
 
         // Private endpoints
         http.authorizeRequests().antMatchers(HttpMethod.POST,"/api/log/**").hasRole("USER");
+        http.authorizeRequests().antMatchers(HttpMethod.GET,"/api/index/**").hasRole("USER");
 
         // Other endpoints are public
         http.authorizeRequests().anyRequest().permitAll();

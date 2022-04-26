@@ -1,0 +1,43 @@
+package com.elasticsearchlogs.elasticsearchlogsbackend.e2e;
+
+
+import io.restassured.RestAssured;
+import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
+import net.minidev.json.JSONObject;
+import org.junit.jupiter.api.Test;
+
+import static io.restassured.RestAssured.get;
+import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.is;
+
+public class IndexTest {
+
+    private String getAuthCookie(){
+        RequestSpecification loginReq = RestAssured.given();
+
+        JSONObject loginReqParams = new JSONObject();
+        loginReqParams.put("username", "elasticadmin");
+        loginReqParams.put("password", "MY_SECRET");
+
+        loginReq.header("Content-Type", "application/json");
+        loginReq.body(loginReqParams.toJSONString());
+
+        Response loginRes = loginReq.post("http://localhost:8080/api/auth/login");
+
+        return loginRes.getCookie("AuthToken");
+    }
+    @Test
+    public void getAllIndices(){
+
+        given()
+                .cookie("AuthToken",this.getAuthCookie())
+        .when()
+                .get("http://localhost:8080/api/index/all")
+        .then()
+                .statusCode(200)
+                .body("size()",is(7));
+
+
+    }
+}

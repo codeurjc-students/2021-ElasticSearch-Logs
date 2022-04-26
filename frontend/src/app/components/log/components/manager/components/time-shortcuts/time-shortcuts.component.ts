@@ -70,24 +70,32 @@ export class TimeShortcutsComponent implements OnInit {
   }
 
   onShorcutCall(dateNumber: number, name: string) {
-    let from;
-    let to;
-    if (name === 'Today') {
-      from =
-        new Date(dateNumber).toISOString().substring(0, 10) +
-        'T00:00:00.000+00:00';
-      to =
-        new Date(dateNumber).toISOString().substring(0, 10) +
-        'T23:59:59.999+00:00';
-    } else {
-      from = new Date(dateNumber).toISOString().replace('Z', '+00:00');
-      to = new Date().toISOString().replace('Z', '+00:00');
-    }
+    //'2022-04-10T22:00:00.000+00:00'
+    // let from;
+    // let to;
+    // if (name === 'Today') {
+    //   from =
+    //     new Date(dateNumber).toISOString().substring(0, 10) +
+    //     'T00:00:00.000+00:00';
+    //   to =
+    //     new Date(dateNumber).toISOString().substring(0, 10) +
+    //     'T23:59:59.999+00:00';
+    // } else {
+    //   from = new Date(dateNumber).toISOString().replace('Z', '+00:00');
+    //   to = new Date().toISOString().replace('Z', '+00:00');
+    // }
+
+    const dateTo = new Date();
+    const dateFrom = new Date(dateNumber);
+
+    const from = `${dateFrom.getFullYear()}-${(dateFrom.getMonth() + 1).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})}-${dateFrom.getDate().toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})}T${dateFrom.getHours().toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})}:${dateFrom.getMinutes().toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})}:${dateFrom.getSeconds().toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})}.000+00:00`;
+
+    const to = `${dateTo.getFullYear()}-${(dateTo.getMonth() + 1).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})}-${dateTo.getDate().toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})}T${dateTo.getHours().toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})}:${dateTo.getMinutes().toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})}:${dateTo.getSeconds().toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})}.000+00:00`;
+
     this.managerComunicationService.sendRangeFilters([from, to]);
   }
 
   private buildDate(dateValue: Date, timeValue: any): string {
-    //'2022-04-10T22:00:00.000+00:00'
     let dateToReturn =
       dateValue.getFullYear() +
       '-' +
