@@ -37,7 +37,7 @@ public class SearchRestController {
     @GetMapping("/count/all/{index}")
     public List<CountDTO> countAll(@PathVariable final String index) {
         return service.count(index);
-    }
+    } 
 
 
 }
