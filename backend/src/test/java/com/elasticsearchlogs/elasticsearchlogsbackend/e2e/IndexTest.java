@@ -1,16 +1,11 @@
 package com.elasticsearchlogs.elasticsearchlogsbackend.e2e;
 
 
-import com.elasticsearchlogs.elasticsearchlogsbackend.index.IndexRestController;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import net.minidev.json.JSONObject;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static io.restassured.RestAssured.get;
 import static io.restassured.RestAssured.given;
