@@ -20,12 +20,13 @@ export class TimeLineService {
      * @returns An observable of logs
      */
     public getIndices(): Observable<string[]> {
-        return this.httpClient.get<string[]>(`${this.url}/index/all`);
+        return this.httpClient.get<string[]>(`${this.url}/index/all`,{ withCredentials: true });
     }
 
     public getLogsCountPerHour(index: string): Observable<LogCount[]> {
         return this.httpClient.get<LogCount[]>(
-            `${this.url}/log/count/all/${index}`
+            `${this.url}/log/count/all/${index}`,
+            { withCredentials: true }
         );
     }
 }

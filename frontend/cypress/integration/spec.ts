@@ -4,13 +4,7 @@ const parseDate = (dateAsString: string) => {
   const [year, month, day] = date.split('-');
 
 
-    console.log("hour => " + hour)
-    console.log("min => " + min)
-    console.log("sec => " + sec)
-
-    console.log("year => " + year)
-    console.log("month => " + month)
-    console.log("day => " + day)
+  
 
   const dateToReturn = new Date();
 

@@ -42,8 +42,11 @@ public class AuthConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
+
+
         // Private endpoints
         http.authorizeRequests().antMatchers(HttpMethod.POST,"/api/log/**").hasRole("USER");
+        http.authorizeRequests().antMatchers(HttpMethod.GET,"/api/log/**").hasRole("USER");
         http.authorizeRequests().antMatchers(HttpMethod.GET,"/api/index/**").hasRole("USER");
 
         // Other endpoints are public
@@ -60,6 +63,9 @@ public class AuthConfiguration extends WebSecurityConfigurerAdapter {
 
         // JWT filter
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+
+        // Enable CORS filter
+        http.cors();
     }
 
     @Bean

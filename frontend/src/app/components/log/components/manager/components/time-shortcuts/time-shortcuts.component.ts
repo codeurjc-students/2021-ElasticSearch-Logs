@@ -111,7 +111,7 @@ export class TimeShortcutsComponent implements OnInit {
       'T' +
       timeValue +
       ':00.000+00:00';
-    console.log(dateToReturn);
+  
 
     const date = new Date(dateValue);
     date.setHours(timeValue.slice(0, 2), timeValue.slice(3, 5));

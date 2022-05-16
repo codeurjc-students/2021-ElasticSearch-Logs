@@ -22,6 +22,7 @@ export class LoginComponent {
     onSubmit(user: User) {
         this.authService.login(user).subscribe({
             next: (res) => {
+           
                 this.router.navigateByUrl('/');
                 localStorage.setItem('logged', user.username);
             },
