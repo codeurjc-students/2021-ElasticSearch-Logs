@@ -13,13 +13,13 @@ export class AuthService {
 
     login(user: User) {
         return this.httpClient.post(`${this.url}/auth/login`, user, {
-            withCredentials: true
+            withCredentials: true 
         });
     }
 
     logout() {
         return this.httpClient.post(`${this.url}/auth/logout`, {
-            withCredentials: true,
+            withCredentials: true, 
         });
     }
 }

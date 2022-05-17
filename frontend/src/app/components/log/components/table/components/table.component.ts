@@ -310,7 +310,7 @@ export class TableComponent implements OnInit {
         const lastRow = this.getLastRow(data.length);
         params.successCallback(data, lastRow);
       },
-      (err) => console.log(err)
+      (err) => console.error(err)
     );
   }
 

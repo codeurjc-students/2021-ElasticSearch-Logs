@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { Injector, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -10,6 +10,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { AuthComponent } from './components/auth.component';
 import { RoutingModule } from 'src/app/routes/routing.module';
 import { AuthRoutingModule } from './routes/auth-routing.module';
+import { RequestService } from './interceptors/request.service';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @NgModule({
     declarations: [LoginComponent, AuthComponent],
@@ -22,9 +25,19 @@ import { AuthRoutingModule } from './routes/auth-routing.module';
         MatInputModule,
         MatIconModule,
         MatButtonModule,
-
         AuthRoutingModule,
     ],
     exports: [AuthComponent],
+    providers: [
+        { 
+            provide: HTTP_INTERCEPTORS,
+            useFactory: function(router: Router) {
+                return new RequestService(router);
+              },
+              multi: true,
+              deps: [Router]
+        }
+    ]
+
 })
-export class AuthModule {}
+export class AuthModule { }
