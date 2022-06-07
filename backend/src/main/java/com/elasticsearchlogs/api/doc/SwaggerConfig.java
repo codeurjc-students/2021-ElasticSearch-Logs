@@ -15,7 +15,7 @@ public class SwaggerConfig {
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.elasticsearchlogs.elasticsearchlogsbackend"))
+                .apis(RequestHandlerSelectors.basePackage("com.elasticsearchlogs.api"))
                 .paths(PathSelectors.any())
                 .build();
     }
