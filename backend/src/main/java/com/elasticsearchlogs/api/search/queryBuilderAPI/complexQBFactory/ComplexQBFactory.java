@@ -6,7 +6,6 @@ import com.elasticsearchlogs.api.search.queryBuilderAPI.complexQBFactory.complex
 import org.elasticsearch.index.query.QueryBuilder;
 
 import java.util.List;
-import java.util.Objects;
 
 public class ComplexQBFactory {
 
@@ -25,14 +24,17 @@ public class ComplexQBFactory {
      * @author cristian
      */
     public static QueryBuilder getCompoundQB(final String type, List<String> fields, List<String> searchTerms, boolean strictQuery) {
-        if (Objects.equals(type, "match"))
-            return new BoolMatchQB().getQueryBuilder(type, fields, searchTerms, strictQuery);
+        return switch (type) {
+            case "match" -> new BoolMatchQB()
+                    .getQueryBuilder(type, fields, searchTerms, strictQuery);
 
-        if (Objects.equals(type, "wildcard"))
-            return new BoolWildcardQB().getQueryBuilder(type, fields, searchTerms, strictQuery);
+            case "wildcard" -> new BoolWildcardQB()
+                    .getQueryBuilder(type, fields, searchTerms, strictQuery);
 
-        if (Objects.equals(type, "range"))
-            return new RangeQB().getQueryBuilder(type, fields, searchTerms, strictQuery);
-        return null;
+            case "range" -> new RangeQB()
+                    .getQueryBuilder(type, fields, searchTerms, strictQuery);
+
+            case default -> null;
+        };
     }
 }

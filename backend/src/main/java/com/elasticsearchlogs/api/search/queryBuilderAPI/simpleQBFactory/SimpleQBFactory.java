@@ -22,14 +22,11 @@ public class SimpleQBFactory {
      * @author cristian
      */
     public static QueryBuilder getAtomicQB(final String type, final String field, final String searchTerm) {
-        if (Objects.equals(type, "match")) {
-            return new MatchQB().getQueryBuilder(field, searchTerm);
-        }
 
-        if (Objects.equals(type, "wildcard")) {
-            return new WildcardQB().getQueryBuilder(field, searchTerm);
-        }
-
-        return null;
+        return switch (type) {
+            case "match" -> new MatchQB().getQueryBuilder(field, searchTerm);
+            case "wildcard" -> new WildcardQB().getQueryBuilder(field, searchTerm);
+            case default -> null;
+        };
     }
 }
