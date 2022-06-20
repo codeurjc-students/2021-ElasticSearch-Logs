@@ -16,6 +16,7 @@ public class SearchTest {
 
     private String getAuthCookie(){
         RequestSpecification loginReq = RestAssured.given();
+        RestAssured.useRelaxedHTTPSValidation();
 
         JSONObject loginReqParams = new JSONObject();
         loginReqParams.put("username", "elasticadmin");
@@ -24,7 +25,7 @@ public class SearchTest {
         loginReq.header("Content-Type", "application/json");
         loginReq.body(loginReqParams.toJSONString());
 
-        Response loginRes = loginReq.post("http://localhost:8080/api/auth/login");
+        Response loginRes = loginReq.post("https://localhost:8443/api/auth/login");
 
         return loginRes.getCookie("AuthToken");
     }
@@ -34,13 +35,14 @@ public class SearchTest {
         JSONObject body = new JSONObject();
         body.put("fields", List.of("log_level"));
         body.put("searchTerms", List.of("INFO"));
+        RestAssured.useRelaxedHTTPSValidation();
 
         given()
                 .cookie("AuthToken",this.getAuthCookie())
                 .header("Content-Type", "application/json")
                 .body(body.toJSONString())
         .when()
-                .post("http://localhost:8080/api/log/match-search")
+                .post("https://localhost:8443/api/log/match-search")
         .then()
                 .statusCode(200)
                 .body("size()",is(200));
@@ -51,13 +53,14 @@ public class SearchTest {
         JSONObject body = new JSONObject();
         body.put("fields", List.of("log_level"));
         body.put("searchTerms", List.of("INFO"));
+        RestAssured.useRelaxedHTTPSValidation();
 
         given()
                 .cookie("AuthToken",this.getAuthCookie())
                 .header("Content-Type", "application/json")
                 .body(body.toJSONString())
         .when()
-                .post("http://localhost:8080/api/log/wildcard-search")
+                .post("https://localhost:8443/api/log/wildcard-search")
         .then()
                 .statusCode(200)
                 .body("size()",is(200));
@@ -68,13 +71,14 @@ public class SearchTest {
         JSONObject body = new JSONObject();
         body.put("fields", List.of("@timestamp"));
         body.put("searchTerms", List.of("2022-04-24T00:00:00.000+00:00","2022-04-24T04:00:00.000+00:00,"));
+        RestAssured.useRelaxedHTTPSValidation();
 
         given()
                 .cookie("AuthToken",this.getAuthCookie())
                 .header("Content-Type", "application/json")
                 .body(body.toJSONString())
         .when()
-                .post("http://localhost:8080/api/log/range-search")
+                .post("https://localhost:8443/api/log/range-search")
         .then()
                 .statusCode(200);
     }

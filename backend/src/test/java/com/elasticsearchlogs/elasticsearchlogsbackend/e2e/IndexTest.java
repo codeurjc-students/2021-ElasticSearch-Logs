@@ -5,6 +5,7 @@ import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import net.minidev.json.JSONObject;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.get;
@@ -15,6 +16,7 @@ public class IndexTest {
 
     private String getAuthCookie(){
         RequestSpecification loginReq = RestAssured.given();
+        RestAssured.useRelaxedHTTPSValidation();
 
         JSONObject loginReqParams = new JSONObject();
         loginReqParams.put("username", "elasticadmin");
@@ -23,20 +25,20 @@ public class IndexTest {
         loginReq.header("Content-Type", "application/json");
         loginReq.body(loginReqParams.toJSONString());
 
-        Response loginRes = loginReq.post("http://localhost:8080/api/auth/login");
+        Response loginRes = loginReq.post("https://localhost:8443/api/auth/login");
 
         return loginRes.getCookie("AuthToken");
     }
     @Test
     public void get_all_indices(){
-
+        RestAssured.useRelaxedHTTPSValidation();
         given()
                 .cookie("AuthToken",this.getAuthCookie())
         .when()
-                .get("http://localhost:8080/api/index/all")
+                .get("https://localhost:8443/api/index/all")
         .then()
                 .statusCode(200)
-                .body("size()",is(7));
+                .body("size()", Matchers.lessThanOrEqualTo(7));
 
 
     }
